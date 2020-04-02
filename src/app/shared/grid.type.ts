@@ -23,7 +23,9 @@ import {GridFormlyFormCellComponent} from './grid-formly-form-cell.component';
 })
 
 export class GridTypeComponent extends FieldArrayType implements OnInit {
-  @ViewChild('agGrid', {static: false}) agGrid: TemplateRef<any>;
+  // TODO: add explicit constructor
+
+  @ViewChild('agGrid') agGrid: TemplateRef<any>;
 
   gridOptions: GridOptions;
   style: any = {};
