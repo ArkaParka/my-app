@@ -15,7 +15,10 @@ import {FormlyFieldButton} from "./button-type.component";
 import {GridFormlyFormCellComponent} from "./grid-formly-form-cell.component";
 import {CustomGridTypeComponent} from "./custom-grid.type";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
-import {MatInputModule, MatPaginatorModule, MatSortModule, MatTableModule} from "@angular/material";
+import { MatInputModule } from "@angular/material/input";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
 import {ModalModule} from "ngx-bootstrap";
 import {DatatableType} from "./datatable/datatable.type";
 
