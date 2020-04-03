@@ -50,6 +50,10 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
+      { //вот тут менюшка
+        path: 'menu',
+        loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
+      },
       {
         path: 'datatable',
         loadChildren: () => import('./views/datatable/datatable.module').then(m => m.DatatableModule)
