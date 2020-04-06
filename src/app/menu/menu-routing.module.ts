@@ -13,12 +13,6 @@ const routes: Routes = [
     data: {
       title: 'Menu'
     },
-    // children:[
-    //   {
-    //     path:'menu/:item', 
-    //     component: MenuComponent
-    //   }
-    // ]
   }
   ];
 

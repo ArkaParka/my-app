@@ -10,7 +10,7 @@ export class DynamicMenuService {
 
   constructor(public http: HttpClient) {}
 
-  public getModules () : Observable<any> {
+  public getModules () : Observable<any> { 
     //здесь будет запрос к бекэнду
     //заглушка
     const zaglushka = [

@@ -2,6 +2,7 @@ import { Component, OnDestroy, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { navItems, NavData } from '../../_nav';
 import { DynamicMenuService } from '../../menu/dynamic-menu.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public childrensForMenu = [];
   private changes: MutationObserver;
   public element: HTMLElement;
-  constructor(@Inject(DOCUMENT) _document?: any, private callListMenu? : DynamicMenuService) {
+  constructor(@Inject(DOCUMENT) _document?: any, private callRequestForGeringModules? : DynamicMenuService) { //изменить название callListMenu, которое будет отображать смыслою нагрузку
     
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -28,35 +29,41 @@ export class DefaultLayoutComponent implements OnDestroy {
   }
 
   private dynamicMenuChildrens () : void {
-    this.callListMenu.getModules().subscribe(res => {
-      this.childrensForMenu = res.map(elem => {
+    this.callRequestForGeringModules.getModules().subscribe(res => {
+      this.childrensForMenu = res.map( elem => {
+        const tempForChildren = this.dynamicMenuChildrensActions(elem.moduleName);
+        console.log("Функция которая пришла", tempForChildren);
         return {
-            name: `${elem.displayName}`,
-            url: `/${elem.moduleName}`,
-            icon: 'icon-puzzle'
-          };;
-    });
+          name: `${elem.displayName}`,
+          url: `/${elem.moduleName}`,
+          children: tempForChildren,
+          icon: 'icon-puzzle'
+          };
+      });
     });
     this.customNavItems.map(elem => {
       if (elem.name === "Menu") {
         elem.children = this.childrensForMenu;
         elem.children.map(elem => {
-          this.dynamicMenuChildrensOfChildrens(elem);
+          this.dynamicMenuChildrensActions(elem);
         });
       }
     });
   }
 
-  private dynamicMenuChildrensOfChildrens (moduleName) : void {
-    this.callListMenu.getModuleActions(moduleName.name).subscribe(res => {
-      moduleName.children = res.map(elem => {
+  private dynamicMenuChildrensActions (nameOfModule) : any  { 
+    let tempAnswer: object[];
+     this.callRequestForGeringModules.getModuleActions(nameOfModule).subscribe(res => {
+      tempAnswer = res.map(elem => { 
         return {
-            name: `${elem.displayName}`,
-            url: `/${elem.actionName}`,
-            icon: 'icon-puzzle'
-          };
+          name: `${elem.displayName}`,
+          url: `/${elem.actionName}`,
+          icon: 'icon-puzzle'
+        };
      });
     });
+    console.log("Ответ", tempAnswer);
+    return tempAnswer;
   }
 
   ngOnDestroy(): void {
