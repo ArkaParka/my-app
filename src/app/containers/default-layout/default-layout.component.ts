@@ -24,10 +24,10 @@ export class DefaultLayoutComponent implements OnDestroy {
       attributes: true,
       attributeFilter: ['class']
     });
-    this.dynamicMenuChildren ();
+    this.dynamicMenuChildrens ();
   }
 
-  private dynamicMenuChildren () : void {
+  private dynamicMenuChildrens () : void {
     this.callListMenu.getModules().subscribe(res => {
       this.childrensForMenu = res.map(elem => {
         return {
@@ -40,7 +40,22 @@ export class DefaultLayoutComponent implements OnDestroy {
     this.customNavItems.map(elem => {
       if (elem.name === "Menu") {
         elem.children = this.childrensForMenu;
+        elem.children.map(elem => {
+          this.dynamicMenuChildrensOfChildrens(elem);
+        });
       }
+    });
+  }
+
+  private dynamicMenuChildrensOfChildrens (moduleName) : void {
+    this.callListMenu.getModuleActions(moduleName.name).subscribe(res => {
+      moduleName.children = res.map(elem => {
+        return {
+            name: `${elem.displayName}`,
+            url: `/${elem.actionName}`,
+            icon: 'icon-puzzle'
+          };
+     });
     });
   }
 

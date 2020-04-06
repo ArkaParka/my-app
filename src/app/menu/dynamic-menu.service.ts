@@ -34,12 +34,12 @@ export class DynamicMenuService {
         {
           actionName: "division-structure",
           displayName: "Структура подразделений",
-          childActions :[] 
+          childActions:[] 
         },
         {
           actionName: "employees-structure",
           displayName: "Структура сотрудников",
-          childActions :[] 
+          childActions:[] 
         }
      ])
     } else {
@@ -47,12 +47,12 @@ export class DynamicMenuService {
         {
           actionName: "incoming",
           displayName: "Входящие",
-          childActions :[] 
+          childActions:[] 
         },
         {
           actionName: "outgoing",
           displayName: "Исходящие",
-          childActions :[] 
+          childActions:[] 
         }
       ]) 
     }
