@@ -2,17 +2,13 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  template: '<h3>Test</h3>'
+  templateUrl: './menu.component.html'
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent {
 
-  constructor(public router : Router) {    
-  }
-
-  ngOnInit(): void {
-    
+  constructor() {  
+    console.log("Тест");  
   }
 
 }

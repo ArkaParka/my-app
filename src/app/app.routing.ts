@@ -51,7 +51,7 @@ export const routes: Routes = [
     },
     children: [
       { //вот тут менюшка
-        path: 'menu',
+        path: 'staff-structure',
         loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
       },
       {

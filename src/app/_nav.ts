@@ -31,9 +31,10 @@ export interface NavData {
 
 export const navItems: NavData[] = [
   {
+    title: true,
     name: 'Menu',
-    url: '/menu',
-    icon: 'icon-menu',
+    // url: '/menu',
+    // icon: 'icon-menu',
   },
   {
     name: 'Dashboard',

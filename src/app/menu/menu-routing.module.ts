@@ -5,16 +5,24 @@ import { MenuComponent } from './menu.component';
 const routes: Routes = [
   {  
     path:'',
-    component: MenuComponent
-  },
-  {
-    path: 'menu',
-    component: MenuComponent,
     data: {
-      title: 'Menu'
+      title: 'Штатная структура'
     },
+    children: [
+      {
+        path: '',
+        redirectTo: 'division-structure'
+      },
+      {
+        path: 'division-structure',
+        component: MenuComponent,
+        data: {
+          title: 'Структура подразделения'
+        }
+      },
+    ]
   }
-  ];
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

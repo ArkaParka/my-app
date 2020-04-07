@@ -69,7 +69,7 @@ import { HttpModule } from '@angular/http';
     P500Component,
     LoginComponent,
     RegisterComponent,
-    MenuComponent,
+    //MenuComponent,
   ],
   providers: [{
     provide: LocationStrategy,
