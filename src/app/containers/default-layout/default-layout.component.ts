@@ -30,15 +30,12 @@ export class DefaultLayoutComponent implements OnDestroy {
 
   private dynamicMenuChildrens() : void {
     this.callRequestForGeringModules.getModules().subscribe(res => {
-      this.childrensForMenu = res.map( elem => {
-        const tempForChildren = this.dynamicMenuChildrensActions(elem.moduleName);
-        return {
-          name: `${elem.displayName}`,
-          url: `/${elem.moduleName}`,
-          children: tempForChildren,
-          icon: 'icon-puzzle'
-          };
+      res.map(elem => {
+        this.callRequestForGeringModules.getModuleActions(elem.url.replace(/\//g, '')).subscribe(res => {
+          elem.children = res;
+        });
       });
+      this.childrensForMenu = res;
     });
 
     const duplicateDetected = this.childrensForMenu.some( elem => {
@@ -53,20 +50,6 @@ export class DefaultLayoutComponent implements OnDestroy {
       });
     }
 
-  }
-
-  private dynamicMenuChildrensActions(nameOfModule) : object  { 
-    let tempAnswer: object[];
-     this.callRequestForGeringModules.getModuleActions(nameOfModule).subscribe(res => {
-      tempAnswer = res.map(elem => { 
-        return {
-          name: `${elem.displayName}`,
-          url: `/${nameOfModule}/${elem.actionName}`,
-          icon: 'icon-puzzle'
-        };
-     });
-    });
-    return tempAnswer;
   }
 
   ngOnDestroy(): void {

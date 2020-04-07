@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,33 @@ export class DynamicMenuService {
         displayName: "Документы"
       }
     ];
-    return of(mockObject);
+    return of(mockObject).pipe(
+      map(elem => {
+        return elem.map(item => {
+          // const tempForChildren = this.getModuleActions(item['moduleName']);
+          // this.getModuleActions(item['moduleName']).pipe(
+          //   map(elem => {
+          //     console.log("Gjnjvrb", elem);
+          //     return;
+          //    })
+          // );
+          // console.log("Сервис", tempForChildren);
+          return {
+            name: item['displayName'],
+            url: `/${item['moduleName']}`,
+            icon: 'icon-puzzle',
+            children: [],
+          };
+        });
+      }));
   }
 
   public getModuleActions(moduleName: string) : Observable<any> {
     //здесь будет запрос к бекэнду
     //заглушка
+    let mockObject;
     if (moduleName === "staff-structure") {
-      return of([
+      mockObject = [
         {
           actionName: "division-structure",
           displayName: "Структура подразделений",
@@ -40,9 +60,9 @@ export class DynamicMenuService {
           displayName: "Структура сотрудников",
           childActions:[] 
         }
-     ])
+     ]
     } else {
-      return of([
+      mockObject = [
         {
           actionName: "incoming",
           displayName: "Входящие",
@@ -53,8 +73,20 @@ export class DynamicMenuService {
           displayName: "Исходящие",
           childActions:[] 
         }
-      ]) 
+      ]
     }
+
+    return of(mockObject).pipe(
+      map(elem => {
+        return elem.map(item => {
+          return {
+            name: item['displayName'],
+            url: `/${moduleName}/${item['actionName']}`,
+            icon: 'icon-puzzle',
+          };
+        });
+      })
+    );
   }
 
   public getModuleMenuFormConfig(moduleName: string, menuActionKey: string) : Observable<any> {
@@ -98,7 +130,7 @@ export class DynamicMenuService {
         totalSize: 100
       }
     }];
-    return of (mockObject);
+    return of(mockObject);
   }
 
 }
