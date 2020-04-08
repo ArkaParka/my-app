@@ -14,7 +14,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public childrensForMenu: NavData[];
   private changes: MutationObserver;
   public element: HTMLElement;
-  constructor(@Inject(DOCUMENT) _document?: any, private callRequestForGeringModules? : DynamicMenuService) { //изменить название callListMenu, которое будет отображать смыслою нагрузку
+  constructor(@Inject(DOCUMENT) _document?: any, private callRequestForGetingModules? : DynamicMenuService) { //изменить название callListMenu, которое будет отображать смыслою нагрузку
     
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -29,9 +29,9 @@ export class DefaultLayoutComponent implements OnDestroy {
   }
 
   private dynamicMenuChildrens() : void {
-    this.callRequestForGeringModules.getModules().subscribe(res => {
+    this.callRequestForGetingModules.getModules().subscribe(res => {
       res.map(elem => {
-        this.callRequestForGeringModules.getModuleActions(elem.url.replace(/\//g, '')).subscribe(res => {
+        this.callRequestForGetingModules.getModuleActions(elem.url.replace(/\//g, '')).subscribe(res => {
           elem.children = res;
         });
       });
