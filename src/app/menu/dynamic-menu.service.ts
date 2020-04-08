@@ -98,16 +98,9 @@ export class DynamicMenuService {
         columnDefs: [
           { headerName: 'Название', field: 'divisionName', resizable: true, sortable: true },
           { headerName: 'Руководитель', field: 'supervisor', resizable: true, sortable: true },
-          { headerName: 'Кол-во сотрудников', field: 'numberOfEmployees', resizable: true, sortable: true },
+          { headerName: 'Кол-во сотрудников', field: 'numberOfEmployees', resizable: true, sortable: true }
         ],
-        rowData: [
-          { divisionName: 'Бухгалтерия', supervisor: 'Лисицина Л. Н.', numberOfEmployees: 7 },
-          { divisionName: 'Канцелярия', supervisor: 'Иванова И. В.', numberOfEmployees: 3 },
-          { divisionName: 'Юридический отдел', supervisor: 'Потапова Е. В.', numberOfEmployees: 4 },
-          { divisionName: 'Отдел технического контроля', supervisor: 'Иванов И. И.', numberOfEmployees: 5 },
-          { divisionName: 'Отдел управления персоналом', supervisor: 'Морозова А. И.', numberOfEmployees: 3 },
-        ],
-        pagination: false,
+        pagination: true,
         paginationAutoPageSize: true,
         rowSelection: 'single',
        } 
@@ -153,8 +146,8 @@ export class DynamicMenuService {
     return of(mockObject).pipe(
       map(resp => {
         return {
-          dataFromViewConfig: resp["viewConfig"]["config"],
-          dataFromDataTypes: resp["dataTypes"]["forms"]["schema"],
+          dataFromViewConfig: resp['viewConfig']['config'],
+          dataFromDataTypes: resp['dataTypes']['forms']['schema'],
         };
       })
     );
@@ -163,18 +156,28 @@ export class DynamicMenuService {
   public getModuleData(moduleName: string, menuName: string, pageInfo: number) : Observable<any> {
     //здесь будет запрос к бекэнду
     //заглушка
-    const mockObject = [{
-      data: [{
+    const mockObject = {
+      data: {
         type: 'dataType',
-        data: { /*объект данных*/ }
-      }],
+        data: [
+          { divisionName: 'Бухгалтерия', supervisor: 'Лисицина Л. Н.', numberOfEmployees: 7 },
+          { divisionName: 'Канцелярия', supervisor: 'Иванова И. В.', numberOfEmployees: 3 },
+          { divisionName: 'Юридический отдел', supervisor: 'Потапова Е. В.', numberOfEmployees: 4 },
+          { divisionName: 'Отдел технического контроля', supervisor: 'Иванов И. И.', numberOfEmployees: 5 },
+          { divisionName: 'Отдел управления персоналом', supervisor: 'Морозова А. И.', numberOfEmployees: 3 },
+        ]
+      },
       pageInfo: {
         pageIndex: 0,
         pageSize: 10,
         totalSize: 100
       }
-    }];
-    return of();
+    };
+    return of(mockObject).pipe(
+      map(resp => {
+        return resp['data']['data'];
+      })
+    );
   }
 
 }

@@ -1,1 +1,10 @@
 <h3>Test</h3>
+<ag-grid-angular
+    #dinamicTable
+    style="height: 500px;"
+    class="ag-theme-balham"
+    [suppressColumnVirtualisation]="true"
+    [rowData]="rowData | async"
+    [gridOptions]="gridOptions"  
+>
+</ag-grid-angular>
