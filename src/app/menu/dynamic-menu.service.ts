@@ -26,14 +26,6 @@ export class DynamicMenuService {
     return of(mockObject).pipe(
       map(elem => {
         return elem.map(item => {
-          // const tempForChildren = this.getModuleActions(item['moduleName']);
-          // this.getModuleActions(item['moduleName']).pipe(
-          //   map(elem => {
-          //     console.log("Gjnjvrb", elem);
-          //     return;
-          //    })
-          // );
-          // console.log("Сервис", tempForChildren);
           return {
             name: item['displayName'],
             url: `/${item['moduleName']}`,
@@ -92,45 +84,97 @@ export class DynamicMenuService {
   public getModuleMenuFormConfig(moduleName: string, menuActionKey: string) : Observable<any> {
     //здесь будет запрос к бекэнду
     //заглушка
-    const mockObject = [{
-      actions: [{
+    const mockObject = {
+      actions: {
         actionName: 'test-1', 
         actionTitle: 'Test 1', 
-        type : ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
-        dataType : 'POST_TYPE', 
-        formKey : 'formKey' 
-      }],
-     viewConfig : [{ 
-       type : "BaseTableVew",
-       config : {/* конфигурация для каждого  типа */}, //есть готовое описание в проете, найти
-     }],
-     dataTypes : [{
-       typeName : 'POST_TYPE',
-       schema : { /* схема описывающая данный тип */},
-       forms : [{
-          formKey : "formKey",
-          schema  : { /* схема для описания формы */ } //есть готовое описание в проете, найти
-        }]
-      }]
-    }];
-    return of(mockObject);
+        type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
+        dataType: 'POST_TYPE', 
+        formKey: 'formKey' 
+      },
+     viewConfig: { 
+       type: "BaseTableVew",
+       config: {
+        columnDefs: [
+          { headerName: 'Название', field: 'divisionName', resizable: true, sortable: true },
+          { headerName: 'Руководитель', field: 'supervisor', resizable: true, sortable: true },
+          { headerName: 'Кол-во сотрудников', field: 'numberOfEmployees', resizable: true, sortable: true },
+        ],
+        rowData: [
+          { divisionName: 'Бухгалтерия', supervisor: 'Лисицина Л. Н.', numberOfEmployees: 7 },
+          { divisionName: 'Канцелярия', supervisor: 'Иванова И. В.', numberOfEmployees: 3 },
+          { divisionName: 'Юридический отдел', supervisor: 'Потапова Е. В.', numberOfEmployees: 4 },
+          { divisionName: 'Отдел технического контроля', supervisor: 'Иванов И. И.', numberOfEmployees: 5 },
+          { divisionName: 'Отдел управления персоналом', supervisor: 'Морозова А. И.', numberOfEmployees: 3 },
+        ],
+        pagination: false,
+        paginationAutoPageSize: true,
+        rowSelection: 'single',
+       } 
+     },
+     dataTypes: {
+       typeName: 'POST_TYPE',
+       schema: { /* схема описывающая данный тип, можно пока забить болт */},
+       forms: {
+          formKey: "formKey",
+          schema: [
+            {
+              key: 'divisionName',
+              type: 'input',
+              templateOptions: {
+                label: 'Подразделение',
+                placeholder: 'Название подразделения',
+                required: true
+              },
+            },
+            {
+              key: 'supervisor',
+              type: 'input',
+              templateOptions: {
+                label: 'Руководитель',
+                placeholder: 'фамилия, инициалы',
+                required: true
+              },
+            },
+            {
+              key: 'numberOfEmployees',
+              type: 'input',
+              templateOptions: {
+                label: 'Кол-во сотрудников',
+                type: 'number',
+                placeholder: 'Только цифры',
+                required: true
+              },
+            },
+          ] 
+        }
+      }
+    };
+    return of(mockObject).pipe(
+      map(resp => {
+        return {
+          dataFromViewConfig: resp["viewConfig"]["config"],
+          dataFromDataTypes: resp["dataTypes"]["forms"]["schema"],
+        };
+      })
+    );
   }
 
   public getModuleData(moduleName: string, menuName: string, pageInfo: number) : Observable<any> {
     //здесь будет запрос к бекэнду
     //заглушка
     const mockObject = [{
-      data : [{
+      data: [{
         type: 'dataType',
         data: { /*объект данных*/ }
       }],
-      pageInfo : {
+      pageInfo: {
         pageIndex: 0,
-        pageSize : 10,
+        pageSize: 10,
         totalSize: 100
       }
     }];
-    return of(mockObject);
+    return of();
   }
 
 }
