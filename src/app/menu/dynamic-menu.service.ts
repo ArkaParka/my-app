@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DataListAboutModules } from './responce-interface';
+import { NavData } from '../_nav';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +25,19 @@ export class DynamicMenuService {
         displayName: "Документы"
       }
     ];
+
     return of(mockObject).pipe(
       map(elem => {
         return elem.map(item => {
+          let tempForChildren;
+          this.getModuleActions(item['moduleName']).subscribe(res => {
+            tempForChildren = res;
+          });
           return {
             name: item['displayName'],
             url: `/${item['moduleName']}`,
             icon: 'icon-puzzle',
-            children: [],
+            children: tempForChildren,
           };
         });
       }));
@@ -86,8 +93,8 @@ export class DynamicMenuService {
     //заглушка
     const mockObject = {
       actions: {
-        actionName: 'test-1', 
-        actionTitle: 'Test 1', 
+        actionName: 'insert', 
+        actionTitle: 'Добавить', 
         type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
         dataType: 'POST_TYPE', 
         formKey: 'formKey' 
@@ -112,33 +119,45 @@ export class DynamicMenuService {
           formKey: "formKey",
           schema: [
             {
-              key: 'divisionName',
-              type: 'input',
-              templateOptions: {
-                label: 'Подразделение',
-                placeholder: 'Название подразделения',
-                required: true
-              },
+              className: 'section-label',
+              template: '<h5>Персональные данные</h5>',
             },
             {
-              key: 'supervisor',
-              type: 'input',
-              templateOptions: {
-                label: 'Руководитель',
-                placeholder: 'фамилия, инициалы',
-                required: true
-              },
-            },
-            {
-              key: 'numberOfEmployees',
-              type: 'input',
-              templateOptions: {
-                label: 'Кол-во сотрудников',
-                type: 'number',
-                placeholder: 'Только цифры',
-                required: true
-              },
-            },
+              fieldGroupClassName: 'row',
+              fieldGroup: [
+                {
+                  className: 'col-6',
+                  key: 'divisionName',
+                  type: 'input',
+                  templateOptions: {
+                    label: 'Подразделение',
+                    placeholder: 'Название подразделения',
+                    required: true
+                  },
+                },
+                {
+                  className: 'col-6',
+                  key: 'supervisor',
+                  type: 'input',
+                  templateOptions: {
+                    label: 'Руководитель',
+                    placeholder: 'фамилия, инициалы',
+                    required: true
+                  },
+                },
+                {
+                  className: 'col-6',
+                  key: 'numberOfEmployees',
+                  type: 'input',
+                  templateOptions: {
+                    label: 'Кол-во сотрудников',
+                    type: 'number',
+                    placeholder: 'Только цифры',
+                    required: true
+                  },
+                },
+              ],
+            }
           ] 
         }
       }
@@ -146,6 +165,7 @@ export class DynamicMenuService {
     return of(mockObject).pipe(
       map(resp => {
         return {
+          dataFromActions: resp['actions'],
           dataFromViewConfig: resp['viewConfig']['config'],
           dataFromDataTypes: resp['dataTypes']['forms']['schema'],
         };

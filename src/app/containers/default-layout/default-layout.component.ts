@@ -14,7 +14,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public childrensForMenu: NavData[];
   private changes: MutationObserver;
   public element: HTMLElement;
-  constructor(@Inject(DOCUMENT) _document?: any, private callRequestForGetingModules? : DynamicMenuService) { //изменить название callListMenu, которое будет отображать смыслою нагрузку
+  constructor(@Inject(DOCUMENT) _document?: any, private dynamicMenuService? : DynamicMenuService) { //изменить название callListMenu, которое будет отображать смыслою нагрузку
     
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -29,13 +29,8 @@ export class DefaultLayoutComponent implements OnDestroy {
   }
 
   private dynamicMenuChildrens() : void {
-    this.callRequestForGetingModules.getModules().subscribe(res => {
-      res.map(elem => {
-        this.callRequestForGetingModules.getModuleActions(elem.url.replace(/\//g, '')).subscribe(res => {
-          elem.children = res;
-        });
-      });
-      this.childrensForMenu = res;
+    this.dynamicMenuService.getModules().subscribe(myRes => {
+      this.childrensForMenu = myRes;
     });
 
     const duplicateDetected = this.childrensForMenu.some( elem => {
@@ -49,7 +44,6 @@ export class DefaultLayoutComponent implements OnDestroy {
         this.customNavItems.splice(i + 1, 0, elem);
       });
     }
-
   }
 
   ngOnDestroy(): void {
