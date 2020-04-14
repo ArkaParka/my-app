@@ -8,7 +8,7 @@ import {ModalDirective} from "ngx-bootstrap";
   templateUrl: 'custom-datatable.component.html'
 })
 export class CustomDatatableComponent {
-  @ViewChild('largeModal', {static: false}) public largeModal: ModalDirective;
+  @ViewChild('largeModal') public largeModal: ModalDirective;
   gridApi;
   form = new FormGroup({});
   model: any = {};

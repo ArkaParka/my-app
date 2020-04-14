@@ -10,7 +10,7 @@ import {ModalDirective} from "ngx-bootstrap";
 })
 
 export class CustomGridTypeComponent extends FieldArrayType implements OnInit {
-  @ViewChild('largeModal', {static: false}) public largeModal: ModalDirective;
+  @ViewChild('largeModal') public largeModal: ModalDirective;
   singleForm = new FormGroup({});
   singleField = [];
   ops: any = {};
