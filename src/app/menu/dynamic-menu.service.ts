@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { DataListAboutModules } from './responce-interface';
-import { NavData } from '../_nav';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,7 @@ export class DynamicMenuService {
 
   constructor(public http: HttpClient) {}
 
-  public getModules() : Observable<any> { 
+   public async getModules(): Promise<Observable<any>> { 
     //здесь будет запрос к бекэнду
     //заглушка
     const mockObject = [
@@ -25,25 +24,22 @@ export class DynamicMenuService {
         displayName: "Документы"
       }
     ];
-
     return of(mockObject).pipe(
-      map(elem => {
-        return elem.map(item => {
-          let tempForChildren;
-          this.getModuleActions(item['moduleName']).subscribe(res => {
-            tempForChildren = res;
-          });
+      map(async obj => {
+        return Promise.all(obj.map(async elem => {
+          let tempForChildren = await this.getModuleActions(elem['moduleName']).toPromise();
           return {
-            name: item['displayName'],
-            url: `/${item['moduleName']}`,
+            name: elem['displayName'],
+            url: `/${elem['moduleName']}`,
             icon: 'icon-puzzle',
             children: tempForChildren,
           };
-        });
-      }));
+        }));
+    }),
+    );
   }
 
-  public getModuleActions(moduleName: string) : Observable<any> {
+  public getModuleActions(moduleName: string): Observable<any> {
     //здесь будет запрос к бекэнду
     //заглушка
     let mockObject;
@@ -76,6 +72,7 @@ export class DynamicMenuService {
     }
 
     return of(mockObject).pipe(
+      //delay(1000),
       map(elem => {
         return elem.map(item => {
           return {
@@ -92,14 +89,30 @@ export class DynamicMenuService {
     //здесь будет запрос к бекэнду
     //заглушка
     const mockObject = {
-      actions: {
-        actionName: 'insert', 
-        actionTitle: 'Добавить', 
-        type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
-        dataType: 'POST_TYPE', 
-        formKey: 'formKey' 
-      },
-     viewConfig: { 
+      actions: [
+        {
+          actionName: 'insert', 
+          actionTitle: 'Добавить', 
+          type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
+          dataType: 'POST_TYPE', 
+          formKey: 'formKey' 
+        },
+        {
+          actionName: 'edit', 
+          actionTitle: 'Изменить', 
+          type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
+          dataType: 'POST_TYPE', 
+          formKey: 'formKey' 
+        },
+        {
+          actionName: 'delete', 
+          actionTitle: 'Удалить', 
+          type: ['NO_REQ', 'REQ_ONE', 'REQ_MULTY' ], 
+          dataType: 'POST_TYPE', 
+          formKey: 'formKey' 
+        },
+      ],
+      viewConfig: { 
        type: "BaseTableVew",
        config: {
         columnDefs: [
@@ -109,10 +122,13 @@ export class DynamicMenuService {
         ],
         pagination: true,
         paginationAutoPageSize: true,
-        rowSelection: 'single',
+        rowSelection: 'multiple',
+        suppressDragLeaveHidesColumns: true,
+        rowHeight: 30,
+        animateRows: true
        } 
-     },
-     dataTypes: {
+      },
+      dataTypes: {
        typeName: 'POST_TYPE',
        schema: { /* схема описывающая данный тип, можно пока забить болт */},
        forms: {
@@ -120,7 +136,7 @@ export class DynamicMenuService {
           schema: [
             {
               className: 'section-label',
-              template: '<h5>Персональные данные</h5>',
+              template: '<h5>Данные</h5>',
             },
             {
               fieldGroupClassName: 'row',
@@ -165,7 +181,12 @@ export class DynamicMenuService {
     return of(mockObject).pipe(
       map(resp => {
         return {
-          dataFromActions: resp['actions'],
+          dataFromActions: resp['actions'].map(elem => {
+            return {
+              value: elem['actionName'],
+              title: elem['actionTitle']
+            }
+          }),
           dataFromViewConfig: resp['viewConfig']['config'],
           dataFromDataTypes: resp['dataTypes']['forms']['schema'],
         };
