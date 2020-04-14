@@ -1,35 +1,39 @@
-<h3>Test</h3>
+<h3>Таблица</h3>
 
 <ng-template #dynamicButtons let-value="value" let-title="title">
-    <button style="margin-bottom: 5px;" type="button" class="btn btn-secondary" value="{{value}}">{{ title }}</button>
+  <button style="margin-bottom: 5px;" type="button" class="btn btn-secondary" value="{{value}}">{{ title }}</button>
 </ng-template>
-<ng-container *ngTemplateOutlet="dynamicButtons; context: templateCtx"></ng-container>
+<div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
+  <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
+</div>
 
 <div>
   {{form.value | json}}
 </div>
 
 <ag-grid-angular
-    #dinamicTable
-    style="height: 500px;"
-    class="ag-theme-balham"
-    [rowData]="rowData | async"
-    [gridOptions]="gridOptions"  
+  #dinamicTable
+  style="height: 500px;"
+  class="ag-theme-balham"
+  [rowData]="rowData | async"
+  [gridOptions]="gridOptions"
+  (gridReady)="onGridReady($event)"
+  (rowClicked)='rowClicked($event)'  
 >
 </ag-grid-angular>
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-          <form [formGroup]="form" (ngSubmit)="submit()">
-            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="add()">Добавить</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="add()">Сохранить</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

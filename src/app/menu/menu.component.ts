@@ -14,43 +14,54 @@ export class MenuComponent implements OnInit {
   public gridOptions: GridOptions;
   public configData;
   public rowData: any;
-  public templateCtx = {};
+  public actions: object[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  public gridApi;
+  public data: object;
+  gridApi: any;
+  gridColumnApi: any;
 
-  constructor(private callRequestForGetModuleConfig: DynamicMenuService) {
+  constructor(private dynamicMenuService: DynamicMenuService) {
     console.log("Тест");  
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
-    if (e.target['value'] == this.templateCtx['value']) {
+    if (e.target['value'] == "insert") {
       this.largeModal.show();
-      console.log("Нажатие мышки", e.target['value']);
+    }
+    if (e.target['value'] == "edit") {
+      if (this.data) {
+        console.log("Данные для изменения", this.data);
+        this.model = this.data;
+        this.largeModal.show();
+        //this.gridApi.refreshCells();
+      } else {
+        alert("Выберите подразделение для правки");
+      }
+    }
+    if (e.target['value'] == "delete") {
+  
     }
   }
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.workWithConfig();
+    this.rowData = this.dynamicMenuService.getModuleData("test", "test", 10);
   }
 
   public workWithConfig(): void {
-    this.callRequestForGetModuleConfig.getModuleMenuFormConfig("test", "test").subscribe(resp => {
+    this.dynamicMenuService.getModuleMenuFormConfig("test", "test").subscribe(resp => {
       this.gridOptions = resp.dataFromViewConfig;
       this.fields = resp.dataFromDataTypes;
-      this.templateCtx = {
-        value: resp.dataFromActions.actionName,
-        title: resp.dataFromActions.actionTitle
-      }
-    });
-    this.rowData = this.callRequestForGetModuleConfig.getModuleData("test", "test", 10);
+      this.actions = resp.dataFromActions;
+    }); 
   }
 
   public submit(): void {
-    alert(JSON.stringify(this.model));
+    console.log("Данные", this.model);
   }
 
   public hideForm(): void {
@@ -59,6 +70,15 @@ export class MenuComponent implements OnInit {
 
   public add(): void {
     this.largeModal.hide();
+  }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridApi.sizeColumnsToFit();
+  }
+
+  rowClicked(event) {
+    this.data = event.data;
   }
 
 }
