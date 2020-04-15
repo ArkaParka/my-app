@@ -33,10 +33,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   private async dynamicMenuChildrens() {
 
-    let dynamicMenuServiceIsPromise = await (await this.dynamicMenuService.getModules()).toPromise();
-
-    console.log("Ответ от сервера", dynamicMenuServiceIsPromise);
-
+    let dynamicMenuServiceIsPromise = await this.dynamicMenuService.getModules().toPromise();
     this.customNavItems = navItems;
 
     const duplicateDetected = dynamicMenuServiceIsPromise.some(elem => {
