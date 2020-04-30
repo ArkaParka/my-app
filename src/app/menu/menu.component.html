@@ -16,6 +16,7 @@
   style="height: 500px;"
   class="ag-theme-balham"
   [rowData]="rowData | async"
+  [columnDefs]="gridOptions.columnDefs"
   [gridOptions]="gridOptions"
   (gridReady)="onGridReady($event)"
   (rowClicked)='rowClicked($event)'  

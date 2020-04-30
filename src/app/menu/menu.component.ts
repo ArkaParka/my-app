@@ -4,6 +4,7 @@ import { GridOptions } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+import { tick } from '@angular/core/testing';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -12,7 +13,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 export class MenuComponent implements OnInit {
 
   public gridOptions: GridOptions;
-  public configData;
+  //public configData;
   public rowData: any;
   public actions: object[];
   public fields: FormlyFieldConfig[];
@@ -49,15 +50,17 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.workWithConfig();
-    this.rowData = this.dynamicMenuService.getModuleData("test", "test", 10);
   }
 
   public workWithConfig(): void {
     this.dynamicMenuService.getModuleMenuFormConfig("test", "test").subscribe(resp => {
       this.gridOptions = resp.dataFromViewConfig;
+      // console.log("ОТвет от сервера", this.gridOptions);
       this.fields = resp.dataFromDataTypes;
       this.actions = resp.dataFromActions;
     }); 
+  
+    this.rowData = this.dynamicMenuService.getModuleData("test", "test", 10);
   }
 
   public submit(): void {
