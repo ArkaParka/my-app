@@ -1,0 +1,108 @@
+{
+    "schema": [
+        {
+        "fieldGroupClassName": "row",
+        "fieldGroup": [
+            {
+                "className": "col-6",
+                "type": "string",
+                "key": "firstName",
+                "templateOptions": {
+                    "label": "First Name",
+                    "required": true
+                }
+            },
+            {
+                "className": "col-6",
+                "type": "string",
+                "key": "lastName",
+                "templateOptions": {
+                    "label": "Last Name"
+                }  
+            },
+            {
+                "className": "col-6",
+                "type": "string",
+                "key": "middleName",
+                "templateOptions": {
+                    "label": "Middle Name"
+                }  
+            },
+            {
+                "className": "col-12",
+                "type": "custom-select-with-search",
+                "url": "/ccy",
+                "key": "mySelect",
+                "templateOptions": {
+                    "label": "Custom select"
+                }  
+            },
+            {
+                "className": "col-12",
+                "type": "select-with-search",
+                "url": "http://localhost:3000/test1",
+                "key": "test1",
+                "templateOptions": {
+                    "label": "Select test"
+                }  
+            },
+            {
+                "className": "col-12",
+                "type": "select-with-search",
+                "key": "test2",
+                "url": "http://localhost:3000/test2"
+            },
+            {
+                "className": "col-12",
+                "type": "input",
+                "key": "date",
+                "templateOptions": {
+                    "label": "Date",
+                    "type": "date"
+                }  
+            },
+            {
+                "className": "col-12",
+                "type": "array",
+                "key": "emails",
+                "templateOptions": {
+                    "label": "Emails" 
+                },
+                "fieldArray": {
+                    "type": "string"
+                }  
+            },
+            {
+                "className": "col-6",
+                "type": "array",
+                "key": "phones",
+                "templateOptions": {
+                    "label": "Phones" 
+                },
+                "fieldArray": {
+                    "fieldGroup": [
+                        {
+                            "type": "string",
+                            "key": "type" 
+                        },
+                        {
+                            "type": "string",
+                            "key": "phone"
+                        }
+                    ]
+                }  
+            }
+        ]
+    }
+    ],
+    "model": {
+        "firstName": "Ivan",
+        "lastName": "Ivanov",
+        "middleName": "Ivanovich",
+        "emails": ["ivan@ivan.com", "iv_bussines@gmail.com"],
+        "phones": [
+            { "type": "home", "phone": "+700000000" },
+            { "type": "mobile", "phone": "+700000000" }
+        ]
+    }
+}

@@ -1,0 +1,42 @@
+.wrapper {
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.lookLikeSelect {
+    background-color: #fff; 
+    color: #5c6873;
+    border-bottom: 1px solid #e4e7ea;
+    width: 30vw;
+    height: 30px;
+    line-height: 25px;
+}
+
+.lookLikeSelect:focus {
+    outline: 0;
+}
+
+.lookLikeSelect:hover {
+    background-color: #e4e7ea;
+}
+
+.styleList {
+    transition: 5s;
+    display: flex;
+    flex-direction: column;
+}
+
+.styleSelect > button:first-child {
+    border-top-width: 0;
+}
+
+.styleSelect > button:not(:last-child) {
+    border-bottom-width: 0 ;
+}
+
+.styleSelect {
+    position: absolute;
+    width: 30vw;
+    z-index: 1;
+}
