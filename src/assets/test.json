@@ -1,0 +1,71 @@
+{
+    "schema": {
+        "className": "form-row",
+        "title": "Person",
+        "type": "object",
+        "required": [
+            "firstName"
+          ],
+        "properties": {
+            "firstName": {
+                "className": "col",
+                "type": "string",
+                "title": "First Name",
+                "focus": true,
+                "description": "This is test description"
+            },
+            "lastName": {
+                "className": "col",
+                "type": "string",
+                "title": "Last Name"
+            },
+            "middleName": {
+                "type": "string",
+                "title": "Middle Name"
+            },
+            "mySelect": {
+                "title": "Custom select",
+                "type": "custom-select-with-search"
+            },
+            "selectOptionsGroup": {
+                "title": "Select option group",
+                "type": "select-with-option-group"
+            },
+            "emails": {
+                "type": "array",
+                "title": "Emails",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "phones": {
+                "type": "array",
+                "title": "Phones",
+                "items": {
+                    "type": "object",
+                    "required": [
+                      "phone"
+                    ],
+                    "properties": {
+                        "type": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "model": {
+        "firstName": "Ivan",
+        "lastName": "Ivanov",
+        "middleName": "Ivanovich",
+        "emails": ["ivan@ivan.com", "iv_bussines@gmail.com"],
+        "phones": [
+            { "type": "home", "phone": "+700000000" },
+            { "type": "mobile", "phone": "+700000000" }
+        ]
+    }
+}

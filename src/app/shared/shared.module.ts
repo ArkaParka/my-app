@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import {ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {FormlyFieldConfig, FormlyModule} from '@ngx-formly/core';
 import {FormlyBootstrapModule} from '@ngx-formly/bootstrap';
 import {HttpClientModule} from '@angular/common/http';
 import {ObjectTypeComponent} from "./object.type";
 import {ArrayTypeComponent} from "./array.type";
 import {NullTypeComponent} from "./null.type";
+import { MultiSchemaTypeComponent } from "./multischema.type";
 import {CommonModule} from "@angular/common";
 import {AgGridModule} from "ag-grid-angular";
 import {GridFormlyCellComponent} from "./grid-formly-cell.component";
@@ -21,7 +22,16 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import {ModalModule} from "ngx-bootstrap";
 import {DatatableType} from "./datatable/datatable.type";
+import { CustomSelectTypeComponent } from './custom-select.type';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
+import { SearchDefaultComponent } from './select-with-search-default.type';
 
 export function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   return `should NOT have fewer than ${field.templateOptions.minItems} items`;
@@ -59,7 +69,9 @@ export function exclusiveMaximumValidationMessage(err, field: FormlyFieldConfig)
   return `should be < ${field.templateOptions.step}`;
 }
 
-
+export function constValidationMessage(err, field: FormlyFieldConfig) {
+  return `should be equal to constant "${field.templateOptions.const}"`;
+}
 
 @NgModule({
   imports: [
@@ -85,8 +97,11 @@ export function exclusiveMaximumValidationMessage(err, field: FormlyFieldConfig)
         { name: 'exclusiveMaximum', message: exclusiveMaximumValidationMessage },
         { name: 'minItems', message: minItemsValidationMessage },
         { name: 'maxItems', message: maxItemsValidationMessage },
+        { name: 'uniqueItems', message: 'should NOT have duplicate items' },
+        { name: 'const', message: constValidationMessage },
       ],
       types: [
+        { name: 'string', extends: 'input' },
         {
           name: 'datatable2',
           component: DatatableType
@@ -161,21 +176,33 @@ export function exclusiveMaximumValidationMessage(err, field: FormlyFieldConfig)
         { name: 'null', component: NullTypeComponent, wrappers: ['form-field'] },
         { name: 'array', component: ArrayTypeComponent },
         { name: 'object', component: ObjectTypeComponent },
+        { name: 'custom-select-with-search', component: CustomSelectTypeComponent },
+        { name: 'select-with-search', component: SearchDefaultComponent },
       ],
     }),
     FormlyBootstrapModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatIconModule,
+    NgSelectModule,
+    NgOptionHighlightModule,
+    FormsModule
   ],
   declarations: [
     NullTypeComponent,
     ArrayTypeComponent,
     ObjectTypeComponent,
+    MultiSchemaTypeComponent,
     GridFormlyCellComponent,
     GridTypeComponent,
     FormlyFieldButton,
     GridFormlyFormCellComponent,
     CustomGridTypeComponent,
-    DatatableType
+    DatatableType,
+    CustomSelectTypeComponent,
+    SearchDefaultComponent
   ],
   exports: [
     ReactiveFormsModule,
@@ -193,7 +220,10 @@ export function exclusiveMaximumValidationMessage(err, field: FormlyFieldConfig)
     MatPaginatorModule,
     MatInputModule,
     AgGridModule,
-    ModalModule
+    ModalModule,
+    NgSelectModule,
+    NgOptionHighlightModule,
+    FormsModule
   ]
 })
 export class SharedModule {}
