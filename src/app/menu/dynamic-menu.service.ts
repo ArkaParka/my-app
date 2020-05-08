@@ -3,19 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { NavData } from '../_nav';
-import { ModuleMenuFormConfigForFront, MData, ModuleMenuFormConfig, Modules } from './responce-interface';
+import { ModuleMenuFormConfigForFront, MData, ModuleMenuFormConfig, DataSelect, FormlyConfig } from './responce-interface';
 
-export interface Person {
-  id: string;
-  isActive: boolean;
-  age: number;
-  name: string;
-  gender: string;
-  company: string;
-  email: string;
-  phone: string;
-  disabled?: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +13,7 @@ export class DynamicMenuService {
 
   constructor(public http: HttpClient) {}
 
-  
-
-  loadExample(): Observable<any> {
+  public loadExample(): Observable<FormlyConfig> {
     return this.http.get<any>('assets/test2.json').pipe(
       tap(({ schema, model }) => {
         return {
@@ -37,8 +24,8 @@ export class DynamicMenuService {
     )
   }
 
-  getDataForSelect(configUrl: string): Observable<Person[]> {
-    return this.http.get<Person[]>(configUrl);  
+  public getDataForSelect(configUrl: string): Observable<DataSelect[]> {
+    return this.http.get<DataSelect[]>(configUrl);  
 }
 
   public getModules(): Observable<any> {
@@ -55,7 +42,6 @@ export class DynamicMenuService {
           }));
       }),
       catchError(err => {  
-        console.log(err); 
         alert("Сервис не доступен!");
         return throwError(err);
       })
@@ -84,7 +70,6 @@ export class DynamicMenuService {
     return this.http.get<ModuleMenuFormConfig>('http://localhost:3000/moduleMenuFormConfig')
     .pipe(
       map(resp => {
-        console.log();
         return {
           dataFromActions: resp['actions'].map(elem => {
             return {
@@ -97,7 +82,6 @@ export class DynamicMenuService {
         };
       }),
       catchError(err => {  
-        console.log(err); 
         alert("Сервис не доступен!");
         return throwError(err);
       })
@@ -108,7 +92,6 @@ export class DynamicMenuService {
     return this.http.get<MData[]>('http://localhost:3000/data')
     .pipe(
       catchError(err => {  
-        console.log(err); 
         alert("Сервис не доступен!");
         return throwError(err);
       })

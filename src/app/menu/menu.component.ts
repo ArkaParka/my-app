@@ -73,7 +73,6 @@ export class MenuComponent implements OnInit {
     this.dynamicMenuService.loadExample().subscribe(asw => {
       //this.fields = [this.formlyJsonschema.toFieldConfig(asw.schema)];
       this.fields = asw.schema;
-      console.log("Форма", this.fields);
       this.model = asw.model;
     });
     
@@ -92,7 +91,6 @@ export class MenuComponent implements OnInit {
   }
 
   submit() {
-    //console.log("Данные", this.model);
   }
 
   public hideForm(): void {
@@ -144,7 +142,6 @@ export class MenuComponent implements OnInit {
 
   public delete(): void {
     // const selected = this.gridApi.getSelectedRows();
-    // console.log("Выбранная строка", selected);
     //this.dynamicMenuService.deleteModuleData(this.data['id']);
     this.gridApi.refreshCells();
     this.smallModal.hide();

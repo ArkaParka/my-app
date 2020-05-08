@@ -76,8 +76,7 @@ export class CustomSelectTypeComponent extends FieldType implements AfterViewIni
     public myItems: any[] = [];
 
     ngOnInit() {
-      //this._searchTextControl = new FormControl();
-      //console.log("This ", (this.field as any).url);
+  
     }
   
     public ngAfterViewInit() : void {

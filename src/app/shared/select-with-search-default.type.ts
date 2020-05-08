@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { DynamicMenuService, Person } from '../menu/dynamic-menu.service';
+import { DynamicMenuService } from '../menu/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
+import { DataSelect } from '../menu/responce-interface';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { FieldType } from '@ngx-formly/core';
 })
 export class SearchDefaultComponent extends FieldType implements OnInit {
 
-    people: Person[] = [];
+    people: DataSelect[] = [];
     peopleLoading = false;
     selectedItem: any;
 
@@ -39,7 +40,6 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
         });
     }
     onChange($event) {
-        console.log("Selected item", this.selectedItem);
         this.formControl.setValue(this.selectedItem);
     }
 }

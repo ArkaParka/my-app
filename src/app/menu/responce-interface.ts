@@ -1,3 +1,20 @@
+export interface FormlyConfig {
+    schema: object[],
+    model?: object
+}
+
+export interface DataSelect {
+    id: string;
+    isActive: boolean;
+    age: number;
+    name: string;
+    gender?: string;
+    company?: string;
+    email?: string;
+    phone?: string;
+    disabled?: boolean;
+}
+
 export interface ModuleMenuFormConfig {
     actions: Actions[],
     viewConfig: ViewConfiguration,
