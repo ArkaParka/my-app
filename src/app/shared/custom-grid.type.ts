@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FieldArrayType, FormlyFormBuilder} from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
 import clone from 'lodash.clonedeep';
-import {ModalDirective} from "ngx-bootstrap";
+import {ModalDirective} from "ngx-bootstrap/modal";
 
 @Component({
   selector: 'formly-field-datatable',
