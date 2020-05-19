@@ -20,7 +20,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import {ModalModule} from "ngx-bootstrap";
+import {ModalModule} from "ngx-bootstrap/modal";
 import {DatatableType} from "./datatable/datatable.type";
 import { CustomSelectTypeComponent } from './custom-select.type';
 

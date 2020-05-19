@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { DynamicMenuService } from './dynamic-menu.service';
 import { GridOptions } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
+import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { BehaviorSubject } from 'rxjs';
 import { FormlyJsonschema } from '@ngx-formly/core/json-schema';
@@ -75,7 +75,7 @@ export class MenuComponent implements OnInit {
       this.fields = asw.schema;
       this.model = asw.model;
     });
-    
+
   }
 
   public workWithConfig(): void {
@@ -98,15 +98,15 @@ export class MenuComponent implements OnInit {
   }
 
   public add(): void {
-    switch(this.buttonIndicator) { 
-      case "insert": { 
+    switch(this.buttonIndicator) {
+      case "insert": {
         this.dynamicMenuService.setModuleData(this.form.value).subscribe(resp => {
           this.rowData.push(resp);
           this.gridApi.setRowData(this.rowData);
           this.gridApi.refreshCells({force : true});
         });
-        break; 
-      } 
+        break;
+      }
       case "edit": {
         this.dynamicMenuService.editModuleData(this.model.id, this.form.value).subscribe(resp => {
           this.rowData.map(elem => {
@@ -118,12 +118,12 @@ export class MenuComponent implements OnInit {
           this.gridApi.setRowData(this.rowData);
           this.gridApi.refreshCells({force : true});
         });
-        break; 
-      } 
-      default: {  
-         break; 
-      } 
-   } 
+        break;
+      }
+      default: {
+         break;
+      }
+   }
     this.largeModal.hide();
   }
 
