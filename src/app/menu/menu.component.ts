@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
-import { DynamicMenuService } from './dynamic-menu.service';
+import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { GridOptions } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";

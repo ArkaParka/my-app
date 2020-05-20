@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
-import { DynamicMenuService } from '../menu/dynamic-menu.service';
+import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
 import { DataSelect } from '../menu/responce-interface';
 
