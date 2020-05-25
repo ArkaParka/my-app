@@ -8,6 +8,7 @@ import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
+import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
 
 export const routes: Routes = [
   {
@@ -50,6 +51,15 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
+      // {
+      //   path: 'grid-layout',
+      //   component: GridLayoutComponent
+      // },
+      // обертка для отображения любой формы по параметрам
+      {
+        path: 'form-loader/:moduleKey/:configPath',
+        component: FormLoaderComponent
+      },
       { //вот тут менюшка
         path: 'staff-structure',
         loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)

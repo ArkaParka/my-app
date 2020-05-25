@@ -51,7 +51,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.dynamicMenu.push(
         {
           name: mr.module.moduleDisplayName,
-          url: `/${mr.module.moduleKey}`,
+          url: `/form-loader/${mr.module.moduleKey}`,
           icon: 'icon-puzzle',
           children: [],
         }
@@ -81,9 +81,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     moduleAction.childActions.forEach(childAction => {
       children.push({
         name: childAction.displayName,
-        url: `${parentUrl}/${childAction.actionName}`,
+        url: `${parentUrl}.${childAction.actionName}`,
         icon: 'icon-puzzle',
-        children: this.getChildren(childAction, `${parentUrl}/${childAction.actionName}`),
+        children: this.getChildren(childAction, `${parentUrl}.${childAction.actionName}`),
       })
     });
     return children.length ? children : null;
