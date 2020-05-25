@@ -42,8 +42,10 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts';
 import { MenuComponent } from './menu/menu.component';
 
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+//import {ContainerModule} from "../../shared/container-module/container.module";
+import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 
 @NgModule({
   imports: [
@@ -69,6 +71,7 @@ import { HttpModule } from '@angular/http';
     P500Component,
     LoginComponent,
     RegisterComponent,
+    FormLoaderComponent,
     //MenuComponent,
   ],
   providers: [{
