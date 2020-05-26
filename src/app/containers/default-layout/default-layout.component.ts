@@ -51,7 +51,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.dynamicMenu.push(
         {
           name: mr.module.moduleDisplayName,
-          url: `/form-loader/${mr.module.moduleKey}`,
+          url: `/form-loader/${mr.nodeName}`,
           icon: 'icon-puzzle',
           children: [],
         }
