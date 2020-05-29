@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError, of} from 'rxjs';
 import {map, catchError, tap} from 'rxjs/operators';
 import {NavData} from '../_nav';
@@ -19,6 +19,10 @@ import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
   providedIn: 'root'
 })
 export class DynamicMenuService {
+
+  public test(): Observable<any> {
+    return this.http.post(`${this.settingsService.apiPath}/modules/staff-module/base/v1/data`, {});
+  }
 
   constructor(public http: HttpClient, private settingsService: SettingsService) {
   }

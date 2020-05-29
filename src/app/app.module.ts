@@ -46,6 +46,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 //import {ContainerModule} from "../../shared/container-module/container.module";
 import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
+import {ContainerModule} from "../../shared/container-module/container.module";
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { FormLoaderComponent } from './containers/form-loader/form-loader.compon
     ChartsModule,
     HttpClientModule,
     HttpModule,
+    ContainerModule
   ],
   declarations: [
     AppComponent,

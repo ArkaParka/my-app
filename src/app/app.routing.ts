@@ -51,10 +51,10 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
-      // {
-      //   path: 'grid-layout',
-      //   component: GridLayoutComponent
-      // },
+      {
+        path: 'grid-layout',
+        component: FormLoaderComponent
+      },
       // обертка для отображения любой формы по параметрам
       {
         path: 'form-loader/:moduleKey/:configPath',
