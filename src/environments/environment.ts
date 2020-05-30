@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiPath: 'http://pbs.ec-t.space/pbs',
+  apiPath: 'http://pbs.ec-t.space',
 };
