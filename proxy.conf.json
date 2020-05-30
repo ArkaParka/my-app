@@ -1,0 +1,17 @@
+{
+  "/": {
+    "target": "http://pbs.ec-t.space",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "cookieDomainRewrite": ""
+    },
+  "/pbs/*": {
+    "target": "http://pbs.ec-t.space",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {"^/pbs" : "http://pbs.ec-t.space/pbs/"},
+    "cookieDomainRewrite": ""
+  }
+}

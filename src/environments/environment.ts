@@ -5,5 +5,9 @@
 
 export const environment = {
   production: false,
+<<<<<<< HEAD
   apiPath: 'http://212.110.128.210:1180/pbs',
+=======
+  apiPath: 'http://pbs.ec-t.space',
+>>>>>>> 3065e70... Исправлены конфигурации, для корректного проксирования запросов на backend.
 };

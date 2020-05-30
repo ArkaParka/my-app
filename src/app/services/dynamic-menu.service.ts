@@ -23,12 +23,16 @@ export class DynamicMenuService {
   constructor(public http: HttpClient, private settingsService: SettingsService) {
   }
 
+  public test(): Observable<any> {
+    return this.http.post(`/pbs/modules/staff-module/base/v1/data`, {action_name: "staff.all_person"});
+  }
+
   public getModules(): Observable<Array<ModuleInfo>> {
-    return this.http.get<Array<ModuleInfo>>(`${this.settingsService.apiPath}/api/base/modules/modules`);
+    return this.http.get<Array<ModuleInfo>>(`/pbs/api/base/modules/modules`);
   }
 
   public getModuleActions(nodeName: string): Observable<Array<ModuleActionsResponse>> {
-    return this.http.get<Array<ModuleActionsResponse>>(`${this.settingsService.apiPath}/modules/${nodeName}/base/v1/menuItems`);
+    return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
   public loadExample(): Observable<FormlyConfig> {
