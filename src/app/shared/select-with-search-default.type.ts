@@ -5,14 +5,15 @@ import { DataSelect } from '../menu/responce-interface';
 
 
 @Component({
-    selector: 'search-default-example',
+    selector: 'select-with-search',
     template: `
     <legend *ngIf="to.label">{{ to.label }}</legend>
-    <ng-select  [items]="people"
+    <legend *ngIf="to.description">{{ to.description }}</legend>
+    <ng-select  [items]="items"
                 bindValue="name"
                 bindLabel="name"
                 placeholder="Search"
-                [loading]="peopleLoading"
+                [loading]="itemsLoading"
                 [(ngModel)]="selectedItem"
                 (change)="onChange($event)">
     </ng-select>
@@ -20,8 +21,8 @@ import { DataSelect } from '../menu/responce-interface';
 })
 export class SearchDefaultComponent extends FieldType implements OnInit {
 
-    people: DataSelect[] = [];
-    peopleLoading = false;
+    items: DataSelect[] = [];
+    itemsLoading = false;
     selectedItem: any;
 
     constructor(private dynamicMenuService: DynamicMenuService) {
@@ -33,11 +34,7 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
     }
 
     private loadPeople() {
-        this.peopleLoading = true;
-        this.dynamicMenuService.getDataForSelect((this.field as any).url).subscribe(x => {
-            this.people = x;
-            this.peopleLoading = false;
-        });
+        this.itemsLoading = true;
     }
     onChange($event) {
         this.formControl.setValue(this.selectedItem);
