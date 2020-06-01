@@ -1,4 +1,4 @@
-<ng-template #dynamicButtons let-value="value" let-title="title">
+<ng-template #dynamicButtons let-value="actionName" let-title="actionTitle">
   <button style="margin-bottom: 5px;" type="button" class="btn btn-secondary" value="{{value}}">{{ title }}</button>
 </ng-template>
 <div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
 import { DataSelect } from '../menu/responce-interface';
@@ -10,16 +10,17 @@ import { DataSelect } from '../menu/responce-interface';
     <legend *ngIf="to.label">{{ to.label }}</legend>
     <legend *ngIf="to.description">{{ to.description }}</legend>
     <ng-select  [items]="items"
-                bindValue="name"
-                bindLabel="name"
+                bindValue="id"
+                bindLabel="title"
                 placeholder="Search"
                 [loading]="itemsLoading"
                 [(ngModel)]="selectedItem"
+                (search)="onSearch($event)"
                 (change)="onChange($event)">
     </ng-select>
     `
 })
-export class SearchDefaultComponent extends FieldType implements OnInit {
+export class SearchDefaultComponent extends FieldType {
 
     items: DataSelect[] = [];
     itemsLoading = false;
@@ -28,14 +29,19 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
     constructor(private dynamicMenuService: DynamicMenuService) {
         super();
     }
-
-    ngOnInit() {
-        this.loadPeople();
+    
+    onSearch($event) {
+        this.loadItems($event.term);
     }
 
-    private loadPeople() {
+    public loadItems(filter: string) {
         this.itemsLoading = true;
+        this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, filter).subscribe(data => {
+            this.items = data;
+            this.itemsLoading = false;
+        });
     }
+
     onChange($event) {
         this.formControl.setValue(this.selectedItem);
     }

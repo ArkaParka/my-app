@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 export class MenuComponent implements OnInit {
 
   public gridOptions: GridOptions = {};
-  public rowData: any;
+  public rowData;
   public actions: object[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
@@ -30,7 +30,7 @@ export class MenuComponent implements OnInit {
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
-
+    this.largeModal.show();
   }
 
   ngOnInit(): void {
@@ -40,11 +40,40 @@ export class MenuComponent implements OnInit {
   }
 
   public workWithConfig(): void {
-
+    this.dynamicMenuService.getModulePageConfiguration('staff-module', 'staff.all_person').subscribe(data => {
+      this.actions = data.actions;
+      this.gridOptions = data.viewConfig.config;
+      let schema = data.dataTypes.map(data => {
+        return data.forms.map(item => {
+          return item.schema;
+        });
+      });
+      this.fields = schema[0];
+      console.log('this.fields',   this.fields);
+      this.model = {
+        phoneInfos: [{ type: null, phone: null }],
+        emails: [ null ]
+      };
+    });
   }
 
   public addData(): void {
-
+    const bodyForModuleData = {
+      action_name: 'staff.all_person',
+      order_info: [
+        {
+          field_path: null,
+          order: null
+        }
+      ],
+      page_info: {
+        pageIndex: 0,
+        pageSize: 10
+      }
+    };
+    this.dynamicMenuService.getModuleData('staff-module', bodyForModuleData).subscribe(data => {
+      this.rowData = data.data;
+    });
   }
 
   submit() {
@@ -55,7 +84,14 @@ export class MenuComponent implements OnInit {
   }
 
   public add(): void {
-
+    const data = this.form.value;
+    //data['id'] = null;
+    const bodyForFormDataInstance = {
+      data: data,
+      formKey: 'user_form',
+      type: 'UserFormItem'
+    }
+    this.dynamicMenuService.putFormDataInstance('staff-module', 'user_form', bodyForFormDataInstance).subscribe();
     this.largeModal.hide();
   }
 
@@ -65,11 +101,8 @@ export class MenuComponent implements OnInit {
   }
 
   rowClicked(event) {
+    
     //this.data = event.data;
-  }
-
-  public hideModal(): void {
-    this.largeModal.hide();
   }
 
   public delete(): void {
