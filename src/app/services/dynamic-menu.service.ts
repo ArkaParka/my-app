@@ -26,4 +26,6 @@ export class DynamicMenuService {
     return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
+  public getModulePageConfiguration(nodeName: string, path: string): Observable<any> {
+    return this.http.get(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${path}`).pipe();}
 }
