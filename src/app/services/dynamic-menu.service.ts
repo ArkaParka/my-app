@@ -4,7 +4,9 @@ import {Observable, throwError, of} from 'rxjs';
 import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
-import { map } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
+import { ModulePageConfiguration } from '../models/ModulePageConfiguration.interface';
+import { ModuleData } from '../models/ModuleData.interface';
 
 
 @Injectable({
@@ -27,28 +29,65 @@ export class DynamicMenuService {
     return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
-  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<any> {
+  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration> {
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`).pipe(
-      map(({actions, viewConfig, dataTypes}) => {
+      tap(({actions, viewConfig, dataTypes}) => {
         return {
           actions, viewConfig, dataTypes
         }
+      }),
+      catchError(err => {
+        return throwError(err);
       })
     );
   }
 
-  public getModuleData(nodeName: string, body: object): Observable<any> {
+  public getModuleData(nodeName: string, actionKey: string, order_info: object): Observable<ModuleData> {
     const headers = {"Content-type": "application/json; charset=UTF-8"};
-    return this.http.post(`/pbs/modules/${nodeName}/base/v1/data`, JSON.stringify(body), { headers });
+    const body = {
+      "action_name": actionKey,
+      "order_info": [
+        {
+          "field_path": null,
+          "order": null
+        }
+      ],
+      "page_info": {
+        "pageIndex": 1,
+        "pageSize": 10
+      }
+    };
+    return this.http.post<ModuleData>(`/pbs/modules/${nodeName}/base/v1/data`, JSON.stringify(body), { headers }).pipe(
+      catchError(err => {
+        return throwError(err);
+      })
+    );;
   }
 
   public findSelectableData(nodeName: string, endpoint: string, filter: string): Observable<any> {
-    return this.http.get(`/pbs/modules/${nodeName}/base/v1/selectable/${endpoint}/${filter}`);
+    return this.http.get(`/pbs/modules/${nodeName}/base/v1/selectable/${endpoint}/${filter}`).pipe(
+      catchError(err => {
+        return throwError(err);
+      })
+    );;
   };
 
-  public putFormDataInstance(nodeName: string, formKey: string, body: object): Observable<any> {
+  public putFormDataInstance(nodeName: string, body: object): Observable<any> {
     const headers = {"Content-type": "application/json; charset=UTF-8"};
-    return this.http.put(`/pbs/modules/${nodeName}/base/v1/data/${formKey}`, body, { headers });
-  }  
+    return this.http.put(`/pbs/modules/${nodeName}/base/v1/data/${body['formKey']}`, body, { headers }).pipe(
+      catchError(err => {
+        return throwError(err);
+      })
+    );;
+  }
+
+  public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: number): Observable<any> {
+    return this.http.get(`${this.settingsService.apiPath}/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}
+    `);
+  }
+  
+  public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: number): Observable<any> {
+    return this.http.delete(`${this.settingsService.apiPath}/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
+  }
 
 }
