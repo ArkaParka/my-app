@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
-import { DataSelect } from '../menu/responce-interface';
-
+import { fromEvent } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'select-with-search',
@@ -22,7 +22,7 @@ import { DataSelect } from '../menu/responce-interface';
 })
 export class SearchDefaultComponent extends FieldType {
 
-    items: DataSelect[] = [];
+    items: object[] = [];
     itemsLoading = false;
     selectedItem: any;
 
@@ -36,10 +36,12 @@ export class SearchDefaultComponent extends FieldType {
 
     public loadItems(filter: string) {
         this.itemsLoading = true;
-        this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, filter).subscribe(data => {
-            this.items = data;
-            this.itemsLoading = false;
-        });
+        if (filter.length > 0 && filter.match(/^\s/) == null) {
+            this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, filter).subscribe(data => {
+                this.items = data;
+                this.itemsLoading = false;
+            });
+        }
     }
 
     onChange($event) {
