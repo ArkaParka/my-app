@@ -5,6 +5,8 @@ import { FormGroup } from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { BehaviorSubject } from 'rxjs';
+import { Actions } from '../models/Actions.interface';
+import { DataTypes } from '../models/DataTypes.interface';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -13,13 +15,16 @@ import { BehaviorSubject } from 'rxjs';
 export class MenuComponent implements OnInit {
 
   public gridOptions: GridOptions = {};
-  public rowData;
-  public actions: object[];
+  public rowData: any;
+  public actions: Actions[];
+  private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
-  public model: any;
+  public model: any = {};
   private data: object;
-  private buttonIndicator;
+  private putFormData;
+  private hash: string = null;
+  private id: number = null;
   private gridApi: any;
   public dataChange: BehaviorSubject<any>;
   public options: FormlyFormOptions = {};
@@ -30,48 +35,50 @@ export class MenuComponent implements OnInit {
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
-    this.largeModal.show();
+    let forms;
+    this.dataTypes.map(elem => forms = elem.forms);
+
+    for(let item of this.actions) {
+      if (e.target['value'] == item['actionName']) {
+        for(let elem of forms) {
+          if (item['execConfig']['formKey'] == elem['formKey']) {
+            this.putFormData = {
+              indicator: e.target['value'],
+              formKey: elem['formKey']
+            };
+            this.fields = [elem['schema']];
+            this.largeModal.show();
+          }
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
     this.workWithConfig();
     this.addData();
-
   }
 
   public workWithConfig(): void {
-    this.dynamicMenuService.getModulePageConfiguration('staff-module', 'staff.all_person').subscribe(data => {
-      this.actions = data.actions;
-      this.gridOptions = data.viewConfig.config;
-      let schema = data.dataTypes.map(data => {
-        return data.forms.map(item => {
-          return item.schema;
-        });
-      });
-      this.fields = schema[0];
-      console.log('this.fields',   this.fields);
-      this.model = {
-        phoneInfos: [{ type: null, phone: null }],
-        emails: [ null ]
-      };
+    this.dynamicMenuService.getModulePageConfiguration("staff-module", "staff.all_person").subscribe(resp => {
+      this.gridOptions = resp.viewConfig.config;
+      this.dataTypes = resp.dataTypes;
+      this.actions = resp.actions;
+      console.log(this.dataTypes)
     });
+   
+    const testModel = {
+      "phoneInfos": [
+          { "type": null, "phone": null }
+      ],
+      "emails": [ null ]
+    };
+    this.model = testModel;
   }
 
   public addData(): void {
-    const bodyForModuleData = {
-      action_name: 'staff.all_person',
-      order_info: [
-        {
-          field_path: null,
-          order: null
-        }
-      ],
-      page_info: {
-        pageIndex: 0,
-        pageSize: 10
-      }
-    };
-    this.dynamicMenuService.getModuleData('staff-module', bodyForModuleData).subscribe(data => {
+    this.dynamicMenuService.getModuleData('staff-module', 'staff.all_person', {}).subscribe(data => {
+      console.log('getModuleData', data.data);
       this.rowData = data.data;
     });
   }
@@ -83,16 +90,49 @@ export class MenuComponent implements OnInit {
     this.largeModal.hide();
   }
 
-  public add(): void {
-    const data = this.form.value;
-    //data['id'] = null;
-    const bodyForFormDataInstance = {
-      data: data,
-      formKey: 'user_form',
-      type: 'UserFormItem'
+  public done(): void {
+    let typeForm;
+    this.dataTypes.map(elem => {
+      elem.forms.filter(item => {
+        if(item.formKey == this.putFormData?.formKey) {
+          typeForm = elem.type;
+        }
+      });
+    });
+    if (this.putFormData.indicator.includes('create')) {
+      this.create(typeForm);
     }
-    this.dynamicMenuService.putFormDataInstance('staff-module', 'user_form', bodyForFormDataInstance).subscribe();
+    if (this.putFormData.indicator.includes('edit')) {
+      this.edit(typeForm);
+    }
+    if (this.putFormData.indicator.includes('delete')) {
+      this.delete(typeForm);
+    }
     this.largeModal.hide();
+  }
+
+  private create(typeForm: string): void {
+    const body = {
+      data: this.form.value,
+      formKey: this.putFormData.formKey,
+      hash: this.hash, //удалить если не заработает
+      id: this.id, //удалить если не заработатет
+      type: typeForm
+    };
+
+    this.dynamicMenuService.putFormDataInstance("staff-module", body).subscribe();
+    this.addData();
+    this.gridApi.refreshCells({force : true});
+  }
+
+  private edit(typeForm: string): void {
+    // this.dynamicMenuService.getFormDataInstance('staff-module', 'staff.all_person', typeForm, this.id).subscribe(data => {
+
+    // });
+  }
+
+  private delete(typeForm: string): void {
+
   }
 
   onGridReady(params) {
@@ -101,14 +141,8 @@ export class MenuComponent implements OnInit {
   }
 
   rowClicked(event) {
-    
-    //this.data = event.data;
-  }
-
-  public delete(): void {
-    // const selected = this.gridApi.getSelectedRows();
-    this.gridApi.refreshCells();
-    this.largeModal.hide();
+    this.data = event.data;
+    console.log('rowClicked', this.data);
   }
 
 }
