@@ -74,7 +74,7 @@ export class DynamicMenuService {
 
   public putFormDataInstance(nodeName: string, body: object): Observable<any> {
     const headers = {"Content-type": "application/json; charset=UTF-8"};
-    return this.http.put(`/pbs/modules/${nodeName}/base/v1/data/${body['formKey']}`, body, { headers }).pipe(
+    return this.http.put(`/pbs/modules/${nodeName}/base/v1/data/${body['formKey']}`, JSON.stringify(body), { headers }).pipe(
       catchError(err => {
         return throwError(err);
       })
@@ -82,12 +82,12 @@ export class DynamicMenuService {
   }
 
   public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: number): Observable<any> {
-    return this.http.get(`${this.settingsService.apiPath}/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}
+    return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}
     `);
   }
   
   public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: number): Observable<any> {
-    return this.http.delete(`${this.settingsService.apiPath}/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
+    return this.http.delete(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }
 
 }
