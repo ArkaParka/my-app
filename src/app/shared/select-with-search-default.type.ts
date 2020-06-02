@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
-import { fromEvent } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'select-with-search',

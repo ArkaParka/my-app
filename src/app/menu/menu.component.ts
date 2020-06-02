@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  private data: object = null;
+  private data;
   private putFormData;
   private hash: string = null;
   private idFieldName = null;
