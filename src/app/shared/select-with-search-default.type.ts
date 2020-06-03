@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
 import { Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'select-with-search',
@@ -26,6 +26,7 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
     readonly itemsLoading$: BehaviorSubject<any> = new BehaviorSubject(true);;
     selectedItem: any;
     readonly input$ = new Subject<any>();
+    readonly destroy$ = new Subject<any>();
 
 
     constructor(private dynamicMenuService: DynamicMenuService) {
@@ -37,10 +38,16 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
             debounceTime(300),
             distinctUntilChanged(),
             switchMap(value => this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, value)),
-            tap(() => this.itemsLoading$.next(false))
+            tap(() => this.itemsLoading$.next(false)),
+            takeUntil(this.destroy$)
           ).subscribe(data => {
             this.items$.next(data);
           });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     onChange($event) {

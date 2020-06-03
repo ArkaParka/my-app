@@ -4,7 +4,7 @@ import {Observable, throwError, of} from 'rxjs';
 import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
-import { map, tap, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { ModulePageConfiguration } from '../models/ModulePageConfiguration.interface';
 import { ModuleData } from '../models/ModuleData.interface';
 

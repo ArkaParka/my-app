@@ -21,51 +21,61 @@ export class MenuComponent implements OnInit {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  private data;
-  private putFormData;
+  public data;
+  public putFormData;
   private hash: string = null;
   private idFieldName = null;
-  private id: number = null;
+  private id: number;
   private bodyForRequest;
   public confirmMessage;
   private typeForm;
   public viewConfig;
   private gridApi: any;
-  public dataChange: BehaviorSubject<any>;
   public options: FormlyFormOptions = {};
+  public deleteIndicator;
+  private testModel = {
+    "phoneInfos": [
+        { "type": null, "phone": null }
+    ],
+    "emails": [ null ]
+  };
 
   constructor(private dynamicMenuService: DynamicMenuService) {
+    this.gridOptions = {};
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
+  @ViewChild('warningModal') public warningModal: ModalDirective;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
     let forms;
     this.dataTypes.map(elem => forms = elem.forms);
-
-    for(let item of this.actions) {
+    //TODO: отрефакторить это дерьмо
+    for (let item of this.actions) {
       if (e.target['value'] == item['actionName']) {
-        for(let elem of forms) {
-          if (item['execConfig']['formKey'] == elem['formKey']) {
+        for (let elem of forms) {
+          if (item['execConfig']['formKey'] == elem['formKey'] && (this.data || e.target['value'].includes('create'))) {
+            this.confirmMessage = null;
+            console.log('Нажатая кнопка', e.target['value'])
             this.putFormData = {
               indicator: e.target['value'],
               formKey: elem['formKey']
             };
             this.fields = [elem['schema']];
-            console.log('this.form.value', this.form.value);
-            this.form.reset();
             this.largeModal.show();
+          } else {
+            if (item['execConfig']['confirmMessage'] && e.target['value'].includes('delete')) {
+              this.confirmMessage = item['execConfig']['confirmMessage'];
+              this.putFormData = {
+                indicator: e.target['value']
+              };
+              this.largeModal.show();
+            } else this.warningModal.show();
           }
-        }
-        if (item['execConfig']['confirmMessage']) {
-          this.confirmMessage = item['execConfig']['confirmMessage'];
-          this.putFormData = {
-            indicator: e.target['value']
-          };
-          this.largeModal.show();
-        }
-      }
+        }  
+      } 
     }
+
     if(this.putFormData && this.data) {
       this.dataTypes.map(elem => {
         forms = elem.forms
@@ -82,13 +92,11 @@ export class MenuComponent implements OnInit {
         id: this.id, 
         type: this.typeForm
       };
-      
       this.idFieldName = this.viewConfig.config.idFieldName;
-      if (this.putFormData.indicator.includes('edit')) {
-        console.log(this.putFormData.indicator);
+      if (e.target['value']?.includes('edit')) {
         this.edit(this.typeForm);
-      }
-    } 
+      } 
+    }
   }
 
   ngOnInit(): void {
@@ -103,15 +111,7 @@ export class MenuComponent implements OnInit {
       this.actions = resp.actions;
       this.gridOptions = this.viewConfig.config;
     });
-    
-    
-    const testModel = {
-      "phoneInfos": [
-          { "type": null, "phone": null }
-      ],
-      "emails": [ null ]
-    };
-    this.model = testModel;
+    this.model = this.testModel;
   }
 
   public addData(): void {
@@ -124,33 +124,34 @@ export class MenuComponent implements OnInit {
   }
 
   public hideForm(): void {
+    this.form.reset();
+    this.data = null;
     this.largeModal.hide();
+    this.warningModal.hide();
   }
 
   public done(): void {
-    this.create();
     if (this.putFormData.indicator.includes('delete')) {
       this.delete(this.typeForm);
     }
+    this.create();
     this.largeModal.hide();
   }
 
   private create(): void {
-    
-
     if (this.putFormData.indicator.includes('create')) {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
-
     this.dynamicMenuService.putFormDataInstance("staff-module", this.bodyForRequest).subscribe(data => {
       console.log('Отвте от сервера', data);
+      //TODO: нужно мутировать данныне под формат таблицы
       // this.rowData.push(data.data);
       // this.gridApi.setRowData(this.rowData);
       // this.gridApi.refreshCells({force : true});
     });
     this.addData();
-    this.gridApi.refreshCells({force : true});
+    this.gridApi.refreshCells({force : true});       
   }
 
   private edit(typeForm: string): void {
@@ -159,7 +160,9 @@ export class MenuComponent implements OnInit {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
+      //TODO: восполнить пробелы в данных
     });
+    this.form.reset();
   }
 
   private delete(typeForm: string): void {
