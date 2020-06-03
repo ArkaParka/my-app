@@ -34,10 +34,10 @@ export class MenuComponent implements OnInit {
   public options: FormlyFormOptions = {};
   public deleteIndicator;
   private testModel = {
-    "phoneInfos": [
-        { "type": null, "phone": null }
+    phoneInfos: [
+        { type: null, phone: null }
     ],
-    "emails": [ null ]
+    emails: [ null ]
   };
 
   constructor(private dynamicMenuService: DynamicMenuService) {
@@ -143,6 +143,9 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
+
+    console.log('Тело для запроса на сервер', this.bodyForRequest);
+
     this.dynamicMenuService.putFormDataInstance("staff-module", this.bodyForRequest).subscribe(data => {
       console.log('Отвте от сервера', data);
       //TODO: нужно мутировать данныне под формат таблицы
@@ -160,6 +163,8 @@ export class MenuComponent implements OnInit {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
       //TODO: восполнить пробелы в данных
     });
     this.form.reset();
