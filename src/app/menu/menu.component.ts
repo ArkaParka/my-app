@@ -64,7 +64,7 @@ export class MenuComponent implements OnInit {
             this.fields = [elem['schema']];
             this.largeModal.show();
           } else {
-            if (item['execConfig']['confirmMessage'] && e.target['value'].includes('delete')) {
+            if (item['execConfig']['confirmMessage'] && e.target['value'].includes('delete') && this.data) {
               this.confirmMessage = item['execConfig']['confirmMessage'];
               this.putFormData = {
                 indicator: e.target['value']
@@ -165,7 +165,6 @@ export class MenuComponent implements OnInit {
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-      //TODO: восполнить пробелы в данных
     });
     this.form.reset();
   }
