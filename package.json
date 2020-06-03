@@ -57,6 +57,7 @@
     "flag-icon-css": "^3.3.0",
     "font-awesome": "^4.7.0",
     "jexl": "^2.2.2",
+    "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",
     "mutationobserver-shim": "^0.3.3",

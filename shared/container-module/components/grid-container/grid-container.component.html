@@ -1,1 +1,3 @@
-<ng-content></ng-content>
+<app-grid-item *ngFor="let item of activeTemplate.gridItems"
+               [value]="item.areaName"
+               [gridAreaName]="item.areaName"></app-grid-item>

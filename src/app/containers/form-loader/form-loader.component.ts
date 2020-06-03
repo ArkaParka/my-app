@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {DynamicMenuService} from "../../services/dynamic-menu.service";
 
 @Component({
   selector: 'app-form-loader',
@@ -11,17 +10,11 @@ export class FormLoaderComponent {
   moduleKey: string;
   configPath: string;
 
-
-  constructor(private route: ActivatedRoute, private dynamicMenuService: DynamicMenuService) {
-    this.dynamicMenuService.test().subscribe(res => {
-      console.log(res);
-    });
-
+  constructor(private route: ActivatedRoute) {
     route.params.subscribe((params) => {
       this.moduleKey = params['moduleKey'];
       this.configPath = params['configPath'];
     });
   }
-
 
 }
