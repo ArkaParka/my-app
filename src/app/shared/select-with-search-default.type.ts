@@ -1,45 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
 
 @Component({
     selector: 'select-with-search',
     template: `
     <legend *ngIf="to.label">{{ to.label }}</legend>
     <legend *ngIf="to.description">{{ to.description }}</legend>
-    <ng-select  [items]="items"
+    <ng-select  [items]="items$ | async"
                 bindValue="id"
                 bindLabel="title"
                 placeholder="Search"
-                [loading]="itemsLoading"
+                [loading]="itemsLoading$ | async"
                 [(ngModel)]="selectedItem"
-                (search)="onSearch($event)"
-                (change)="onChange($event)">
+                [typeahead]="input$"
+                (change)="onChange()">
     </ng-select>
     `
 })
-export class SearchDefaultComponent extends FieldType {
+export class SearchDefaultComponent extends FieldType implements OnInit {
 
-    items: object[] = [];
-    itemsLoading = false;
+    readonly items$: BehaviorSubject<any[]> = new BehaviorSubject([]);
+    readonly itemsLoading$: BehaviorSubject<any> = new BehaviorSubject(true);;
     selectedItem: any;
+    readonly input$ = new Subject<any>();
+
 
     constructor(private dynamicMenuService: DynamicMenuService) {
         super();
     }
-    
-    onSearch($event) {
-        this.loadItems($event.term);
-    }
-
-    public loadItems(filter: string) {
-        this.itemsLoading = true;
-        if (filter.length > 0 && filter.match(/^\s/) == null) {
-            this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, filter).subscribe(data => {
-                this.items = data;
-                this.itemsLoading = false;
-            });
-        }
+    ngOnInit(): void {
+        this.input$.pipe(
+            filter(data => data.length > 0 && data.match(/^\s/) == null),
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(value => this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, value)),
+            tap(() => this.itemsLoading$.next(false))
+          ).subscribe(data => {
+            this.items$.next(data);
+          });
     }
 
     onChange($event) {
