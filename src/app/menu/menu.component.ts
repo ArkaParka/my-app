@@ -135,6 +135,8 @@ export class MenuComponent implements OnInit {
       this.delete(this.typeForm);
     }
     this.create();
+    this.addData();
+    this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
   }
 
@@ -144,17 +146,13 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.id;
     }
 
-    console.log('Тело для запроса на сервер', this.bodyForRequest);
-
     this.dynamicMenuService.putFormDataInstance("staff-module", this.bodyForRequest).subscribe(data => {
       console.log('Отвте от сервера', data);
       //TODO: нужно мутировать данныне под формат таблицы
       // this.rowData.push(data.data);
       // this.gridApi.setRowData(this.rowData);
       // this.gridApi.refreshCells({force : true});
-    });
-    this.addData();
-    this.gridApi.refreshCells({force : true});       
+    });       
   }
 
   private edit(typeForm: string): void {
