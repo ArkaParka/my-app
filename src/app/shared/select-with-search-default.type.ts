@@ -34,7 +34,7 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
     }
     ngOnInit(): void {
         this.input$.pipe(
-            filter(data => data.length > 0 && data.match(/^\s/) == null),
+            filter(data => data?.length > 0 && data.match(/^\s/) == null),
             debounceTime(300),
             distinctUntilChanged(),
             switchMap(value => this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, value)),

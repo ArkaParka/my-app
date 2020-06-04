@@ -4,7 +4,6 @@ import { GridOptions } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
-import { BehaviorSubject } from 'rxjs';
 import { Actions } from '../models/Actions.interface';
 import { DataTypes } from '../models/DataTypes.interface';
 
@@ -22,7 +21,7 @@ export class MenuComponent implements OnInit {
   public form = new FormGroup({});
   public model: any = {};
   public data;
-  public putFormData;
+  public putFormData: object = {};
   private hash: string = null;
   private idFieldName = null;
   private id: number;
@@ -33,15 +32,9 @@ export class MenuComponent implements OnInit {
   private gridApi: any;
   public options: FormlyFormOptions = {};
   public deleteIndicator;
-  private testModel = {
-    phoneInfos: [
-        { type: null, phone: null }
-    ],
-    emails: [ null ]
-  };
+
 
   constructor(private dynamicMenuService: DynamicMenuService) {
-    this.gridOptions = {};
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
@@ -55,23 +48,16 @@ export class MenuComponent implements OnInit {
       if (e.target['value'] == item['actionName']) {
         for (let elem of forms) {
           if (item['execConfig']['formKey'] == elem['formKey'] && (this.data || e.target['value'].includes('create'))) {
-            this.confirmMessage = null;
-            console.log('Нажатая кнопка', e.target['value'])
             this.putFormData = {
               indicator: e.target['value'],
-              formKey: elem['formKey']
+              formKey: elem['formKey'],
+              confirmMessage: item['execConfig']['confirmMessage']
             };
-            this.fields = [elem['schema']];
+            if (!e.target['value'].includes('delete')) {
+              this.fields = [elem['schema']];
+            }
             this.largeModal.show();
-          } else {
-            if (item['execConfig']['confirmMessage'] && e.target['value'].includes('delete') && this.data) {
-              this.confirmMessage = item['execConfig']['confirmMessage'];
-              this.putFormData = {
-                indicator: e.target['value']
-              };
-              this.largeModal.show();
-            } else this.warningModal.show();
-          }
+          } else this.warningModal.show();
         }  
       } 
     }
@@ -80,21 +66,21 @@ export class MenuComponent implements OnInit {
       this.dataTypes.map(elem => {
         forms = elem.forms
         elem.forms.filter(item => {
-          if(item.formKey == this.putFormData?.formKey) {
+          if(item.formKey == (this.putFormData as any)?.formKey) {
             this.typeForm = elem.type;
           }
         });
       });
       this.bodyForRequest = {
         data: this.form.value,
-        formKey: this.putFormData.formKey,
+        formKey: (this.putFormData as any)?.formKey,
         hash: this.hash,
         id: this.id, 
         type: this.typeForm
       };
       this.idFieldName = this.viewConfig.config.idFieldName;
-      if (e.target['value']?.includes('edit')) {
-        this.edit(this.typeForm);
+      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
+        this.getFormDataInstance(this.typeForm);
       } 
     }
   }
@@ -111,7 +97,13 @@ export class MenuComponent implements OnInit {
       this.actions = resp.actions;
       this.gridOptions = this.viewConfig.config;
     });
-    this.model = this.testModel;
+    const testModel = {
+      phoneInfos: [
+          { type: null, phone: null }
+      ],
+      emails: [ null ]
+    };
+    this.model = testModel;
   }
 
   public addData(): void {
@@ -131,17 +123,19 @@ export class MenuComponent implements OnInit {
   }
 
   public done(): void {
-    if (this.putFormData.indicator.includes('delete')) {
+    if ((this.putFormData as any).indicator.includes('delete')) {
       this.delete(this.typeForm);
+    } else {
+      this.create();
     }
-    this.create();
+    
     this.addData();
     this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
   }
 
   private create(): void {
-    if (this.putFormData.indicator.includes('create')) {
+    if ((this.putFormData as any).indicator.includes('create')) {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
@@ -155,9 +149,9 @@ export class MenuComponent implements OnInit {
     });       
   }
 
-  private edit(typeForm: string): void {
+  private getFormDataInstance(typeForm: string): void {
     this.id = this.data[this.idFieldName];
-    this.dynamicMenuService.getFormDataInstance('staff-module', this.putFormData.formKey, typeForm, this.id).subscribe(data => {
+    this.dynamicMenuService.getFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
@@ -168,7 +162,11 @@ export class MenuComponent implements OnInit {
   }
 
   private delete(typeForm: string): void {
-    this.dynamicMenuService.deleteFormDataInstance('staff-module', this.putFormData.formKey, typeForm, this.id).subscribe();
+    console.log('Модель перед удалением', this.model);
+    this.dynamicMenuService.deleteFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
+      console.log('Отвте от сервера', data);
+      //TODO: нужно мутировать данныне под формат таблицы
+    });
   }
 
   onGridReady(params) {

@@ -25,11 +25,11 @@
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body" *ngIf="!confirmMessage; else delete">
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-        </form>
+    <div class="modal-content" *ngIf="!putFormData.confirmMessage; else delete">
+      <div class="modal-body">
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+          </form> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
@@ -40,24 +40,17 @@
 </div>
 
 <ng-template #delete>
-  <div class="modal-body">
-    <h5> {{ confirmMessage }}</h5>
-  </div>
-</ng-template>
-
-<!-- <div bsModal #deletegModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h5> {{ confirmMessage }}</h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
-        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="done()">Готово</button>
-      </div>
+  <div class="modal-content">
+    <div class="modal-body">
+      <h5> {{ putFormData.confirmMessage }}</h5>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
+      <button type="button" class="btn btn-primary" (click)="done()">Готово</button>
     </div>
   </div>
-</div> -->
+
+</ng-template>
 
 <div bsModal #warningModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
