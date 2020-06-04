@@ -6,6 +6,7 @@ import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { Actions } from '../models/Actions.interface';
 import { DataTypes } from '../models/DataTypes.interface';
+import { Subject } from 'rxjs';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -13,14 +14,14 @@ import { DataTypes } from '../models/DataTypes.interface';
 
 export class MenuComponent implements OnInit {
 
-  public gridOptions: GridOptions = {};
+  public gridOptions: GridOptions;
   public rowData: object[] = [];
   public actions: Actions[];
   private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  public data;
+  //public data;
   public putFormData: object = {};
   private hash: string = null;
   private idFieldName = null;
@@ -32,7 +33,8 @@ export class MenuComponent implements OnInit {
   private gridApi: any;
   public options: FormlyFormOptions = {};
   public deleteIndicator;
-
+  private REQ_ONE;
+  private REQ_MULTY;
 
   constructor(private dynamicMenuService: DynamicMenuService) {
   }
@@ -47,7 +49,7 @@ export class MenuComponent implements OnInit {
     for (let item of this.actions) {
       if (e.target['value'] == item['actionName']) {
         for (let elem of forms) {
-          if (item['execConfig']['formKey'] == elem['formKey'] && (this.data || e.target['value'].includes('create'))) {
+          if (item['execConfig']['formKey'] == elem['formKey'] && (this.REQ_ONE || e.target['value'].includes('create'))) {
             this.putFormData = {
               indicator: e.target['value'],
               formKey: elem['formKey'],
@@ -62,7 +64,7 @@ export class MenuComponent implements OnInit {
       } 
     }
 
-    if(this.putFormData && this.data) {
+    if(this.putFormData && this.REQ_ONE) {
       this.dataTypes.map(elem => {
         forms = elem.forms
         elem.forms.filter(item => {
@@ -79,7 +81,7 @@ export class MenuComponent implements OnInit {
         type: this.typeForm
       };
       this.idFieldName = this.viewConfig.config.idFieldName;
-      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
+      if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
       } 
     }
@@ -97,6 +99,7 @@ export class MenuComponent implements OnInit {
       this.actions = resp.actions;
       this.gridOptions = this.viewConfig.config;
     });
+    //checkboxSelection: true 
     const testModel = {
       phoneInfos: [
           { type: null, phone: null }
@@ -117,16 +120,16 @@ export class MenuComponent implements OnInit {
 
   public hideForm(): void {
     this.form.reset();
-    this.data = null;
+    this.REQ_ONE = null;
     this.largeModal.hide();
     this.warningModal.hide();
   }
 
   public done(): void {
     if ((this.putFormData as any).indicator.includes('delete')) {
-      this.delete(this.typeForm);
+      this.deleteFormDataInstance(this.typeForm);
     } else {
-      this.create();
+      this.putFormDataInstance();
     }
     
     this.addData();
@@ -134,7 +137,7 @@ export class MenuComponent implements OnInit {
     this.largeModal.hide();
   }
 
-  private create(): void {
+  private putFormDataInstance(): void {
     if ((this.putFormData as any).indicator.includes('create')) {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
@@ -145,12 +148,12 @@ export class MenuComponent implements OnInit {
       //TODO: нужно мутировать данныне под формат таблицы
       // this.rowData.push(data.data);
       // this.gridApi.setRowData(this.rowData);
-      // this.gridApi.refreshCells({force : true});
+      //this.gridApi.refreshCells({force : true});
     });       
   }
 
   private getFormDataInstance(typeForm: string): void {
-    this.id = this.data[this.idFieldName];
+    this.id = this.REQ_ONE[this.idFieldName];
     this.dynamicMenuService.getFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
@@ -161,12 +164,15 @@ export class MenuComponent implements OnInit {
     this.form.reset();
   }
 
-  private delete(typeForm: string): void {
-    console.log('Модель перед удалением', this.model);
-    this.dynamicMenuService.deleteFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
-      console.log('Отвте от сервера', data);
-      //TODO: нужно мутировать данныне под формат таблицы
+  private deleteFormDataInstance(typeForm: string): void {
+    this.REQ_MULTY.map(elem => {
+      this.id = elem[this.idFieldName];
+      this.dynamicMenuService.deleteFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
+        console.log('Отвте от сервера', data);
+        //TODO: нужно мутировать данныне под формат таблицы
+      });
     });
+    
   }
 
   onGridReady(params) {
@@ -175,7 +181,9 @@ export class MenuComponent implements OnInit {
   }
 
   rowClicked(event) {
-    this.data = event.data;
+    this.REQ_ONE = event.data;
+    this.REQ_MULTY = this.gridApi.getSelectedRows();
+    console.log('rowsSelection', this.REQ_MULTY);
   }
 
 }
