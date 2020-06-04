@@ -186,7 +186,6 @@ export class MenuComponent implements OnInit {
   rowClicked(event) {
     this.REQ_ONE = event.data;
     this.REQ_MULTY = this.gridApi.getSelectedRows();
-    console.log('rowsSelection', this.REQ_MULTY);
   }
 
 }
