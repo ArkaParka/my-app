@@ -1,6 +1,6 @@
-import { BaseTableVew } from './BaseTableVew.interface';
+import { GridOptions } from 'ag-grid-community';
 
 export interface ViewConfiguration {
     type: string,
-    config: BaseTableVew
+    config: GridOptions
 }

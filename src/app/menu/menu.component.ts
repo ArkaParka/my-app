@@ -6,7 +6,7 @@ import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { Actions } from '../models/Actions.interface';
 import { DataTypes } from '../models/DataTypes.interface';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -15,6 +15,7 @@ import { Subject } from 'rxjs';
 export class MenuComponent implements OnInit {
 
   public gridOptions: GridOptions;
+  // public columnDefs;
   public rowData: object[] = [];
   public actions: Actions[];
   private dataTypes: DataTypes[];
@@ -97,7 +98,9 @@ export class MenuComponent implements OnInit {
       this.viewConfig =  resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
-      this.gridOptions = this.viewConfig.config;
+      this.gridOptions = resp.viewConfig.config;
+      // this.columnDefs = resp.viewConfig.config.columnDefs;
+      // delete this.gridOptions.columnDefs;
     });
     //checkboxSelection: true 
     const testModel = {
