@@ -1,44 +1,55 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
-import { DataSelect } from '../menu/responce-interface';
-
+import { Subject, BehaviorSubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'search-default-example',
+    selector: 'select-with-search',
     template: `
     <legend *ngIf="to.label">{{ to.label }}</legend>
-    <ng-select  [items]="people"
-                bindValue="name"
-                bindLabel="name"
+    <legend *ngIf="to.description">{{ to.description }}</legend>
+    <ng-select  [items]="items$ | async"
+                bindValue="id"
+                bindLabel="title"
                 placeholder="Search"
-                [loading]="peopleLoading"
+                [loading]="itemsLoading$ | async"
                 [(ngModel)]="selectedItem"
-                (change)="onChange($event)">
+                [typeahead]="input$"
+                (change)="onChange()">
     </ng-select>
     `
 })
 export class SearchDefaultComponent extends FieldType implements OnInit {
 
-    people: DataSelect[] = [];
-    peopleLoading = false;
+    readonly items$: BehaviorSubject<any[]> = new BehaviorSubject([]);
+    readonly itemsLoading$: BehaviorSubject<any> = new BehaviorSubject(true);;
     selectedItem: any;
+    readonly input$ = new Subject<any>();
+    readonly destroy$ = new Subject<any>();
+
 
     constructor(private dynamicMenuService: DynamicMenuService) {
         super();
     }
-
-    ngOnInit() {
-        this.loadPeople();
+    ngOnInit(): void {
+        this.input$.pipe(
+            filter(data => data.length > 0 && data.match(/^\s/) == null),
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap(value => this.dynamicMenuService.findSelectableData((this.field as any).widgetOptions.module, (this.field as any).widgetOptions.endPoint, value)),
+            tap(() => this.itemsLoading$.next(false)),
+            takeUntil(this.destroy$)
+          ).subscribe(data => {
+            this.items$.next(data);
+          });
     }
 
-    private loadPeople() {
-        this.peopleLoading = true;
-        this.dynamicMenuService.getDataForSelect((this.field as any).url).subscribe(x => {
-            this.people = x;
-            this.peopleLoading = false;
-        });
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
+
     onChange($event) {
         this.formControl.setValue(this.selectedItem);
     }

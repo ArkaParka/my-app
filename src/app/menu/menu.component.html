@@ -1,21 +1,17 @@
-<h3>Таблица</h3>
-
-<ng-template #dynamicButtons let-value="value" let-title="title">
+<ng-template #dynamicButtons let-value="actionName" let-title="actionTitle">
   <button style="margin-bottom: 5px;" type="button" class="btn btn-secondary" value="{{value}}">{{ title }}</button>
 </ng-template>
 <div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
   <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
 </div>
 
+<br>
 <div>
   {{form.value | json}}
 </div>
+<br>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-</form>
-
-<!--<ag-grid-angular
+<ag-grid-angular
   #dinamicTable
   style="height: 500px;"
   class="ag-theme-balham"
@@ -23,47 +19,57 @@
   [columnDefs]="gridOptions.columnDefs"
   [gridOptions]="gridOptions"
   (gridReady)="onGridReady($event)"
-  (rowClicked)='rowClicked($event)'  
+  (rowClicked)='rowClicked($event)'
 >
 </ag-grid-angular>
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-body">
+      <div class="modal-body" *ngIf="!confirmMessage; else delete">
         <form [formGroup]="form" (ngSubmit)="submit()">
           <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
-        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="add()">Сохранить</button>
-      </div>
-    </div>
-  </div>
-</div>
--->
-
-<div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Вы подтверждаете операцию?</h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="hideModal()">Закрыть</button>
-        <button type="submit" class="btn btn-primary" (click)="delete()"> Удалить</button>
+        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="done()">Готово</button>
       </div>
     </div>
   </div>
 </div>
 
-<div bsModal #warningModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModal" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+<ng-template #delete>
+  <div class="modal-body">
+    <h5> {{ confirmMessage }}</h5>
+  </div>
+</ng-template>
+
+<!-- <div bsModal #deletegModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <p>Выберите строку из таблицы!</p>
+        <h5> {{ confirmMessage }}</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
+        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="done()">Готово</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div bsModal #warningModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h5>Выберите строку из таблицы!</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>
       </div>
     </div>
   </div>
 </div>
+
+

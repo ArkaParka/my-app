@@ -5,8 +5,8 @@ import { FormGroup } from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { BehaviorSubject } from 'rxjs';
-import { FormlyJsonschema } from '@ngx-formly/core/json-schema';
-
+import { Actions } from '../models/Actions.interface';
+import { DataTypes } from '../models/DataTypes.interface';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -14,117 +14,161 @@ import { FormlyJsonschema } from '@ngx-formly/core/json-schema';
 
 export class MenuComponent implements OnInit {
 
-  public gridOptions: GridOptions;
-  public rowData: any;
-  public actions: object[];
+  public gridOptions: GridOptions = {};
+  public rowData: object[] = [];
+  public actions: Actions[];
+  private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
-  public model: any;
-  private data: object;
-  private buttonIndicator;
+  public model: any = {};
+  public data;
+  public putFormData;
+  private hash: string = null;
+  private idFieldName = null;
+  private id: number;
+  private bodyForRequest;
+  public confirmMessage;
+  private typeForm;
+  public viewConfig;
   private gridApi: any;
-  public dataChange: BehaviorSubject<any>;
   public options: FormlyFormOptions = {};
+  public deleteIndicator;
+  private testModel = {
+    phoneInfos: [
+        { type: null, phone: null }
+    ],
+    emails: [ null ]
+  };
 
-  constructor(private dynamicMenuService: DynamicMenuService,  private formlyJsonschema: FormlyJsonschema,) {
+  constructor(private dynamicMenuService: DynamicMenuService) {
+    this.gridOptions = {};
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-  @ViewChild('smallModal') public smallModal: ModalDirective;
   @ViewChild('warningModal') public warningModal: ModalDirective;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
-    switch(e.target['value']) {
-      case "insert": {
-        this.buttonIndicator = e.target['value'];
-        this.largeModal.show();
-        break;
-      }
-      case "edit": {
-        const selected = this.gridApi.getSelectedRows();
-        if (this.data) {
-          this.buttonIndicator = e.target['value'];
-          //this.model = selected;
-          this.model = this.data;
-          this.largeModal.show();
-        } else {
-          this.warningModal.show();
-        }
-        break;
-      }
-      case "delete": {
-        if (this.data) {
-          this.smallModal.show();
-        } else {
-          this.warningModal.show();
-        }
-        break;
-      }
-      default: {
-        break;
-      }
+    let forms;
+    this.dataTypes.map(elem => forms = elem.forms);
+    //TODO: отрефакторить это дерьмо
+    for (let item of this.actions) {
+      if (e.target['value'] == item['actionName']) {
+        for (let elem of forms) {
+          if (item['execConfig']['formKey'] == elem['formKey'] && (this.data || e.target['value'].includes('create'))) {
+            this.confirmMessage = null;
+            console.log('Нажатая кнопка', e.target['value'])
+            this.putFormData = {
+              indicator: e.target['value'],
+              formKey: elem['formKey']
+            };
+            this.fields = [elem['schema']];
+            this.largeModal.show();
+          } else {
+            if (item['execConfig']['confirmMessage'] && e.target['value'].includes('delete') && this.data) {
+              this.confirmMessage = item['execConfig']['confirmMessage'];
+              this.putFormData = {
+                indicator: e.target['value']
+              };
+              this.largeModal.show();
+            } else this.warningModal.show();
+          }
+        }  
+      } 
+    }
+
+    if(this.putFormData && this.data) {
+      this.dataTypes.map(elem => {
+        forms = elem.forms
+        elem.forms.filter(item => {
+          if(item.formKey == this.putFormData?.formKey) {
+            this.typeForm = elem.type;
+          }
+        });
+      });
+      this.bodyForRequest = {
+        data: this.form.value,
+        formKey: this.putFormData.formKey,
+        hash: this.hash,
+        id: this.id, 
+        type: this.typeForm
+      };
+      this.idFieldName = this.viewConfig.config.idFieldName;
+      if (e.target['value']?.includes('edit')) {
+        this.edit(this.typeForm);
+      } 
     }
   }
 
   ngOnInit(): void {
     this.workWithConfig();
     this.addData();
-    //тестовый пример
-    this.dynamicMenuService.loadExample().subscribe(asw => {
-      //this.fields = [this.formlyJsonschema.toFieldConfig(asw.schema)];
-      this.fields = asw.schema;
-      this.model = asw.model;
-    });
-
   }
 
   public workWithConfig(): void {
-    this.dynamicMenuService.getModuleMenuFormConfig("test", "test").subscribe(resp => {
-      this.gridOptions = resp.dataFromViewConfig;
-      //this.fields = resp.dataFromDataTypes;
-      this.actions = resp.dataFromActions;
+    this.dynamicMenuService.getModulePageConfiguration("staff-module", "staff.all_person").subscribe(resp => {
+      this.viewConfig =  resp.viewConfig;
+      this.dataTypes = resp.dataTypes;
+      this.actions = resp.actions;
+      this.gridOptions = this.viewConfig.config;
     });
+    this.model = this.testModel;
   }
 
-  public async addData(): Promise<void> {
-    this.rowData = await this.dynamicMenuService.getModuleData("test", "test", 10).toPromise();
+  public addData(): void {
+    this.dynamicMenuService.getModuleData('staff-module', 'staff.all_person', {}).subscribe(data => {
+      this.rowData = data.data;
+    });
   }
 
   submit() {
   }
 
   public hideForm(): void {
+    this.form.reset();
+    this.data = null;
+    this.largeModal.hide();
+    this.warningModal.hide();
+  }
+
+  public done(): void {
+    if (this.putFormData.indicator.includes('delete')) {
+      this.delete(this.typeForm);
+    }
+    this.create();
+    this.addData();
+    this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
   }
 
-  public add(): void {
-    switch(this.buttonIndicator) {
-      case "insert": {
-        this.dynamicMenuService.setModuleData(this.form.value).subscribe(resp => {
-          this.rowData.push(resp);
-          this.gridApi.setRowData(this.rowData);
-          this.gridApi.refreshCells({force : true});
-        });
-        break;
-      }
-      case "edit": {
-        this.dynamicMenuService.editModuleData(this.model.id, this.form.value).subscribe(resp => {
-          this.rowData.map(elem => {
-            if (elem.id == resp.id) {
-              return resp;
-            }
-            return elem;
-          });
-          this.gridApi.setRowData(this.rowData);
-          this.gridApi.refreshCells({force : true});
-        });
-        break;
-      }
-      default: {
-         break;
-      }
-   }
-    this.largeModal.hide();
+  private create(): void {
+    if (this.putFormData.indicator.includes('create')) {
+      delete  this.bodyForRequest.hash;
+      delete  this.bodyForRequest.id;
+    }
+
+    this.dynamicMenuService.putFormDataInstance("staff-module", this.bodyForRequest).subscribe(data => {
+      console.log('Отвте от сервера', data);
+      //TODO: нужно мутировать данныне под формат таблицы
+      // this.rowData.push(data.data);
+      // this.gridApi.setRowData(this.rowData);
+      // this.gridApi.refreshCells({force : true});
+    });       
+  }
+
+  private edit(typeForm: string): void {
+    this.id = this.data[this.idFieldName];
+    this.dynamicMenuService.getFormDataInstance('staff-module', this.putFormData.formKey, typeForm, this.id).subscribe(data => {
+      this.model = data.data;
+      this.hash = data.hash;
+      this.id = data.id;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+    });
+    this.form.reset();
+  }
+
+  private delete(typeForm: string): void {
+    this.dynamicMenuService.deleteFormDataInstance('staff-module', this.putFormData.formKey, typeForm, this.id).subscribe();
   }
 
   onGridReady(params) {
@@ -133,18 +177,7 @@ export class MenuComponent implements OnInit {
   }
 
   rowClicked(event) {
-    //this.data = event.data;
-  }
-
-  public hideModal(): void {
-    this.smallModal.hide();
-  }
-
-  public delete(): void {
-    // const selected = this.gridApi.getSelectedRows();
-    //this.dynamicMenuService.deleteModuleData(this.data['id']);
-    this.gridApi.refreshCells();
-    this.smallModal.hide();
+    this.data = event.data;
   }
 
 }
