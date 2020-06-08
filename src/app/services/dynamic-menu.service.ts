@@ -85,7 +85,7 @@ export class DynamicMenuService {
     return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}
     `);
   }
-  
+
   public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: number): Observable<any> {
     return this.http.delete(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }

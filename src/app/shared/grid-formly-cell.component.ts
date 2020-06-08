@@ -10,7 +10,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
   `,
 })
 export class GridFormlyCellComponent implements ICellRendererAngularComp, OnInit {
-  private params: any;
+  public params: any;
 
   ngOnInit() {
     console.log(this.params)

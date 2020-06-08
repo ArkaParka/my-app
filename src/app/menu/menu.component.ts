@@ -23,7 +23,8 @@ export class MenuComponent implements OnInit {
   public form = new FormGroup({});
   public model: any = {};
   //public data;
-  public putFormData: object = {};
+  //TODO: заменить any на нормальную модель
+  public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
   private id: number;
@@ -61,8 +62,8 @@ export class MenuComponent implements OnInit {
             }
             this.largeModal.show();
           } else this.warningModal.show();
-        }  
-      } 
+        }
+      }
     }
 
     if(this.putFormData && this.REQ_ONE) {
@@ -78,13 +79,13 @@ export class MenuComponent implements OnInit {
         data: this.form.value,
         formKey: (this.putFormData as any)?.formKey,
         hash: this.hash,
-        id: this.id, 
+        id: this.id,
         type: this.typeForm
       };
       this.idFieldName = this.viewConfig.config.idFieldName;
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
-      } 
+      }
     }
   }
 
@@ -102,7 +103,7 @@ export class MenuComponent implements OnInit {
       // this.columnDefs = resp.viewConfig.config.columnDefs;
       // delete this.gridOptions.columnDefs;
     });
-    //checkboxSelection: true 
+    //checkboxSelection: true
     const testModel = {
       phoneInfos: [
           { type: null, phone: null }
@@ -134,7 +135,7 @@ export class MenuComponent implements OnInit {
     } else {
       this.putFormDataInstance();
     }
-    
+
     this.addData();
     this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
@@ -152,7 +153,7 @@ export class MenuComponent implements OnInit {
       // this.rowData.push(data.data);
       // this.gridApi.setRowData(this.rowData);
       //this.gridApi.refreshCells({force : true});
-    });       
+    });
   }
 
   private getFormDataInstance(typeForm: string): void {
@@ -175,7 +176,7 @@ export class MenuComponent implements OnInit {
         //TODO: нужно мутировать данныне под формат таблицы
       });
     });
-    
+
   }
 
   onGridReady(params) {
