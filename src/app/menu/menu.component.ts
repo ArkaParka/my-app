@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { GridOptions } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
@@ -39,7 +39,8 @@ export class MenuComponent implements OnInit {
   private REQ_ONE;
   private REQ_MULTY;
   private currentPage;
-  private pageSize;
+  private getPageSize;
+  private sortModel;
 
 
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
@@ -51,6 +52,7 @@ export class MenuComponent implements OnInit {
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
   @ViewChild('warningModal') public warningModal: ModalDirective;
+  @ViewChild('pageSize') public pageSize: ElementRef;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
     let forms;
@@ -120,17 +122,15 @@ export class MenuComponent implements OnInit {
   }
 
   public addData(): void {
+    this.sortModel = this.sortModel ? this.sortModel : null;
     const bodyForGetModuleData = {
       action_name: this.configPath,
       order_info: [
-        {
-          field_path: null,
-          order: null
-        }
+        this.sortModel
       ],
       page_info: {
         pageIndex: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.getPageSize
       }
     };
     this.dynamicMenuService.getModuleData( this.moduleKey, bodyForGetModuleData).subscribe(data => {
@@ -144,6 +144,7 @@ export class MenuComponent implements OnInit {
   public hideForm(): void {
     this.form.reset();
     this.REQ_ONE = null;
+    this.id = null;
     this.largeModal.hide();
     this.warningModal.hide();
   }
@@ -192,13 +193,25 @@ export class MenuComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+    console.log('Данные с инпута', this.pageSize.nativeElement.value);
+    this.gridApi.paginationSetPageSize(this.pageSize.nativeElement.value);
   }
 
   rowClicked(event) {
     this.REQ_ONE = event.data;
     this.REQ_MULTY = this.gridApi.getSelectedRows();
     this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
-    this.pageSize = this.gridOptions.api.paginationGetPageSize()
+    this.getPageSize = this.gridOptions.api.paginationGetPageSize();
+    this.sortModel = this.gridOptions.api.getSortModel().map(elem => {
+      return {
+        field_path: elem.colId,
+        order: elem.sort
+      }
+    });
+  }
+
+  setPageSize($event) {
+    this.gridApi.paginationSetPageSize($event.target.valueAsNumber);
   }
 
 }
