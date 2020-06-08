@@ -7,6 +7,7 @@ import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { Actions } from '../models/Actions.interface';
 import { DataTypes } from '../models/DataTypes.interface';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   templateUrl: './menu.component.html'
@@ -14,15 +15,16 @@ import { Subject, BehaviorSubject } from 'rxjs';
 
 export class MenuComponent implements OnInit {
 
+  moduleKey: string;
+  configPath: string
+
   public gridOptions: GridOptions;
-  // public columnDefs;
   public rowData: object[] = [];
   public actions: Actions[];
   private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  //public data;
   public putFormData: object = {};
   private hash: string = null;
   private idFieldName = null;
@@ -36,8 +38,15 @@ export class MenuComponent implements OnInit {
   public deleteIndicator;
   private REQ_ONE;
   private REQ_MULTY;
+  private currentPage;
+  private pageSize;
 
-  constructor(private dynamicMenuService: DynamicMenuService) {
+
+  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
+    route.params.subscribe((params) => {
+      this.moduleKey = params['moduleKey'];
+      this.configPath = params['configPath'];
+    });
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
@@ -94,13 +103,11 @@ export class MenuComponent implements OnInit {
   }
 
   public workWithConfig(): void {
-    this.dynamicMenuService.getModulePageConfiguration("staff-module", "staff.all_person").subscribe(resp => {
+    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
       this.viewConfig =  resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
       this.gridOptions = resp.viewConfig.config;
-      // this.columnDefs = resp.viewConfig.config.columnDefs;
-      // delete this.gridOptions.columnDefs;
     });
     //checkboxSelection: true 
     const testModel = {
@@ -113,7 +120,20 @@ export class MenuComponent implements OnInit {
   }
 
   public addData(): void {
-    this.dynamicMenuService.getModuleData('staff-module', 'staff.all_person', {}).subscribe(data => {
+    const bodyForGetModuleData = {
+      action_name: this.configPath,
+      order_info: [
+        {
+          field_path: null,
+          order: null
+        }
+      ],
+      page_info: {
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }
+    };
+    this.dynamicMenuService.getModuleData( this.moduleKey, bodyForGetModuleData).subscribe(data => {
       this.rowData = data.data;
     });
   }
@@ -146,18 +166,12 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.id;
     }
 
-    this.dynamicMenuService.putFormDataInstance("staff-module", this.bodyForRequest).subscribe(data => {
-      console.log('Отвте от сервера', data);
-      //TODO: нужно мутировать данныне под формат таблицы
-      // this.rowData.push(data.data);
-      // this.gridApi.setRowData(this.rowData);
-      //this.gridApi.refreshCells({force : true});
-    });       
+    this.dynamicMenuService.putFormDataInstance( this.moduleKey, this.bodyForRequest).subscribe();       
   }
 
   private getFormDataInstance(typeForm: string): void {
     this.id = this.REQ_ONE[this.idFieldName];
-    this.dynamicMenuService.getFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
+    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
@@ -170,10 +184,7 @@ export class MenuComponent implements OnInit {
   private deleteFormDataInstance(typeForm: string): void {
     this.REQ_MULTY.map(elem => {
       this.id = elem[this.idFieldName];
-      this.dynamicMenuService.deleteFormDataInstance('staff-module', (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
-        console.log('Отвте от сервера', data);
-        //TODO: нужно мутировать данныне под формат таблицы
-      });
+      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.id).subscribe();
     });
     
   }
@@ -186,6 +197,8 @@ export class MenuComponent implements OnInit {
   rowClicked(event) {
     this.REQ_ONE = event.data;
     this.REQ_MULTY = this.gridApi.getSelectedRows();
+    this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
+    this.pageSize = this.gridOptions.api.paginationGetPageSize()
   }
 
 }

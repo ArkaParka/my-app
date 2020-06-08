@@ -56,12 +56,12 @@ export const routes: Routes = [
       //   component: GridLayoutComponent
       // },
       // обертка для отображения любой формы по параметрам
-      {
-        path: 'form-loader/:moduleKey/:configPath',
-        component: FormLoaderComponent
-      },
+      // {
+      //   path: 'form-loader/:moduleKey/:configPath',
+      //   component: FormLoaderComponent
+      // },
       { //вот тут менюшка
-        path: 'staff-structure',
+        path: '',
         loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
       },
       {

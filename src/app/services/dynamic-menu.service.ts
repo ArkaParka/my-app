@@ -42,21 +42,8 @@ export class DynamicMenuService {
     );
   }
 
-  public getModuleData(nodeName: string, actionKey: string, order_info: object): Observable<ModuleData> {
+  public getModuleData(nodeName: string, body: object): Observable<ModuleData> {
     const headers = {"Content-type": "application/json; charset=UTF-8"};
-    const body = {
-      "action_name": actionKey,
-      "order_info": [
-        {
-          "field_path": null,
-          "order": null
-        }
-      ],
-      "page_info": {
-        "pageIndex": 1,
-        "pageSize": 10
-      }
-    };
     return this.http.post<ModuleData>(`/pbs/modules/${nodeName}/base/v1/data`, JSON.stringify(body), { headers }).pipe(
       catchError(err => {
         return throwError(err);
