@@ -10,16 +10,9 @@ const routes: Routes = [
     },
     children: [
       {
-        path: '',
-        redirectTo: 'division-structure'
-      },
-      {
-        path: 'division-structure',
-        component: MenuComponent,
-        data: {
-          title: 'Структура подразделения'
+        path: 'form-loader/:moduleKey/:configPath',
+        component: MenuComponent
         }
-      },
     ]
   }
 ];
