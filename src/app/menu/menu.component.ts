@@ -25,7 +25,9 @@ export class MenuComponent implements OnInit {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  public putFormData: object = {};
+  //public data;
+  //TODO: заменить any на нормальную модель
+  public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
   private id: number;
@@ -70,8 +72,8 @@ export class MenuComponent implements OnInit {
             }
             this.largeModal.show();
           } else this.warningModal.show();
-        }  
-      } 
+        }
+      }
     }
 
     if(this.putFormData && this.REQ_ONE) {
@@ -87,13 +89,13 @@ export class MenuComponent implements OnInit {
         data: this.form.value,
         formKey: (this.putFormData as any)?.formKey,
         hash: this.hash,
-        id: this.id, 
+        id: this.id,
         type: this.typeForm
       };
       this.idFieldName = this.viewConfig.config.idFieldName;
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
-      } 
+      }
     }
   }
 
@@ -109,7 +111,7 @@ export class MenuComponent implements OnInit {
       this.actions = resp.actions;
       this.gridOptions = resp.viewConfig.config;
     });
-    //checkboxSelection: true 
+    //checkboxSelection: true
     const testModel = {
       phoneInfos: [
           { type: null, phone: null }
@@ -154,7 +156,7 @@ export class MenuComponent implements OnInit {
     } else {
       this.putFormDataInstance();
     }
-    
+
     this.addData();
     this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
@@ -186,7 +188,7 @@ export class MenuComponent implements OnInit {
       this.id = elem[this.idFieldName];
       this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.id).subscribe();
     });
-    
+
   }
 
   onGridReady(params) {
