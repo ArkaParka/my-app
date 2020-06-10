@@ -48,28 +48,34 @@ export class MenuComponent implements OnInit {
   private pageSize;
 
 
-  generateFormlyFieldConfig(schema: FieldGroup[] | any, actionType: string) { //schema:FieldGroup
-    console.log(schema)
-    let result = new Array<any>(); //TODO юзать lodash/get чтобы вытянуть с ответа defaultProperties
-    let fieldGroup = get(schema, '[0].fieldGroup');
-    fieldGroup = fieldGroup.map(fg => {
-      let field = cloneDeep(fg.defaultProperties);
-      if (fg.additionalProperties) {
-        if (fg.additionalProperties.readOnly && fg.additionalProperties.readOnly.length) {
-          if (fg.additionalProperties.readOnly.includes(actionType)) {
-            field.templateOptions.readonly = true;
-            console.log("disabled:", field)
-          }
+  modifyFormlyField(field, additionalProperties, actionType) {
+    let newField = cloneDeep(field);
+    if (additionalProperties) {
+      if (additionalProperties.readOnly && additionalProperties.readOnly.length) {
+        if (additionalProperties.readOnly.includes(actionType)) {
+          newField.templateOptions.readonly = true;
         }
       }
+    }
+    return newField;
+  }
+
+
+  generateFormlyFieldConfig(schema: FieldGroup[] | any, actionType: string) { //schema:FieldGroup
+    console.log(schema)
+    let result = new Array<any>();
+    let fieldGroup = get(schema, '[0].fieldGroup');
+
+    fieldGroup = fieldGroup.map(fg => {
+      let field = cloneDeep(fg.defaultProperties);
+      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
       return field;
     });
-    console.log("fieldGroup", fieldGroup)
+
     result.push({
       fieldGroup: fieldGroup,
       fieldGroupClassName: schema[0].fieldGroupClassName
     });
-
 
     return result;
   }
