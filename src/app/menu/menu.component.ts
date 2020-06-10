@@ -97,6 +97,7 @@ export class MenuComponent implements OnInit {
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
       } 
+      this.REQ_ONE = null;
     }
   }
 
@@ -108,7 +109,7 @@ export class MenuComponent implements OnInit {
   disableFunc(type: string): boolean {
     switch(type) {
       case 'NO_REQ':
-        if(!this.REQ_ONE) {
+        if(!this.REQ_ONE && !this.REQ_MULTY) {
           return false;
         } else return true;
       case 'REQ_ONE':
