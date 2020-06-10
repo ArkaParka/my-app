@@ -1,5 +1,10 @@
 <ng-template #dynamicButtons let-value="execConfig.formActionType" let-title="actionTitle">
-  <button style="margin-bottom: 5px;" type="button" class="btn btn-secondary" value="{{value}}">{{ title }}</button>
+  <button style="margin-bottom: 5px;"
+          type="button"
+          class="btn btn-secondary"
+          value="{{value}}"
+          (click)="actionButtonClicked($event)"
+          >{{ title }}</button>
 </ng-template>
 <div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
   <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>

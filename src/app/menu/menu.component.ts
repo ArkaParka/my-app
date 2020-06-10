@@ -4,7 +4,7 @@ import {GridOptions} from 'ag-grid-community';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {Actions} from '../models/Actions.interface';
+import {Actions, FormActionTypes} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
 import {Subject, BehaviorSubject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
@@ -12,6 +12,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import {FieldGroup} from "../models/FieldGroup.interface";
 import {FieldGroupDefaultProperties} from "../models/FieldGroupDefaultProperties";
 import get from 'lodash/get'
+import {Forms} from "../models/Forms.interface";
 
 @Component({
   templateUrl: './menu.component.html'
@@ -48,6 +49,63 @@ export class MenuComponent implements OnInit {
   private pageSize;
 
 
+  @ViewChild('largeModal') public largeModal: ModalDirective;
+  @ViewChild('warningModal') public warningModal: ModalDirective;
+
+  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
+    route.params.subscribe((params) => {
+      this.moduleKey = params['moduleKey'];
+      this.configPath = params['configPath'];
+    });
+  }
+
+  actionButtonClicked(e): void {
+    let forms: Forms[];
+    this.dataTypes.map(elem => forms = elem.forms);
+    //TODO: отрефакторить это дерьмо
+    for (let item of this.actions) {
+      console.log(item.execConfig.formActionType)
+      if (e.target.value === item.execConfig.formActionType) {
+        for (let elem of forms) {
+          if (item.execConfig.formKey == elem.formKey && (this.REQ_ONE || e.target.value===FormActionTypes.CREATE)) {
+            this.putFormData = {
+              indicator: e.target.value,
+              formKey: elem.formKey,
+              confirmMessage: item.execConfig.confirmMessage
+            };
+            if (e.target.value!==FormActionTypes.DELETE) {
+              this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
+            }
+            this.largeModal.show();
+          } else this.warningModal.show();
+        }
+      }
+    }
+
+
+    if (this.putFormData && this.REQ_ONE) {
+      this.dataTypes.map(elem => {
+        forms = elem.forms;
+        elem.forms.filter(item => {
+          if (item.formKey == (this.putFormData as any)?.formKey) {
+            this.typeForm = elem.type;
+          }
+        });
+      });
+      this.bodyForRequest = {
+        data: this.form.value,
+        formKey: (this.putFormData as any)?.formKey,
+        hash: this.hash,
+        id: this.id,
+        type: this.typeForm
+      };
+      this.idFieldName = this.viewConfig.config.idFieldName;
+      if (e.target.value===FormActionTypes.UPDATE) {
+        this.getFormDataInstance(this.typeForm);
+      }
+    }
+  }
+
   modifyFormlyField(field, additionalProperties, actionType) {
     let newField = cloneDeep(field);
     if (additionalProperties) {
@@ -79,61 +137,6 @@ export class MenuComponent implements OnInit {
     return result;
   }
 
-  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.subscribe((params) => {
-      this.moduleKey = params['moduleKey'];
-      this.configPath = params['configPath'];
-    });
-  }
-
-  @ViewChild('largeModal') public largeModal: ModalDirective;
-  @ViewChild('warningModal') public warningModal: ModalDirective;
-
-  @HostListener('click', ['$event']) onClick(e: MouseEvent) {
-    let forms;
-    this.dataTypes.map(elem => forms = elem.forms);
-    //TODO: отрефакторить это дерьмо
-    for (let item of this.actions) {
-      if (e.target['value'] == item['execConfig']['formActionType']) {
-        for (let elem of forms) {
-          if (item['execConfig']['formKey'] == elem['formKey'] && (this.REQ_ONE || e.target['value'].includes('CREATE'))) {
-            this.putFormData = {
-              indicator: e.target['value'],
-              formKey: elem['formKey'],
-              confirmMessage: item['execConfig']['confirmMessage']
-            };
-            if (!e.target['value'].includes('DELETE')) {
-              this.fields = this.generateFormlyFieldConfig([elem['schema']], e.target['value']);
-            }
-            this.largeModal.show();
-          } else this.warningModal.show();
-        }
-      }
-    }
-
-
-    if (this.putFormData && this.REQ_ONE) {
-      this.dataTypes.map(elem => {
-        forms = elem.forms
-        elem.forms.filter(item => {
-          if (item.formKey == (this.putFormData as any)?.formKey) {
-            this.typeForm = elem.type;
-          }
-        });
-      });
-      this.bodyForRequest = {
-        data: this.form.value,
-        formKey: (this.putFormData as any)?.formKey,
-        hash: this.hash,
-        id: this.id,
-        type: this.typeForm
-      };
-      this.idFieldName = this.viewConfig.config.idFieldName;
-      if (e.target['value']?.includes('edit')) {
-        this.getFormDataInstance(this.typeForm);
-      }
-    }
-  }
 
   ngOnInit(): void {
     this.workWithConfig();
