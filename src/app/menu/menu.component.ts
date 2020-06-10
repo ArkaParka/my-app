@@ -108,8 +108,9 @@ export class MenuComponent implements OnInit {
   disableFunc(type: string): boolean {
     switch(type) {
       case 'NO_REQ':
-        return false;
-        break;
+        if(!this.REQ_ONE) {
+          return false;
+        } else return true;
       case 'REQ_ONE':
         if(this.REQ_ONE) {
           return false;
@@ -220,7 +221,7 @@ export class MenuComponent implements OnInit {
     this.REQ_ONE = event.data;
     this.REQ_MULTY = this.gridApi.getSelectedRows();
     if (this.REQ_MULTY.length > 1) {
-      this.REQ_ONE = null;
+      this.REQ_ONE = null;  
     }
     this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
     this.getPageSize = this.gridOptions.api.paginationGetPageSize();
