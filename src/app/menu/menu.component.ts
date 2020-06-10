@@ -219,6 +219,9 @@ export class MenuComponent implements OnInit {
   rowClicked(event) {
     this.REQ_ONE = event.data;
     this.REQ_MULTY = this.gridApi.getSelectedRows();
+    if (this.REQ_MULTY.length > 1) {
+      this.REQ_ONE = null;
+    }
     this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
     this.getPageSize = this.gridOptions.api.paginationGetPageSize();
     this.sortModel = this.gridOptions.api.getSortModel().map(elem => {
