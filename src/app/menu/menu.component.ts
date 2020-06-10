@@ -61,10 +61,9 @@ export class MenuComponent implements OnInit {
   }
 
 
-  generateFormlyFieldConfig(schema: FieldGroup[] | any, actionType: string) { //schema:FieldGroup
-    console.log(schema)
+  generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
-    let fieldGroup = get(schema, '[0].fieldGroup');
+    let fieldGroup:FieldGroup[] = get(schema, '[0].fieldGroup');
 
     fieldGroup = fieldGroup.map(fg => {
       let field = cloneDeep(fg.defaultProperties);
@@ -93,7 +92,6 @@ export class MenuComponent implements OnInit {
   @HostListener('click', ['$event']) onClick(e: MouseEvent) {
     let forms;
     this.dataTypes.map(elem => forms = elem.forms);
-    console.log(e.target['value'])
     //TODO: отрефакторить это дерьмо
     for (let item of this.actions) {
       if (e.target['value'] == item['execConfig']['formActionType']) {
