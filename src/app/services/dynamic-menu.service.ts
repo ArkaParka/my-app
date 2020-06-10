@@ -7,6 +7,7 @@ import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
 import { tap, catchError } from 'rxjs/operators';
 import { ModulePageConfiguration } from '../models/ModulePageConfiguration.interface';
 import { ModuleData } from '../models/ModuleData.interface';
+import {response} from "../menu/resp";
 
 
 @Injectable({
@@ -29,17 +30,18 @@ export class DynamicMenuService {
     return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
-  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration> {
-    return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`).pipe(
-      tap(({actions, viewConfig, dataTypes}) => {
-        return {
-          actions, viewConfig, dataTypes
-        }
-      }),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
+  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration|any> {
+    // return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`).pipe(
+    //   tap(({actions, viewConfig, dataTypes}) => {
+    //     return {
+    //       actions, viewConfig, dataTypes
+    //     }
+    //   }),
+    //   catchError(err => {
+    //     return throwError(err);
+    //   })
+    // );
+    return of(response)
   }
 
   public getModuleData(nodeName: string, body: object): Observable<ModuleData> {
