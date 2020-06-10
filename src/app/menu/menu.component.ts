@@ -36,8 +36,9 @@ export class MenuComponent implements OnInit {
   private gridApi: any;
   public options: FormlyFormOptions = {};
   public deleteIndicator;
-  private REQ_ONE;
-  private REQ_MULTY;
+  public REQ_ONE;
+  public REQ_MULTY;
+  public NO_REQ = null;
   private currentPage;
   private getPageSize;
   private sortModel;
@@ -104,6 +105,25 @@ export class MenuComponent implements OnInit {
     this.addData();
   }
 
+  disableFunc(type: string): boolean {
+    switch(type) {
+      case 'NO_REQ':
+        return false;
+        break;
+      case 'REQ_ONE':
+        if(this.REQ_ONE) {
+          return false;
+        } else return true;
+        break;
+      case 'REQ_MULTY':
+        if(this.REQ_MULTY) {
+          return false;
+        } else return true;
+        break;
+      default: break;
+    }
+  }
+
   public workWithConfig(): void {
     this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
       this.viewConfig =  resp.viewConfig;
@@ -111,7 +131,6 @@ export class MenuComponent implements OnInit {
       this.actions = resp.actions;
       this.gridOptions = resp.viewConfig.config;
     });
-    //checkboxSelection: true 
     const testModel = {
       phoneInfos: [
           { type: null, phone: null }
@@ -144,6 +163,7 @@ export class MenuComponent implements OnInit {
   public hideForm(): void {
     this.form.reset();
     this.REQ_ONE = null;
+    this.REQ_MULTY = null;
     this.id = null;
     this.largeModal.hide();
     this.warningModal.hide();
@@ -193,7 +213,6 @@ export class MenuComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    console.log('Данные с инпута', this.pageSize.nativeElement.value);
     this.gridApi.paginationSetPageSize(this.pageSize.nativeElement.value);
   }
 
