@@ -64,20 +64,19 @@ export class MenuComponent implements OnInit {
     this.dataTypes.map(elem => forms = elem.forms);
     //TODO: отрефакторить это дерьмо
     for (let item of this.actions) {
-      console.log(item.execConfig.formActionType)
       if (e.target.value === item.execConfig.formActionType) {
         for (let elem of forms) {
-          if (item.execConfig.formKey == elem.formKey && (this.REQ_ONE || e.target.value===FormActionTypes.CREATE)) {
+          if (item.execConfig.formKey == elem.formKey) {
             this.putFormData = {
               indicator: e.target.value,
               formKey: elem.formKey,
               confirmMessage: item.execConfig.confirmMessage
             };
-            if (e.target.value!==FormActionTypes.DELETE) {
+            if (e.target.value !== FormActionTypes.DELETE) {
               this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
             }
             this.largeModal.show();
-          } else this.warningModal.show();
+          }
         }
       }
     }
@@ -100,7 +99,7 @@ export class MenuComponent implements OnInit {
         type: this.typeForm
       };
       this.idFieldName = this.viewConfig.config.idFieldName;
-      if (e.target.value===FormActionTypes.UPDATE) {
+      if (e.target.value === FormActionTypes.UPDATE) {
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -121,7 +120,7 @@ export class MenuComponent implements OnInit {
 
   generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
-    let fieldGroup:FieldGroup[] = get(schema, '[0].fieldGroup');
+    let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
 
     fieldGroup = fieldGroup.map(fg => {
       let field = cloneDeep(fg.defaultProperties);
@@ -145,7 +144,6 @@ export class MenuComponent implements OnInit {
 
   public workWithConfig(): void {
     this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
-      console.log(resp)
       this.viewConfig = resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
