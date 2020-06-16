@@ -78,9 +78,9 @@ export class MenuComponent implements OnInit {
       } 
     }
 
-    if(this.putFormData) {
+    if (this.putFormData) {
       this.dataTypes.map(elem => {
-        forms = elem.forms
+        forms = elem.forms;
         elem.forms.filter(item => {
           if(item.formKey == (this.putFormData as any)?.formKey) {
             this.typeForm = elem.type;
@@ -113,15 +113,13 @@ export class MenuComponent implements OnInit {
       case 'NO_REQ':
         return false;
       case 'REQ_ONE':
-        if(this.REQ_ONE) {
+        if (this.REQ_ONE) {
           return false;
         } else return true;
-        break;
       case 'REQ_MULTY':
-        if(this.REQ_MULTY) {
+        if (this.REQ_MULTY) {
           return false;
         } else return true;
-        break;
       default: break;
     }
   }
@@ -143,7 +141,6 @@ export class MenuComponent implements OnInit {
   }
 
   public addData(): void {
-    this.sortModel = this.sortModel ? this.sortModel : null;
     const bodyForGetModuleData = {
       action_name: this.configPath,
       order_info: [
@@ -176,7 +173,7 @@ export class MenuComponent implements OnInit {
     } else {
       this.putFormDataInstance();
     }
-    
+    this.form.reset();
     this.addData();
     this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
@@ -225,10 +222,11 @@ export class MenuComponent implements OnInit {
     }
     this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
     this.getPageSize = this.gridOptions.api.paginationGetPageSize();
+    console.log('Размер страницы', this.gridOptions.api.paginationGetPageSize());
     this.sortModel = this.gridOptions.api.getSortModel().map(elem => {
       return {
-        field_path: elem.colId,
-        order: elem.sort
+        field_path: elem.colId ? elem.colId : null,
+        order: elem.sort ? elem.sort : null
       }
     });
   }
