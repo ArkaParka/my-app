@@ -10,7 +10,8 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  templateUrl: './menu.component.html'
+  templateUrl: './menu.component.html',
+  styleUrls: [ './menu.component.scss' ]
 })
 
 export class MenuComponent implements OnInit {
@@ -42,6 +43,7 @@ export class MenuComponent implements OnInit {
   private currentPage;
   private getPageSize;
   private sortModel;
+  public listOfPageSize = [10, 20, 30, 40, 50];
 
 
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
@@ -52,7 +54,6 @@ export class MenuComponent implements OnInit {
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-  @ViewChild('warningModal') public warningModal: ModalDirective;
   @ViewChild('pageSize') public pageSize: ElementRef;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
@@ -62,7 +63,7 @@ export class MenuComponent implements OnInit {
     for (let item of this.actions) {
       if (e.target['value'] == item['actionName']) {
         for (let elem of forms) {
-          if (item['execConfig']['formKey'] == elem['formKey'] && (this.REQ_ONE || e.target['value'].includes('create'))) {
+          if (item['execConfig']['formKey'] == elem['formKey']) {
             this.putFormData = {
               indicator: e.target['value'],
               formKey: elem['formKey'],
@@ -72,12 +73,12 @@ export class MenuComponent implements OnInit {
               this.fields = [elem['schema']];
             }
             this.largeModal.show();
-          } else this.warningModal.show();
+          } 
         }  
       } 
     }
 
-    if(this.putFormData && this.REQ_ONE) {
+    if(this.putFormData) {
       this.dataTypes.map(elem => {
         forms = elem.forms
         elem.forms.filter(item => {
@@ -98,6 +99,7 @@ export class MenuComponent implements OnInit {
         this.getFormDataInstance(this.typeForm);
       } 
       this.REQ_ONE = null;
+      this.REQ_MULTY = null;
     }
   }
 
@@ -166,7 +168,6 @@ export class MenuComponent implements OnInit {
     this.REQ_MULTY = null;
     this.id = null;
     this.largeModal.hide();
-    this.warningModal.hide();
   }
 
   public done(): void {
@@ -213,7 +214,7 @@ export class MenuComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    this.gridApi.paginationSetPageSize(this.pageSize.nativeElement.value);
+    this.gridApi.paginationSetPageSize(this.listOfPageSize[0]);
   }
 
   rowClicked(event) {
@@ -233,7 +234,7 @@ export class MenuComponent implements OnInit {
   }
 
   setPageSize($event) {
-    this.gridApi.paginationSetPageSize($event.target.valueAsNumber);
+    this.gridApi.paginationSetPageSize($event.target.value);
   }
 
 }
