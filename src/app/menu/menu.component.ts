@@ -109,9 +109,7 @@ export class MenuComponent implements OnInit {
   disableFunc(type: string): boolean {
     switch(type) {
       case 'NO_REQ':
-        if(!this.REQ_ONE && !this.REQ_MULTY) {
-          return false;
-        } else return true;
+        return false;
       case 'REQ_ONE':
         if(this.REQ_ONE) {
           return false;
