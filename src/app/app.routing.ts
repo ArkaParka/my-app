@@ -8,7 +8,7 @@ import {P404Component} from './views/error/404.component';
 import {P500Component} from './views/error/500.component';
 import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
-import {DynamicLayoutExampleComponent} from "./containers/form-loader/dynamic-layout-example/dynamic-layout-example.component";
+import {DynamicLayoutExampleComponent} from "../../shared/container-module/components/dynamic-layout-example/dynamic-layout-example.component";
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
 
 export const routes: Routes = [
@@ -54,7 +54,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'grid-layout',
-        component: DynamicLayoutExampleComponent
+        loadChildren: () => import('./../../shared/container-module/container.module').then(m => m.ContainerModule)
       },
       // обертка для отображения любой формы по параметрам
       {
