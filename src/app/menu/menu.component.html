@@ -21,14 +21,17 @@
       <thead>
         <tr>
           <th
-           
             [(nzChecked)]="checked"
             [nzIndeterminate]="indeterminate"
             (nzCheckedChange)="onAllChecked($event)"
           ></th>
-          <th nzColumnKey="login">Логин</th>
-          <th nzColumnKey="fullName" [nzSortFn]="true">ФИО</th>
-          <th nzColumnKey="status">Статус</th>
+          <th
+            *ngFor="let column of listOfColumns"
+            nzColumnKey="column.columnKey"
+            [nzSortFn]="column.sortFn"
+          >
+            {{ column.name }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -40,8 +43,6 @@
         </tr>
       </tbody>
 </nz-table>
-
-<!--  [nzSelections]="listOfSelection" -->
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">

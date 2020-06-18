@@ -7,8 +7,19 @@ import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { Actions } from '../models/Actions.interface';
 import { DataTypes } from '../models/DataTypes.interface';
 import { ActivatedRoute } from '@angular/router';
-import { NzTableQueryParams } from 'ng-zorro-antd/table/ng-zorro-antd-table';
+import { NzTableQueryParams, NzTableFilterFn, NzTableFilterList, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 //import { InfiniteRowModelModule } from '@ag-grid-community/infinite-row-model'
+
+interface ColumnItem {
+  name: string;
+  nzColumnKey?: string;
+  sortOrder?: NzTableSortOrder;
+  sortFn?: NzTableSortFn;
+  listOfFilter?: NzTableFilterList;
+  filterFn?: NzTableFilterFn;
+  filterMultiple?: boolean;
+  sortDirections?: NzTableSortOrder[];
+}
 
 @Component({
   templateUrl: './menu.component.html',
@@ -34,45 +45,28 @@ export class MenuComponent implements OnInit {
   private typeForm;
   public viewConfig;
   public options: FormlyFormOptions = {};
-  public REQ_ONE;
-  public REQ_MULTY;
+  private REQ_ONE;
+  private REQ_MULTY;
   private one_id: string = '';
   private multy_id: string[] = [];
-  public NO_REQ = null;
 
-  total = 1;
+  public total = 1;
   listOfModuleData: object[] = [];
   loading = true;
-  pageSize = 10;
+  public pageSize = 10;
   pageIndex = 1;
-  checked = false;
-  indeterminate = false;
+  public checked = false;
+  public indeterminate = false;
   listOfCurrentPageData: object[] = [];
-  listOfData: object[] = [];
   setOfCheckedId = new Set<string>();
+  public listOfColumns: ColumnItem[];
 
-  // listOfSelection = [
-  //   {
-  //     text: 'Select All Row',
-  //     onSelect: () => {
-  //       this.onAllChecked(true);
-  //     }
-  //   },
-  //   {
-  //     text: 'Select Odd Row',
-  //     onSelect: () => {
-  //       this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 !== 0));
-  //       this.refreshCheckedStatus();
-  //     }
-  //   },
-  //   {
-  //     text: 'Select Even Row',
-  //     onSelect: () => {
-  //       this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 === 0));
-  //       this.refreshCheckedStatus();
-  //     }
-  //   }
-  // ];
+  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
+    route.params.subscribe((params) => {
+      this.moduleKey = params['moduleKey'];
+      this.configPath = params['configPath'];
+    });
+  }
 
   updateCheckedSet(login: string, checked: boolean): void {
     if (checked) {
@@ -117,13 +111,6 @@ export class MenuComponent implements OnInit {
   refreshCheckedStatus(): void {
     this.checked = this.listOfCurrentPageData.every(item => this.setOfCheckedId.has(item[this.idFieldName]));
     this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item[this.idFieldName])) && !this.checked;
-  }
-
-  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.subscribe((params) => {
-      this.moduleKey = params['moduleKey'];
-      this.configPath = params['configPath'];
-    });
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
@@ -194,12 +181,13 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  public workWithConfig(): void {
+  private workWithConfig(): void {
     this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
       this.viewConfig =  resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
       //this.gridOptions = resp.viewConfig.config;
+      this.makeListOfColumns(this.viewConfig.config);
       this.idFieldName = this.viewConfig.config.idFieldName;
     });
     const testModel = {
@@ -211,7 +199,23 @@ export class MenuComponent implements OnInit {
     this.model = testModel;
   }
 
-  public addData(
+  private makeListOfColumns (tableConfig: object): void {
+   // console.log('Кофигурация таблицы', tableConfig);
+    this.listOfColumns = tableConfig['columnDefs'].map(elem => {
+      if (elem.sortable == false) {
+        return {
+          name: elem.headerName,
+          columnKey: elem.field,
+        }
+      } else {
+      return {
+        name: elem.headerName,
+        columnKey: elem.field,
+        sortFn: elem.sortable
+      }}
+    });
+  }
+  private addData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
@@ -255,9 +259,8 @@ export class MenuComponent implements OnInit {
       this.putFormDataInstance();
     }
     this.form.reset();
-    //this.addData();
-    //this.gridApi.refreshCells({force : true});
     this.largeModal.hide();
+    this.addData(this.pageIndex, this.pageSize, null, null);
   }
 
   private putFormDataInstance(): void {
@@ -265,7 +268,6 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
-
     this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe();       
   }
 
@@ -289,6 +291,8 @@ export class MenuComponent implements OnInit {
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
+    this.pageSize = pageSize;
+    this.pageIndex = pageIndex;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
