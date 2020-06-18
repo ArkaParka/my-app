@@ -20,8 +20,6 @@ export class MenuComponent implements OnInit {
   moduleKey: string;
   configPath: string
 
-  public gridOptions: GridOptions;
-  public rowData: object[] = [];
   public actions: Actions[];
   private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
@@ -35,20 +33,12 @@ export class MenuComponent implements OnInit {
   public confirmMessage;
   private typeForm;
   public viewConfig;
-  // private gridApi: any;
   public options: FormlyFormOptions = {};
-  // public deleteIndicator;
   public REQ_ONE;
   public REQ_MULTY;
   private one_id: string = '';
   private multy_id: string[] = [];
   public NO_REQ = null;
-  // public listOfPageSize = [10, 20, 30, 40, 50];
-  // private currentPage = 0;
-  // private getPageSize = this.listOfPageSize[0];
-  // private sortModel;
-  //dataSource: IDatasource; 
-  //public modules: Module[] = [InfiniteRowModelModule];
 
   total = 1;
   listOfModuleData: object[] = [];
@@ -61,28 +51,28 @@ export class MenuComponent implements OnInit {
   listOfData: object[] = [];
   setOfCheckedId = new Set<string>();
 
-  listOfSelection = [
-    {
-      text: 'Select All Row',
-      onSelect: () => {
-        this.onAllChecked(true);
-      }
-    },
-    {
-      text: 'Select Odd Row',
-      onSelect: () => {
-        this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 !== 0));
-        this.refreshCheckedStatus();
-      }
-    },
-    {
-      text: 'Select Even Row',
-      onSelect: () => {
-        this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 === 0));
-        this.refreshCheckedStatus();
-      }
-    }
-  ];
+  // listOfSelection = [
+  //   {
+  //     text: 'Select All Row',
+  //     onSelect: () => {
+  //       this.onAllChecked(true);
+  //     }
+  //   },
+  //   {
+  //     text: 'Select Odd Row',
+  //     onSelect: () => {
+  //       this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 !== 0));
+  //       this.refreshCheckedStatus();
+  //     }
+  //   },
+  //   {
+  //     text: 'Select Even Row',
+  //     onSelect: () => {
+  //       this.listOfCurrentPageData.forEach((data, index) => this.updateCheckedSet(data[this.idFieldName], index % 2 === 0));
+  //       this.refreshCheckedStatus();
+  //     }
+  //   }
+  // ];
 
   updateCheckedSet(login: string, checked: boolean): void {
     if (checked) {
@@ -134,36 +124,13 @@ export class MenuComponent implements OnInit {
       this.moduleKey = params['moduleKey'];
       this.configPath = params['configPath'];
     });
-    // this.dataSource = {
-    //   getRows: (params: IGetRowsParams) => {
-    //     const bodyForGetModuleData = {
-    //       action_name: this.configPath,
-    //       order_info: [
-    //         this.sortModel
-    //       ],
-    //       page_info: {
-    //         pageIndex: this.currentPage,
-    //         pageSize: this.getPageSize
-    //       }
-    //     };
-    //     this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(resp => {
-    //       params.successCallback(resp.data, Number(resp.total_size));
-    //       // this.gridOptions.api.setRowData(resp.data);
-    //       // this.gridApi.refreshCells({force: true});
-    //     });
-    //   }
-    // };  
-
-
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-  //@ViewChild('pageSize') public pageSize: ElementRef;
 
   @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
     let forms;
     this.dataTypes.map(elem => forms = elem.forms);
-    //TODO: отрефакторить это дерьмо
     for (let item of this.actions) {
       if (e.target['value'] == item['actionName']) {
         for (let elem of forms) {
@@ -209,8 +176,6 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.workWithConfig();
-    
-    //this.addData(this.pageIndex, this.pageSize, null, null);
   }
 
   disableFunc(type: string): boolean {
@@ -234,7 +199,7 @@ export class MenuComponent implements OnInit {
       this.viewConfig =  resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
-      this.gridOptions = resp.viewConfig.config;
+      //this.gridOptions = resp.viewConfig.config;
       this.idFieldName = this.viewConfig.config.idFieldName;
     });
     const testModel = {
@@ -267,7 +232,6 @@ export class MenuComponent implements OnInit {
     };
     this.loading = true;
     this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
-      //this.rowData = data.data;
       this.loading = false;
       this.total =  data.total_size; 
       this.listOfModuleData = data.data;
@@ -330,37 +294,4 @@ export class MenuComponent implements OnInit {
     const sortOrder = (currentSort && currentSort.value) || null;
     this.addData(pageIndex, pageSize, sortField, sortOrder);
   }
-
-  // onGridReady(params) {
-  //   this.gridApi = params.api;
-  //   this.gridOptions.api.setColumnDefs(this.gridOptions.columnDefs);
-  //   this.gridOptions.rowModelType = 'infinite'; 
-  //   this.gridOptions.cacheBlockSize = 10;
-  //   this.gridApi.paginationSetPageSize(this.listOfPageSize[0]);
-  //   this.gridApi.sizeColumnsToFit();
-  //   //this.gridApi.setDatasource(this.dataSource);
-  //   this.addData();
-  // }
-
-  // rowClicked(event) {
-  //   this.REQ_ONE = event.data;
-  //   this.REQ_MULTY = this.gridApi.getSelectedRows();
-  //   if (this.REQ_MULTY.length > 1) {
-  //     this.REQ_ONE = null;  
-  //   }
-  //   this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
-  //   this.getPageSize = this.gridOptions.api.paginationGetPageSize();
-  //   this.sortModel = this.gridOptions.api.getSortModel().map(elem => {
-  //     return {
-  //       field_path: elem.colId ? elem.colId : null,
-  //       order: elem.sort ? elem.sort : null
-  //     }
-  //   });
-  // }
-
-  // setPageSize($event) {
-  //   this.gridApi.paginationSetPageSize(Number($event.target.value));
-  //   //this.addData();
-  // }
-
 }
