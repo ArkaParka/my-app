@@ -5,16 +5,52 @@
   <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
 </div>
 
-<br>
+<nz-table
+      nzBordered
+      nzShowSizeChanger
+      [nzData]="listOfModuleData"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+        <tr>
+          <th
+            [nzSelections]="listOfSelection"
+            [(nzChecked)]="checked"
+            [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="onAllChecked($event)"
+          ></th>
+          <th nzColumnKey="login">Логин</th>
+          <th nzColumnKey="fullName" [nzSortFn]="true">ФИО</th>
+          <th nzColumnKey="status">Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of listOfModuleData">
+          <td [nzChecked]="setOfCheckedId.has(data.login)" (nzCheckedChange)="onItemChecked(data.login, $event)"></td>
+          <td>{{ data.login }}</td>
+          <td>{{ data.fullName }}</td>
+          <td>{{ data.status }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+<!-- <br>
 <div style="display: flex; justify-content: flex-end;">
   <label style="margin: 0; line-height: 3;">Page size: </label>
-  <!-- <input #pageSize (change)="setPageSize($event)" class="form-control" style="width: 100px; margin-left: 5px;" type="number" value="10"  min="10" max="100"> -->
   <select class="form-control" (change)="setPageSize($event)" style="width: 100px; margin: 5px;">
     <option *ngFor="let pageSize of listOfPageSize" value="{{pageSize}}"> {{ pageSize }} </option>
   </select>
-</div>
+</div> -->
 
-<ag-grid-angular
+ <!-- <input #pageSize (change)="setPageSize($event)" class="form-control" style="width: 100px; margin-left: 5px;" type="number" value="10"  min="10" max="100"> -->
+
+<!-- <ag-grid-angular
   #dinamicTable
   style="height: 500px;"
   class="ag-theme-balham"
@@ -24,7 +60,7 @@
   (gridReady)="onGridReady($event)"
   (rowClicked)='rowClicked($event)'
 >
-</ag-grid-angular>
+</ag-grid-angular> -->
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
