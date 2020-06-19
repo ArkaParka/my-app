@@ -287,12 +287,14 @@ export class MenuComponent implements OnInit {
 
   private deleteFormDataInstance(typeForm: string): void {
     this.multy_id.map(elem => {
-      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe();
+      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(data => {
+        this.updateCheckedSet(data.id, null);
+      this.addData(this.pageIndex, this.pageSize, null, null);
+      });
     });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
     this.pageSize = pageSize;
     this.pageIndex = pageIndex;
