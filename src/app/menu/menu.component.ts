@@ -86,8 +86,6 @@ export class MenuComponent implements OnInit {
       this.REQ_ONE = false;
       this.REQ_MULTY = false;
     }
-    console.log('this.multy_id', this.multy_id);
-    console.log('this.one_id', this.one_id);
   }
 
   oneIdTemplate (size, item) {
@@ -202,7 +200,6 @@ export class MenuComponent implements OnInit {
   }
 
   private makeListOfColumns (tableConfig: object): void {
-   // console.log('Кофигурация таблицы', tableConfig);
     this.listOfColumns = tableConfig['columnDefs'].map(elem => {
       if (elem.sortable == false) {
         return {
