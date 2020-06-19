@@ -1,13 +1,20 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { DynamicMenuService } from '../services/dynamic-menu.service';
-import { GridOptions, IDatasource, IGetRowsParams, Module } from 'ag-grid-community';
-import { FormGroup } from '@angular/forms';
+import {Component, OnInit, HostListener, ViewChild, ElementRef} from '@angular/core';
+import {DynamicMenuService} from '../services/dynamic-menu.service';
+import {GridOptions, IDatasource, IGetRowsParams, Module} from 'ag-grid-community';
+import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
-import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
-import { Actions } from '../models/Actions.interface';
-import { DataTypes } from '../models/DataTypes.interface';
-import { ActivatedRoute } from '@angular/router';
-import { NzTableQueryParams, NzTableFilterFn, NzTableFilterList, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
+import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
+import {Actions} from '../models/Actions.interface';
+import {DataTypes} from '../models/DataTypes.interface';
+import {ActivatedRoute} from '@angular/router';
+import {
+  NzTableQueryParams,
+  NzTableFilterFn,
+  NzTableFilterList,
+  NzTableSortFn,
+  NzTableSortOrder
+} from 'ng-zorro-antd/table';
+
 //import { InfiniteRowModelModule } from '@ag-grid-community/infinite-row-model'
 
 interface ColumnItem {
@@ -23,13 +30,15 @@ interface ColumnItem {
 
 @Component({
   templateUrl: './menu.component.html',
-  styleUrls: [ './menu.component.scss' ]
+  styleUrls: ['./menu.component.scss']
 })
 
 export class MenuComponent implements OnInit {
 
   moduleKey: string;
-  configPath: string
+  configPath: string;
+
+  isLoading: boolean = true;
 
   public actions: Actions[];
   private dataTypes: DataTypes[];
@@ -117,7 +126,7 @@ export class MenuComponent implements OnInit {
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
-  @HostListener ('click', ['$event']) onClick(e: MouseEvent) {
+  @HostListener('click', ['$event']) onClick(e: MouseEvent) {
     let forms;
     this.dataTypes.map(elem => forms = elem.forms);
     for (let item of this.actions) {
@@ -142,7 +151,7 @@ export class MenuComponent implements OnInit {
       this.dataTypes.map(elem => {
         forms = elem.forms;
         elem.forms.filter(item => {
-          if(item.formKey == (this.putFormData as any)?.formKey) {
+          if (item.formKey == (this.putFormData as any)?.formKey) {
             this.typeForm = elem.type;
           }
         });
@@ -166,7 +175,7 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {}
 
   disableFunc(type: string): boolean {
-    switch(type) {
+    switch (type) {
       case 'NO_REQ':
         return false;
       case 'REQ_ONE':
@@ -177,26 +186,34 @@ export class MenuComponent implements OnInit {
         if (this.REQ_MULTY) {
           return false;
         } else return true;
-      default: break;
+      default:
+        break;
     }
   }
 
   private workWithConfig(): void {
+    this.isLoading = true;
     this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
-      this.viewConfig =  resp.viewConfig;
-      this.dataTypes = resp.dataTypes;
-      this.actions = resp.actions;
-      //this.gridOptions = resp.viewConfig.config;
-      this.makeListOfColumns(this.viewConfig.config);
-      this.idFieldName = this.viewConfig.config.idFieldName;
-    });
-    const testModel = {
-      phoneInfos: [
-          { type: null, phone: null }
-      ],
-      emails: [ null ]
-    };
-    this.model = testModel;
+        this.viewConfig = resp.viewConfig;
+        this.dataTypes = resp.dataTypes;
+        this.actions = resp.actions;
+        //this.gridOptions = resp.viewConfig.config;
+        this.makeListOfColumns(this.viewConfig.config);
+        this.idFieldName = this.viewConfig.config.idFieldName;
+
+        const testModel = {
+          phoneInfos: [
+            {type: null, phone: null}
+          ],
+          emails: [null]
+        };
+        this.model = testModel;
+
+        this.isLoading = false;
+      },
+      (err) => {
+        console.log(err.message)
+      });
   }
 
   private makeListOfColumns (tableConfig: object): void {
@@ -207,19 +224,21 @@ export class MenuComponent implements OnInit {
           columnKey: elem.field,
         }
       } else {
-      return {
-        name: elem.headerName,
-        columnKey: elem.field,
-        sortFn: elem.sortable
-      }}
+        return {
+          name: elem.headerName,
+          columnKey: elem.field,
+          sortFn: elem.sortable
+        }
+      }
     });
   }
+
   private addData(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null
-    ): void {
+  ): void {
     const bodyForGetModuleData = {
       action_name: this.configPath,
       order_info: [
@@ -236,12 +255,13 @@ export class MenuComponent implements OnInit {
     this.loading = true;
     this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
       this.loading = false;
-      this.total =  data.total_size;
+      this.total = data.total_size;
       this.listOfModuleData = data.data;
     });
   }
 
-  submit() { }
+  submit() {
+  }
 
   public hideForm(): void {
     this.form.reset();
@@ -263,8 +283,8 @@ export class MenuComponent implements OnInit {
 
   private putFormDataInstance(): void {
     if ((this.putFormData as any).indicator.includes('create')) {
-      delete  this.bodyForRequest.hash;
-      delete  this.bodyForRequest.id;
+      delete this.bodyForRequest.hash;
+      delete this.bodyForRequest.id;
     }
     this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe(data => {
       this.updateCheckedSet(data.id, null);
@@ -273,11 +293,11 @@ export class MenuComponent implements OnInit {
   }
 
   private getFormDataInstance(typeForm: string): void {
-    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+    this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
       this.model.selectableField = null;
       console.log('model', this.model);
@@ -287,13 +307,13 @@ export class MenuComponent implements OnInit {
 
   private deleteFormDataInstance(typeForm: string): void {
     this.multy_id.map(elem => {
-      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe();
+      this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe();
     });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
-    const { pageSize, pageIndex, sort, filter } = params;
+    const {pageSize, pageIndex, sort, filter} = params;
     this.pageSize = pageSize;
     this.pageIndex = pageIndex;
     const currentSort = sort.find(item => item.value !== null);
