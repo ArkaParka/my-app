@@ -21,7 +21,7 @@ export class FormlyComponent  {
   }
 
 
-  loadExample(t) {
+  loadExample() {
     this.http.get<any>(`assets/schema.json`).pipe(
       tap(({ schema, model }) => {
         console.log(schema)

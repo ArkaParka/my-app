@@ -16,7 +16,7 @@ import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil }
                 [loading]="itemsLoading$ | async"
                 [(ngModel)]="selectedItem"
                 [typeahead]="input$"
-                (change)="onChange()">
+                (change)="onChange($event)">
     </ng-select>
     `
 })

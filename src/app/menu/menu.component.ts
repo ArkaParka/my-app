@@ -36,7 +36,9 @@ export class MenuComponent implements OnInit {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  public putFormData: object = {};
+  //public data;
+  //TODO: заменить any на нормальную модель
+  public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
   private id: string;
@@ -83,7 +85,7 @@ export class MenuComponent implements OnInit {
     if (this.setOfCheckedId.size == 0) {
       this.REQ_ONE = false;
       this.REQ_MULTY = false;
-    } 
+    }
   }
 
   oneIdTemplate (size, login) {
@@ -131,9 +133,9 @@ export class MenuComponent implements OnInit {
               this.fields = [elem['schema']];
             }
             this.largeModal.show();
-          } 
-        }  
-      } 
+          }
+        }
+      }
     }
 
     if (this.putFormData) {
@@ -149,13 +151,13 @@ export class MenuComponent implements OnInit {
         data: this.form.value,
         formKey: (this.putFormData as any)?.formKey,
         hash: this.hash,
-        id: this.id, 
+        id: this.id,
         type: this.typeForm
       };
 
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
-      } 
+      }
       this.REQ_ONE = null;
       this.REQ_MULTY = null;
     }
@@ -237,7 +239,7 @@ export class MenuComponent implements OnInit {
     this.loading = true;
     this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
       this.loading = false;
-      this.total =  data.total_size; 
+      this.total =  data.total_size;
       this.listOfModuleData = data.data;
     });
   }
@@ -268,7 +270,7 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
-    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe();       
+    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe();
   }
 
   private getFormDataInstance(typeForm: string): void {
