@@ -30,16 +30,7 @@ export class DynamicMenuService {
   }
 
   public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration> {
-    return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`).pipe(
-      tap(({actions, viewConfig, dataTypes}) => {
-        return {
-          actions, viewConfig, dataTypes
-        }
-      }),
-      catchError(err => {
-        return throwError(err);
-      })
-    );
+    return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 
   public getModuleData(nodeName: string, body: object): Observable<ModuleData> {
