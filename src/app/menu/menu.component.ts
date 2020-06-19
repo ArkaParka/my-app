@@ -53,7 +53,7 @@ export class MenuComponent implements OnInit {
 
   public total = 1;
   listOfModuleData: object[] = [];
-  loading = true;
+  public loadingTable = true;
   public pageSize = 10;
   pageIndex = 1;
   public checked = false;
@@ -185,8 +185,7 @@ export class MenuComponent implements OnInit {
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
       //this.gridOptions = resp.viewConfig.config;
-      this.makeListOfColumns(this.viewConfig.config);
-      this.idFieldName = this.viewConfig.config.idFieldName;
+      if (this.viewConfig.config) this.makeListOfColumns(this.viewConfig.config);
     });
     const testModel = {
       phoneInfos: [
@@ -198,7 +197,8 @@ export class MenuComponent implements OnInit {
   }
 
   private makeListOfColumns (tableConfig: object): void {
-    this.listOfColumns = tableConfig['columnDefs'].map(elem => {
+    this.idFieldName = (tableConfig as any)?.idFieldName;
+    this.listOfColumns = tableConfig['columnDefs']?.map(elem => {
       if (elem.sortable == false) {
         return {
           name: elem.headerName,
@@ -212,6 +212,7 @@ export class MenuComponent implements OnInit {
       }}
     });
   }
+
   private addData(
     pageIndex: number,
     pageSize: number,
@@ -231,9 +232,9 @@ export class MenuComponent implements OnInit {
         pageSize: pageSize
       }
     };
-    this.loading = true;
+    this.loadingTable = true;
     this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
-      this.loading = false;
+      this.loadingTable = false;
       this.total =  data.total_size;
       this.listOfModuleData = data.data;
     });
@@ -278,8 +279,6 @@ export class MenuComponent implements OnInit {
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-      this.model.selectableField = null;
-      console.log('model', this.model);
     });
     this.form.reset();
   }
