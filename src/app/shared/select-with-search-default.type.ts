@@ -3,6 +3,7 @@ import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'select-with-search',
@@ -16,7 +17,8 @@ import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil }
                 [loading]="itemsLoading$ | async"
                 [(ngModel)]="selectedItem"
                 [typeahead]="input$"
-                (change)="onChange($event)">
+                (change)="onChange($event)"
+                [formControl]="_selectControl">
     </ng-select>
     `
 })
@@ -27,6 +29,7 @@ export class SearchDefaultComponent extends FieldType implements OnInit {
     selectedItem: any;
     readonly input$ = new Subject<any>();
     readonly destroy$ = new Subject<any>();
+    public _selectControl = new FormControl();
 
 
     constructor(private dynamicMenuService: DynamicMenuService) {
