@@ -68,12 +68,12 @@ export class DynamicMenuService {
     );;
   }
 
-  public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: number): Observable<any> {
+  public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: string): Observable<any> {
     return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}
     `);
   }
 
-  public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: number): Observable<any> {
+  public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: string): Observable<any> {
     return this.http.delete(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }
 
