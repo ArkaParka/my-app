@@ -36,7 +36,6 @@ export class MenuComponent implements OnInit {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  //public data;
   //TODO: заменить any на нормальную модель
   public putFormData: any = {};
   private hash: string = null;
@@ -49,7 +48,7 @@ export class MenuComponent implements OnInit {
   public options: FormlyFormOptions = {};
   private REQ_ONE;
   private REQ_MULTY;
-  private one_id: string = '';
+  private one_id: string = null;
   private multy_id: string[] = [];
 
   public total = 1;
@@ -67,36 +66,39 @@ export class MenuComponent implements OnInit {
     route.params.subscribe((params) => {
       this.moduleKey = params['moduleKey'];
       this.configPath = params['configPath'];
+      this.workWithConfig();
     });
   }
 
-  updateCheckedSet(login: string, checked: boolean): void {
+  updateCheckedSet(item: string, checked: boolean): void {
     if (checked) {
-      this.setOfCheckedId.add(login);
+      this.setOfCheckedId.add(item);
       this.REQ_ONE = false;
       this.REQ_MULTY = true;
-      this.multy_id.push(login);
-      this.oneIdTemplate(this.setOfCheckedId.size, login);
+      this.multy_id.push(item);
+      this.oneIdTemplate(this.setOfCheckedId.size, item);
     } else {
-      this.setOfCheckedId.delete(login);
-      this.multy_id.splice( this.multy_id.indexOf(login), 1);
-      this.oneIdTemplate(this.setOfCheckedId.size, login);
+      this.setOfCheckedId.delete(item);
+      this.multy_id.splice( this.multy_id.indexOf(item), 1);
+      this.oneIdTemplate(this.setOfCheckedId.size, this.multy_id[0]);
     }
-    if (this.setOfCheckedId.size == 0) {
+    if (this.multy_id.length == 0 || !this.one_id) {
       this.REQ_ONE = false;
       this.REQ_MULTY = false;
     }
+    console.log('this.multy_id', this.multy_id);
+    console.log('this.one_id', this.one_id);
   }
 
-  oneIdTemplate (size, login) {
+  oneIdTemplate (size, item) {
     if (size == 1) {
       this.REQ_ONE = true;
-      this.one_id = login;
+      this.one_id = item;
     }
   }
 
-  onItemChecked(login: string, checked: boolean): void {
-    this.updateCheckedSet(login, checked);
+  onItemChecked(item: string, checked: boolean): void {
+    this.updateCheckedSet(item, checked);
     this.refreshCheckedStatus();
   }
 
@@ -158,14 +160,12 @@ export class MenuComponent implements OnInit {
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
       }
-      this.REQ_ONE = null;
-      this.REQ_MULTY = null;
+      this.one_id = null;
+      this.multy_id = [];
     }
   }
 
-  ngOnInit(): void {
-    this.workWithConfig();
-  }
+  ngOnInit(): void {}
 
   disableFunc(type: string): boolean {
     switch(type) {
@@ -248,8 +248,8 @@ export class MenuComponent implements OnInit {
 
   public hideForm(): void {
     this.form.reset();
-    this.REQ_ONE = null;
-    this.REQ_MULTY = null;
+    this.one_id = null;
+    this.multy_id = [];
     this.id = null;
     this.largeModal.hide();
   }
@@ -262,7 +262,6 @@ export class MenuComponent implements OnInit {
     }
     this.form.reset();
     this.largeModal.hide();
-    this.addData(this.pageIndex, this.pageSize, null, null);
   }
 
   private putFormDataInstance(): void {
@@ -270,7 +269,10 @@ export class MenuComponent implements OnInit {
       delete  this.bodyForRequest.hash;
       delete  this.bodyForRequest.id;
     }
-    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe();
+    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe(data => {
+      this.updateCheckedSet(data.id, null);
+      this.addData(this.pageIndex, this.pageSize, null, null);
+    });
   }
 
   private getFormDataInstance(typeForm: string): void {
@@ -280,6 +282,8 @@ export class MenuComponent implements OnInit {
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      this.model.selectableField = null;
+      console.log('model', this.model);
     });
     this.form.reset();
   }
