@@ -158,8 +158,6 @@ export class MenuComponent implements OnInit {
       if (e.target['value']?.includes('edit')) {
         this.getFormDataInstance(this.typeForm);
       }
-      this.one_id = null;
-      this.multy_id = [];
     }
   }
 
@@ -245,9 +243,10 @@ export class MenuComponent implements OnInit {
 
   public hideForm(): void {
     this.form.reset();
+    this.id = null;
+    //this.multy_id.map(elem => {this.updateCheckedSet(elem, null); this.refreshCheckedStatus();});
     this.one_id = null;
     this.multy_id = [];
-    this.id = null;
     this.largeModal.hide();
   }
 
