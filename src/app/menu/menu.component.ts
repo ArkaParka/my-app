@@ -14,6 +14,8 @@ import {
   NzTableSortFn,
   NzTableSortOrder
 } from 'ng-zorro-antd/table';
+import {mergeMap, switchMap, tap} from "rxjs/operators";
+import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
 
 //import { InfiniteRowModelModule } from '@ag-grid-community/infinite-row-model'
 
@@ -38,7 +40,7 @@ export class MenuComponent implements OnInit {
   moduleKey: string;
   configPath: string;
 
-  isLoading: boolean = true;
+  isFormLoading: boolean = true;
 
   public actions: Actions[];
   private dataTypes: DataTypes[];
@@ -71,12 +73,17 @@ export class MenuComponent implements OnInit {
   setOfCheckedId = new Set<string>();
   public listOfColumns: ColumnItem[];
 
+
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.subscribe((params) => {
-      this.moduleKey = params['moduleKey'];
-      this.configPath = params['configPath'];
-      this.workWithConfig();
-    });
+    route.params.pipe(
+      switchMap((params) => {
+        this.isFormLoading = true;
+        this.moduleKey = params['moduleKey'];
+        this.configPath = params['configPath'];
+        return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
+      })
+    ).subscribe(resp => this.pageConfigurationCb(resp),
+    );
   }
 
   updateCheckedSet(item: string, checked: boolean): void {
@@ -88,7 +95,7 @@ export class MenuComponent implements OnInit {
       this.oneIdTemplate(this.setOfCheckedId.size, item);
     } else {
       this.setOfCheckedId.delete(item);
-      this.multy_id.splice( this.multy_id.indexOf(item), 1);
+      this.multy_id.splice(this.multy_id.indexOf(item), 1);
       this.oneIdTemplate(this.setOfCheckedId.size, this.multy_id[0]);
     }
     if (this.multy_id.length == 0 || !this.one_id) {
@@ -97,7 +104,7 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  oneIdTemplate (size, item) {
+  oneIdTemplate(size, item) {
     if (size == 1) {
       this.REQ_ONE = true;
       this.one_id = item;
@@ -172,7 +179,8 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   disableFunc(type: string): boolean {
     switch (type) {
@@ -191,32 +199,37 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  pageConfigurationCb = (resp: ModulePageConfiguration) => {
+    console.log(resp)
+    if (resp && resp.viewConfig && resp.dataTypes && resp.actions) {
+      this.viewConfig = resp.viewConfig;
+      this.dataTypes = resp.dataTypes;
+      this.actions = resp.actions;
+      //this.gridOptions = resp.viewConfig.config;
+      this.makeListOfColumns(this.viewConfig?.config);
+      this.idFieldName = this.viewConfig.config.idFieldName;
+
+      const testModel = {
+        phoneInfos: [
+          {type: null, phone: null}
+        ],
+        emails: [null]
+      };
+      this.model = testModel;
+
+      this.isFormLoading = false;
+    }
+  };
+
   private workWithConfig(): void {
-    this.isLoading = true;
-    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
-        this.viewConfig = resp.viewConfig;
-        this.dataTypes = resp.dataTypes;
-        this.actions = resp.actions;
-        //this.gridOptions = resp.viewConfig.config;
-        this.makeListOfColumns(this.viewConfig.config);
-        this.idFieldName = this.viewConfig.config.idFieldName;
-
-        const testModel = {
-          phoneInfos: [
-            {type: null, phone: null}
-          ],
-          emails: [null]
-        };
-        this.model = testModel;
-
-        this.isLoading = false;
-      },
+    this.isFormLoading = true;
+    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => this.pageConfigurationCb(resp),
       (err) => {
         console.log(err.message)
       });
   }
 
-  private makeListOfColumns (tableConfig: object): void {
+  private makeListOfColumns(tableConfig: object): void {
     this.listOfColumns = tableConfig['columnDefs'].map(elem => {
       if (elem.sortable == false) {
         return {
@@ -307,7 +320,7 @@ export class MenuComponent implements OnInit {
 
   private deleteFormDataInstance(typeForm: string): void {
     this.multy_id.map(elem => {
-      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(data => {
+      this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(data => {
         this.updateCheckedSet(data.id, null);
         this.addData(this.pageIndex, this.pageSize, null, null);
       });
@@ -315,7 +328,7 @@ export class MenuComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex, sort, filter } = params;
+    const {pageSize, pageIndex, sort, filter} = params;
     this.pageSize = pageSize;
     this.pageIndex = pageIndex;
     const currentSort = sort.find(item => item.value !== null);

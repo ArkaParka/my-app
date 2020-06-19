@@ -1,7 +1,7 @@
 <div class="text-center">
-  <div *ngIf="isLoading" class="spinner-border" role="status"></div>
+  <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
 </div>
-<div *ngIf="!isLoading">
+<div *ngIf="!isFormLoading">
   <ng-template #dynamicButtons let-value="actionName" let-title="actionTitle" let-type="type">
     <button style="margin-bottom: 5px;" type="button"
             class="btn btn-secondary" [disabled]="disableFunc(type)" value="{{value}}">{{ title }}</button>
