@@ -8,7 +8,8 @@ import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './default-layout.component.html'
+  templateUrl: './default-layout.component.html',
+  styleUrls:['./default-layout.component.scss']
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
