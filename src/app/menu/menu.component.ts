@@ -1,6 +1,5 @@
-import {Component, OnInit, HostListener, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy} from '@angular/core';
 import {DynamicMenuService} from '../services/dynamic-menu.service';
-import {GridOptions, IDatasource, IGetRowsParams, Module} from 'ag-grid-community';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
@@ -14,10 +13,10 @@ import {
   NzTableSortFn,
   NzTableSortOrder
 } from 'ng-zorro-antd/table';
-import {mergeMap, switchMap, tap} from "rxjs/operators";
+import {switchMap, takeUntil} from "rxjs/operators";
 import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
-
-//import { InfiniteRowModelModule } from '@ag-grid-community/infinite-row-model'
+import {ModuleData} from "../models/ModuleData.interface";
+import {Subject, zip} from "rxjs";
 
 interface ColumnItem {
   name: string;
@@ -35,7 +34,7 @@ interface ColumnItem {
   styleUrls: ['./menu.component.scss']
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
 
   moduleKey: string;
   configPath: string;
@@ -74,6 +73,12 @@ export class MenuComponent implements OnInit {
   public listOfColumns: ColumnItem[];
 
 
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  ngOnDestroy(): void {
+    this.destroy$.next(null);
+    this.destroy$.complete();
+  }
+
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
     route.params.pipe(
       switchMap((params) => {
@@ -81,9 +86,10 @@ export class MenuComponent implements OnInit {
         this.moduleKey = params['moduleKey'];
         this.configPath = params['configPath'];
         return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
-      })
-    ).subscribe(resp => this.pageConfigurationCb(resp),
-    );
+      }),
+      takeUntil(this.destroy$)
+    )
+      .subscribe(resp => this.pageConfigurationCb(resp));
   }
 
   updateCheckedSet(item: string, checked: boolean): void {
@@ -219,14 +225,6 @@ export class MenuComponent implements OnInit {
     }
   };
 
-  private workWithConfig(): void {
-    this.isFormLoading = true;
-    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => this.pageConfigurationCb(resp),
-      (err) => {
-        console.log(err.message)
-      });
-  }
-
   private makeListOfColumns(tableConfig: object): void {
     this.listOfColumns = tableConfig['columnDefs'].map(elem => {
       if (elem.sortable == false) {
@@ -244,12 +242,16 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  private addData(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null
-  ): void {
+  getModuleDataCb = (data: ModuleData) => {
+    this.loading = false;
+    this.total = data.total_size;
+    this.listOfModuleData = data.data;
+  };
+
+  addData(pageIndex: number,
+          pageSize: number,
+          sortField: string | null,
+          sortOrder: string | null) {
     const bodyForGetModuleData = {
       action_name: this.configPath,
       order_info: [
@@ -264,11 +266,7 @@ export class MenuComponent implements OnInit {
       }
     };
     this.loading = true;
-    this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
-      this.loading = false;
-      this.total = data.total_size;
-      this.listOfModuleData = data.data;
-    });
+    return this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData);
   }
 
   submit() {
@@ -298,10 +296,13 @@ export class MenuComponent implements OnInit {
       delete this.bodyForRequest.hash;
       delete this.bodyForRequest.id;
     }
-    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe(data => {
-      this.updateCheckedSet(data.id, null);
-      this.addData(this.pageIndex, this.pageSize, null, null);
-    });
+    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).pipe(
+      switchMap(data => {
+        this.updateCheckedSet(data.id, null);
+        return this.addData(this.pageIndex, this.pageSize, null, null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((result) => this.getModuleDataCb(result));
   }
 
   private getFormDataInstance(typeForm: string): void {
@@ -318,12 +319,15 @@ export class MenuComponent implements OnInit {
   }
 
   private deleteFormDataInstance(typeForm: string): void {
-    this.multy_id.map(elem => {
-      this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(data => {
-        this.updateCheckedSet(data.id, null);
-        this.addData(this.pageIndex, this.pageSize, null, null);
-      });
-    });
+    let deleteRequest = [];
+    this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
+
+    zip(...deleteRequest).pipe(
+      switchMap(() => {
+        return this.addData(this.pageIndex, this.pageSize, null, null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((result) => this.getModuleDataCb(result));
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
@@ -333,6 +337,8 @@ export class MenuComponent implements OnInit {
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
-    this.addData(pageIndex, pageSize, sortField, sortOrder);
+    this.addData(pageIndex, pageSize, sortField, sortOrder)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => this.getModuleDataCb(result));
   }
 }
