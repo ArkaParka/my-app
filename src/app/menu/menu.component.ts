@@ -63,7 +63,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public total = 1;
   listOfModuleData: object[] = [];
-  loading = true;
+  public loadingTable = true;
   public pageSize = 10;
   pageIndex = 1;
   public checked = false;
@@ -176,8 +176,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         id: this.id,
         type: this.typeForm
       };
-
-      if (e.target['value']?.includes('edit')) {
+      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -243,7 +242,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   getModuleDataCb = (data: ModuleData) => {
-    this.loading = false;
+    this.loadingTable = false;
     this.total = data.total_size;
     this.listOfModuleData = data.data;
   };
@@ -265,7 +264,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         pageSize: pageSize
       }
     };
-    this.loading = true;
+    this.loadingTable = true;
     return this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData);
   }
 
@@ -275,9 +274,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   public hideForm(): void {
     this.form.reset();
     this.id = null;
-    //this.multy_id.map(elem => {this.updateCheckedSet(elem, null); this.refreshCheckedStatus();});
-    this.one_id = null;
-    this.multy_id = [];
+    this.fields = null;
     this.largeModal.hide();
   }
 
@@ -287,8 +284,18 @@ export class MenuComponent implements OnInit, OnDestroy {
     } else {
       this.putFormDataInstance();
     }
-    this.form.reset();
     this.largeModal.hide();
+    this.fields = null;
+  }
+
+  private getFormDataInstance(typeForm: string): void {
+    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+      this.model = data.data;
+      this.hash = data.hash;
+      this.id = data.id;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+    });
   }
 
   private putFormDataInstance(): void {
@@ -303,19 +310,6 @@ export class MenuComponent implements OnInit, OnDestroy {
       }),
       takeUntil(this.destroy$)
     ).subscribe((result) => this.getModuleDataCb(result));
-  }
-
-  private getFormDataInstance(typeForm: string): void {
-    this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
-      this.model = data.data;
-      this.hash = data.hash;
-      this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
-      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-      this.model.selectableField = null;
-      console.log('model', this.model);
-    });
-    this.form.reset();
   }
 
   private deleteFormDataInstance(typeForm: string): void {
