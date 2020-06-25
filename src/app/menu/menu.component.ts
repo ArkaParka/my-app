@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DynamicMenuService } from '../services/dynamic-menu.service';
-import { GridOptions, IDatasource, IGetRowsParams, Module } from 'ag-grid-community';
+//import { GridOptions, IDatasource, IGetRowsParams, Module } from 'ag-grid-community';
 import { FormGroup } from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
@@ -147,15 +147,15 @@ export class MenuComponent implements OnInit {
           }
         });
       });
-      this.bodyForRequest = {
-        data: this.form.value,
-        formKey: (this.putFormData as any)?.formKey,
-        hash: this.hash,
-        id: this.id,
-        type: this.typeForm
-      };
 
-      if (e.target['value']?.includes('edit')) {
+      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
+        this.bodyForRequest = {
+          data: this.form.value,
+          formKey: (this.putFormData as any)?.formKey,
+          hash: this.hash,
+          id: this.id,
+          type: this.typeForm
+        };
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -245,9 +245,7 @@ export class MenuComponent implements OnInit {
   public hideForm(): void {
     this.form.reset();
     this.id = null;
-    //this.multy_id.map(elem => {this.updateCheckedSet(elem, null); this.refreshCheckedStatus();});
-    this.one_id = null;
-    this.multy_id = [];
+    this.fields = null;
     this.largeModal.hide();
   }
 
@@ -257,8 +255,8 @@ export class MenuComponent implements OnInit {
     } else {
       this.putFormDataInstance();
     }
-    this.form.reset();
     this.largeModal.hide();
+    this.fields = null;
   }
 
   private putFormDataInstance(): void {
@@ -279,14 +277,13 @@ export class MenuComponent implements OnInit {
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      console.log('Модель формы', this.model);
     });
-    this.form.reset();
   }
 
   private deleteFormDataInstance(typeForm: string): void {
     this.multy_id.map(elem => {
-      this.dynamicMenuService.deleteFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(data => {
-        this.updateCheckedSet(data.id, null);
+      this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem).subscribe(() => {
         this.addData(this.pageIndex, this.pageSize, null, null);
       });
     });
