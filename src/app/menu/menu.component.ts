@@ -147,15 +147,14 @@ export class MenuComponent implements OnInit {
           }
         });
       });
-
+      this.bodyForRequest = {
+        data: this.form.value,
+        formKey: (this.putFormData as any)?.formKey,
+        hash: this.hash,
+        id: this.id,
+        type: this.typeForm
+      };
       if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
-        this.bodyForRequest = {
-          data: this.form.value,
-          formKey: (this.putFormData as any)?.formKey,
-          hash: this.hash,
-          id: this.id,
-          type: this.typeForm
-        };
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -259,6 +258,16 @@ export class MenuComponent implements OnInit {
     this.fields = null;
   }
 
+  private getFormDataInstance(typeForm: string): void {
+    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+      this.model = data.data;
+      this.hash = data.hash;
+      this.id = data.id;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+    });
+  }
+
   private putFormDataInstance(): void {
     if ((this.putFormData as any).indicator.includes('create')) {
       delete  this.bodyForRequest.hash;
@@ -267,17 +276,6 @@ export class MenuComponent implements OnInit {
     this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe(data => {
       this.updateCheckedSet(data.id, null);
       this.addData(this.pageIndex, this.pageSize, null, null);
-    });
-  }
-
-  private getFormDataInstance(typeForm: string): void {
-    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
-      this.model = data.data;
-      this.hash = data.hash;
-      this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
-      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-      console.log('Модель формы', this.model);
     });
   }
 
