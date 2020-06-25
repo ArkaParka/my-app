@@ -1,3 +1,5 @@
-<app-grid-item *ngFor="let item of activeTemplate.gridItems"
+<app-grid-item *ngFor="let item of activeTemplate.gridItems, let i=index"
                [value]="item.areaName"
-               [gridAreaName]="item.areaName"></app-grid-item>
+               [gridAreaName]="item.areaName"
+               [grid-area-config]="activeGridAreasTemplate[i]"
+></app-grid-item>

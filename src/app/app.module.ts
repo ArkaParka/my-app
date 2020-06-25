@@ -75,7 +75,6 @@ import {FormLoaderComponent} from "./containers/form-loader/form-loader.componen
     LoginComponent,
     RegisterComponent,
     FormLoaderComponent,
-    DynamicLayoutExampleComponent,
     //MenuComponent,
   ],
   providers: [{
