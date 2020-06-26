@@ -2,61 +2,71 @@
   <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
 </div>
 <div *ngIf="!isFormLoading">
-  <ng-template #dynamicButtons let-value="actionName" let-title="actionTitle" let-type="type">
-    <button style="margin-bottom: 5px;" type="button"
-            class="btn btn-secondary" [disabled]="disableFunc(type)" value="{{value}}">{{ title }}</button>
+  <ng-template #dynamicButtons let-value="execConfig.formActionType" let-title="actionTitle" let-type="type">
+    <button style="margin-bottom: 5px;"
+            type="button"
+            class="btn btn-secondary"
+      [disabled]="disableFunc(type)"
+      value="{{value}}"
+      (click)="actionButtonClicked($event)">{{ title }}</button>
   </ng-template>
   <div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
     <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
   </div>
 
-<nz-table
-      nzBordered
-      nzShowSizeChanger
-      nzSize="small"
-      [nzData]="listOfModuleData"
-      [nzFrontPagination]="false"
-      [nzLoading]="loadingTable"
-      [nzTotal]="total"
-      [nzPageSize]="pageSize"
-      [nzPageIndex]="pageIndex"
-      (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
-      (nzQueryParams)="onQueryParamsChange($event)"
-    >
-      <thead>
-        <tr>
-          <th
-            [(nzChecked)]="checked"
-            [nzIndeterminate]="indeterminate"
-            (nzCheckedChange)="onAllChecked($event)"
-          ></th>
-          <th
-            *ngFor="let column of listOfColumns"
-            [nzColumnKey]="column.columnKey"
-            [nzSortFn]="column.sortFn"
-          >
-            {{ column.name }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of listOfModuleData">
-          <td [nzChecked]="setOfCheckedId.has(data.login)" (nzCheckedChange)="onItemChecked(data.login, $event)"></td>
-          <td>{{ data.login }}</td>
-          <td>{{ data.fullName }}</td>
-          <td>{{ data.status }}</td>
-        </tr>
-      </tbody>
-</nz-table>
+  <nz-table
+    nzBordered
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="listOfModuleData"
+    [nzFrontPagination]="false"
+    [nzLoading]="loadingTable"
+    [nzTotal]="total"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+        ></th>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzColumnKey]="column.columnKey"
+          [nzSortFn]="column.sortFn"
+        >
+          {{ column.name }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfModuleData">
+        <td [nzChecked]="setOfCheckedId.has(data.login)" (nzCheckedChange)="onItemChecked(data.login, $event)"></td>
+        <td>{{ data.login }}</td>
+        <td>{{ data.fullName }}</td>
+        <td>{{ data.status }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" *ngIf="!putFormData.confirmMessage; else confirmMessage">
       <div class="modal-body">
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-        </form>
+        <div *ngIf="!isModalDataLoading">
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+          </form>
+        </div>
+        <div class="text-center">
+          <div *ngIf="isModalDataLoading" class="spinner-border" role="status"></div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="hideForm()">Закрыть</button>

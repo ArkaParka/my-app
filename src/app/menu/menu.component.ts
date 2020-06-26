@@ -3,7 +3,7 @@ import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {Actions} from '../models/Actions.interface';
+import {Actions, FormActionTypes} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -17,6 +17,10 @@ import {switchMap, takeUntil} from "rxjs/operators";
 import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
 import {ModuleData} from "../models/ModuleData.interface";
 import {Subject, zip} from "rxjs";
+import {Forms} from "../models/Forms.interface";
+import {FieldGroup} from "../models/FieldGroup.interface";
+import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 interface ColumnItem {
   name: string;
@@ -40,6 +44,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   configPath: string;
 
   isFormLoading: boolean = true;
+  isModalDataLoading: boolean = false;
 
   public actions: Actions[];
   private dataTypes: DataTypes[];
@@ -74,10 +79,13 @@ export class MenuComponent implements OnInit, OnDestroy {
 
 
   destroy$: Subject<boolean> = new Subject<boolean>();
+
   ngOnDestroy(): void {
     this.destroy$.next(null);
     this.destroy$.complete();
   }
+
+  @ViewChild('largeModal') public largeModal: ModalDirective;
 
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
     route.params.pipe(
@@ -137,50 +145,71 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item[this.idFieldName])) && !this.checked;
   }
 
-  @ViewChild('largeModal') public largeModal: ModalDirective;
-
-  @HostListener('click', ['$event']) onClick(e: MouseEvent) {
-    let forms;
+  actionButtonClicked(e): void {
+    let forms: Forms[];
     this.dataTypes.map(elem => forms = elem.forms);
     for (let item of this.actions) {
-      if (e.target['value'] == item['actionName']) {
+      if (e.target.value === item.execConfig.formActionType) {
         for (let elem of forms) {
-          if (item['execConfig']['formKey'] == elem['formKey']) {
+          if (item.execConfig.formKey == elem.formKey && (this.REQ_ONE || e.target.value === FormActionTypes.CREATE)) {
             this.putFormData = {
-              indicator: e.target['value'],
-              formKey: elem['formKey'],
-              confirmMessage: item['execConfig']['confirmMessage']
+              indicator: e.target.value,
+              formKey: elem.formKey,
+              confirmMessage: item.execConfig.confirmMessage
             };
-            if (!e.target['value'].includes('delete')) {
-              this.fields = [elem['schema']];
+            this.dataTypes.map(elem => {
+              forms = elem.forms;
+              elem.forms.filter(item => {
+                if (item.formKey == (this.putFormData as any)?.formKey) {
+                  this.typeForm = elem.type;
+                }
+              });
+            });
+
+            if (e.target.value !== FormActionTypes.DELETE) {
+              this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
+            }
+            if (e.target.value === FormActionTypes.UPDATE) {
+              this.getFormDataInstance(this.typeForm);
             }
             this.largeModal.show();
           }
         }
       }
     }
+  }
 
-    if (this.putFormData) {
-      this.dataTypes.map(elem => {
-        forms = elem.forms;
-        elem.forms.filter(item => {
-          if (item.formKey == (this.putFormData as any)?.formKey) {
-            this.typeForm = elem.type;
-          }
-        });
-      });
-      this.bodyForRequest = {
-        data: this.form.value,
-        formKey: (this.putFormData as any)?.formKey,
-        hash: this.hash,
-        id: this.id,
-        type: this.typeForm
-      };
-      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
-        this.getFormDataInstance(this.typeForm);
+  modifyFormlyField(field, additionalProperties, actionType) {
+    let newField = cloneDeep(field);
+    if (additionalProperties) {
+      if (additionalProperties.readOnly && additionalProperties.readOnly.length) {
+        if (additionalProperties.readOnly.includes(actionType)) {
+          newField.templateOptions.readonly = true;
+        }
       }
     }
+    return newField;
   }
+
+
+  generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
+    let result = new Array<any>();
+    let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
+
+    fieldGroup = fieldGroup.map(fg => {
+      let field = cloneDeep(fg.defaultProperties);
+      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
+      return field;
+    });
+
+    result.push({
+      fieldGroup: fieldGroup,
+      fieldGroupClassName: schema[0].fieldGroupClassName
+    });
+
+    return result;
+  }
+
 
   ngOnInit(): void {
   }
@@ -203,12 +232,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   pageConfigurationCb = (resp: ModulePageConfiguration) => {
-    console.log(resp)
     if (resp && resp.viewConfig && resp.dataTypes && resp.actions) {
       this.viewConfig = resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
-      //this.gridOptions = resp.viewConfig.config;
       this.makeListOfColumns(this.viewConfig?.config);
       this.idFieldName = this.viewConfig.config.idFieldName;
 
@@ -289,16 +316,27 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   private getFormDataInstance(typeForm: string): void {
-    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+    this.isModalDataLoading = true;
+    this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      this.isModalDataLoading = false;
     });
   }
 
   private putFormDataInstance(): void {
+
+    this.bodyForRequest = {
+      data: this.form.value,
+      formKey: (this.putFormData as any)?.formKey,
+      hash: this.hash,
+      id: this.id,
+      type: this.typeForm
+    };
+
     if ((this.putFormData as any).indicator.includes('create')) {
       delete this.bodyForRequest.hash;
       delete this.bodyForRequest.id;
