@@ -7,6 +7,19 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
+import ru from '@angular/common/locales/ru';
+import { registerLocaleData } from '@angular/common';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+
+registerLocaleData(ru);
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -46,6 +59,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 //import {ContainerModule} from "../../shared/container-module/container.module";
 import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
+import {MenuModule} from "./menu/menu.module";
 
 @NgModule({
   imports: [
@@ -63,6 +77,7 @@ import { FormLoaderComponent } from './containers/form-loader/form-loader.compon
     ChartsModule,
     HttpClientModule,
     HttpModule,
+    MenuModule
   ],
   declarations: [
     AppComponent,
@@ -74,10 +89,13 @@ import { FormLoaderComponent } from './containers/form-loader/form-loader.compon
     FormLoaderComponent,
     //MenuComponent,
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy,
+    },
+    { provide: NZ_I18N, useValue: ru_RU }, { provide: NZ_ICONS, useValue: icons }
+],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

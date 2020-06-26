@@ -1,68 +1,147 @@
-import {Component, OnInit, HostListener, ViewChild} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy} from '@angular/core';
 import {DynamicMenuService} from '../services/dynamic-menu.service';
-import {GridOptions} from 'ag-grid-community';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {Actions, FormActionTypes} from '../models/Actions.interface';
+import {Actions} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
-import {Subject, BehaviorSubject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import cloneDeep from 'lodash/cloneDeep'
-import {FieldGroup} from "../models/FieldGroup.interface";
-import {FieldGroupDefaultProperties} from "../models/FieldGroupDefaultProperties";
-import get from 'lodash/get'
-import {Forms} from "../models/Forms.interface";
+import {
+  NzTableQueryParams,
+  NzTableFilterFn,
+  NzTableFilterList,
+  NzTableSortFn,
+  NzTableSortOrder
+} from 'ng-zorro-antd/table';
+import {switchMap, takeUntil} from "rxjs/operators";
+import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
+import {ModuleData} from "../models/ModuleData.interface";
+import {Subject, zip} from "rxjs";
+
+interface ColumnItem {
+  name: string;
+  nzColumnKey?: string;
+  sortOrder?: NzTableSortOrder;
+  sortFn?: NzTableSortFn;
+  listOfFilter?: NzTableFilterList;
+  filterFn?: NzTableFilterFn;
+  filterMultiple?: boolean;
+  sortDirections?: NzTableSortOrder[];
+}
 
 @Component({
-  templateUrl: './menu.component.html'
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss']
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
 
   moduleKey: string;
-  configPath: string
+  configPath: string;
 
-  public gridOptions: GridOptions;
-  public rowData: object[] = [];
+  isFormLoading: boolean = true;
+
   public actions: Actions[];
   private dataTypes: DataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  //public data;
   //TODO: заменить any на нормальную модель
   public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
-  private id: number;
+  private id: string;
   private bodyForRequest;
   public confirmMessage;
   private typeForm;
   public viewConfig;
-  private gridApi: any;
   public options: FormlyFormOptions = {};
-  public deleteIndicator;
   private REQ_ONE;
   private REQ_MULTY;
-  private currentPage;
-  private pageSize;
+  private one_id: string = null;
+  private multy_id: string[] = [];
 
+  public total = 1;
+  listOfModuleData: object[] = [];
+  public loadingTable = true;
+  public pageSize = 10;
+  pageIndex = 1;
+  public checked = false;
+  public indeterminate = false;
+  listOfCurrentPageData: object[] = [];
+  setOfCheckedId = new Set<string>();
+  public listOfColumns: ColumnItem[];
+
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  ngOnDestroy(): void {
+    this.destroy$.next(null);
+    this.destroy$.complete();
+  }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-  @ViewChild('warningModal') public warningModal: ModalDirective;
 
   constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.subscribe((params) => {
-      this.moduleKey = params['moduleKey'];
-      this.configPath = params['configPath'];
-    });
+    route.params.pipe(
+      switchMap((params) => {
+        this.isFormLoading = true;
+        this.moduleKey = params['moduleKey'];
+        this.configPath = params['configPath'];
+        return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
+      }),
+      takeUntil(this.destroy$)
+    )
+      .subscribe(resp => this.pageConfigurationCb(resp));
+  }
+
+  updateCheckedSet(item: string, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(item);
+      this.REQ_ONE = false;
+      this.REQ_MULTY = true;
+      this.multy_id.push(item);
+      this.oneIdTemplate(this.setOfCheckedId.size, item);
+    } else {
+      this.setOfCheckedId.delete(item);
+      this.multy_id.splice(this.multy_id.indexOf(item), 1);
+      this.oneIdTemplate(this.setOfCheckedId.size, this.multy_id[0]);
+    }
+    if (this.multy_id.length == 0 || !this.one_id) {
+      this.REQ_ONE = false;
+      this.REQ_MULTY = false;
+    }
+  }
+
+  oneIdTemplate(size, item) {
+    if (size == 1) {
+      this.REQ_ONE = true;
+      this.one_id = item;
+    }
+  }
+
+  onItemChecked(item: string, checked: boolean): void {
+    this.updateCheckedSet(item, checked);
+    this.refreshCheckedStatus();
+  }
+
+  onAllChecked(value: boolean): void {
+    this.listOfCurrentPageData.forEach(item => this.updateCheckedSet(item[this.idFieldName], value));
+    this.refreshCheckedStatus();
+  }
+
+  onCurrentPageDataChange($event: object[]): void {
+    this.listOfCurrentPageData = $event;
+    this.refreshCheckedStatus();
+  }
+
+  refreshCheckedStatus(): void {
+    this.checked = this.listOfCurrentPageData.every(item => this.setOfCheckedId.has(item[this.idFieldName]));
+    this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item[this.idFieldName])) && !this.checked;
   }
 
   actionButtonClicked(e): void {
     let forms: Forms[];
     this.dataTypes.map(elem => forms = elem.forms);
-    //TODO: отрефакторить это дерьмо
     for (let item of this.actions) {
       if (e.target.value === item.execConfig.formActionType) {
         for (let elem of forms) {
@@ -82,7 +161,7 @@ export class MenuComponent implements OnInit {
     }
 
 
-    if (this.putFormData && this.REQ_ONE) {
+    if (this.putFormData) {
       this.dataTypes.map(elem => {
         forms = elem.forms;
         elem.forms.filter(item => {
@@ -98,8 +177,7 @@ export class MenuComponent implements OnInit {
         id: this.id,
         type: this.typeForm
       };
-      this.idFieldName = this.viewConfig.config.idFieldName;
-      if (e.target.value === FormActionTypes.UPDATE) {
+      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -138,44 +216,89 @@ export class MenuComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.workWithConfig();
-    this.addData();
   }
 
-  public workWithConfig(): void {
-    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).subscribe(resp => {
+  disableFunc(type: string): boolean {
+    switch (type) {
+      case 'NO_REQ':
+        return false;
+      case 'REQ_ONE':
+        if (this.REQ_ONE) {
+          return false;
+        } else return true;
+      case 'REQ_MULTY':
+        if (this.REQ_MULTY) {
+          return false;
+        } else return true;
+      default:
+        break;
+    }
+  }
+
+  pageConfigurationCb = (resp: ModulePageConfiguration) => {
+    console.log(resp)
+    if (resp && resp.viewConfig && resp.dataTypes && resp.actions) {
       this.viewConfig = resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
-      this.gridOptions = resp.viewConfig.config;
+      //this.gridOptions = resp.viewConfig.config;
+      this.makeListOfColumns(this.viewConfig?.config);
+      this.idFieldName = this.viewConfig.config.idFieldName;
+
+      const testModel = {
+        phoneInfos: [
+          {type: null, phone: null}
+        ],
+        emails: [null]
+      };
+      this.model = testModel;
+
+      this.isFormLoading = false;
+    }
+  };
+
+  private makeListOfColumns(tableConfig: object): void {
+    this.listOfColumns = tableConfig['columnDefs'].map(elem => {
+      if (elem.sortable == false) {
+        return {
+          name: elem.headerName,
+          columnKey: elem.field,
+        }
+      } else {
+        return {
+          name: elem.headerName,
+          columnKey: elem.field,
+          sortFn: elem.sortable
+        }
+      }
     });
-    //checkboxSelection: true
-    const testModel = {
-      phoneInfos: [
-        {type: null, phone: null}
-      ],
-      emails: [null]
-    };
-    this.model = testModel;
   }
 
-  public addData(): void {
+  getModuleDataCb = (data: ModuleData) => {
+    this.loadingTable = false;
+    this.total = data.total_size;
+    this.listOfModuleData = data.data;
+  };
+
+  addData(pageIndex: number,
+          pageSize: number,
+          sortField: string | null,
+          sortOrder: string | null) {
     const bodyForGetModuleData = {
       action_name: this.configPath,
       order_info: [
         {
-          field_path: null,
-          order: null
+          field_path: sortField,
+          order: sortOrder
         }
       ],
       page_info: {
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
+        pageIndex: pageIndex,
+        pageSize: pageSize
       }
     };
-    this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData).subscribe(data => {
-      this.rowData = data.data;
-    });
+    this.loadingTable = true;
+    return this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData);
   }
 
   submit() {
@@ -183,9 +306,9 @@ export class MenuComponent implements OnInit {
 
   public hideForm(): void {
     this.form.reset();
-    this.REQ_ONE = null;
+    this.id = null;
+    this.fields = null;
     this.largeModal.hide();
-    this.warningModal.hide();
   }
 
   public done(): void {
@@ -194,10 +317,18 @@ export class MenuComponent implements OnInit {
     } else {
       this.putFormDataInstance();
     }
-
-    this.addData();
-    this.gridApi.refreshCells({force: true});
     this.largeModal.hide();
+    this.fields = null;
+  }
+
+  private getFormDataInstance(typeForm: string): void {
+    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+      this.model = data.data;
+      this.hash = data.hash;
+      this.id = data.id;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+    });
   }
 
   private putFormDataInstance(): void {
@@ -205,40 +336,36 @@ export class MenuComponent implements OnInit {
       delete this.bodyForRequest.hash;
       delete this.bodyForRequest.id;
     }
-
-    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).subscribe();
-  }
-
-  private getFormDataInstance(typeForm: string): void {
-    this.id = this.REQ_ONE[this.idFieldName];
-    this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.id).subscribe(data => {
-      this.model = data.data;
-      this.hash = data.hash;
-      this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
-      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-    });
-    this.form.reset();
+    this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).pipe(
+      switchMap(data => {
+        this.updateCheckedSet(data.id, null);
+        return this.addData(this.pageIndex, this.pageSize, null, null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((result) => this.getModuleDataCb(result));
   }
 
   private deleteFormDataInstance(typeForm: string): void {
-    this.REQ_MULTY.map(elem => {
-      this.id = elem[this.idFieldName];
-      this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.id).subscribe();
-    });
+    let deleteRequest = [];
+    this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
 
+    zip(...deleteRequest).pipe(
+      switchMap(() => {
+        return this.addData(this.pageIndex, this.pageSize, null, null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((result) => this.getModuleDataCb(result));
   }
 
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    const {pageSize, pageIndex, sort, filter} = params;
+    this.pageSize = pageSize;
+    this.pageIndex = pageIndex;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+    this.addData(pageIndex, pageSize, sortField, sortOrder)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(result => this.getModuleDataCb(result));
   }
-
-  rowClicked(event) {
-    this.REQ_ONE = event.data;
-    this.REQ_MULTY = this.gridApi.getSelectedRows();
-    this.currentPage = this.gridOptions.api.paginationGetCurrentPage();
-    this.pageSize = this.gridOptions.api.paginationGetPageSize()
-  }
-
 }
