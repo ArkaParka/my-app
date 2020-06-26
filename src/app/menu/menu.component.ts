@@ -44,6 +44,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   configPath: string;
 
   isFormLoading: boolean = true;
+  isModalDataLoading: boolean = false;
 
   public actions: Actions[];
   private dataTypes: DataTypes[];
@@ -168,10 +169,10 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (e.target.value !== FormActionTypes.DELETE) {
               this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
             }
-            if (e.target.value===FormActionTypes.UPDATE) {
+            if (e.target.value === FormActionTypes.UPDATE) {
               this.getFormDataInstance(this.typeForm);
             }
-            else this.largeModal.show();
+            this.largeModal.show();
           }
         }
       }
@@ -315,13 +316,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   private getFormDataInstance(typeForm: string): void {
+    this.isModalDataLoading = true;
     this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
-      this.largeModal.show();
+      this.isModalDataLoading = false;
     });
   }
 
