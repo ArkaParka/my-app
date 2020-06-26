@@ -156,27 +156,24 @@ export class MenuComponent implements OnInit, OnDestroy {
               formKey: elem.formKey,
               confirmMessage: item.execConfig.confirmMessage
             };
+            this.dataTypes.map(elem => {
+              forms = elem.forms;
+              elem.forms.filter(item => {
+                if (item.formKey == (this.putFormData as any)?.formKey) {
+                  this.typeForm = elem.type;
+                }
+              });
+            });
+
             if (e.target.value !== FormActionTypes.DELETE) {
               this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
             }
-            this.largeModal.show();
+            if (e.target.value===FormActionTypes.UPDATE) {
+              this.getFormDataInstance(this.typeForm);
+            }
+            else this.largeModal.show();
           }
         }
-      }
-    }
-
-
-    if (this.putFormData) {
-      this.dataTypes.map(elem => {
-        forms = elem.forms;
-        elem.forms.filter(item => {
-          if (item.formKey == (this.putFormData as any)?.formKey) {
-            this.typeForm = elem.type;
-          }
-        });
-      });
-      if (e.target.value===FormActionTypes.UPDATE) {
-        this.getFormDataInstance(this.typeForm);
       }
     }
   }
@@ -324,6 +321,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.id = data.id;
       this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      this.largeModal.show();
     });
   }
 
