@@ -3,7 +3,7 @@ import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {Actions} from '../models/Actions.interface';
+import {Actions, FormActionTypes} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -17,6 +17,10 @@ import {switchMap, takeUntil} from "rxjs/operators";
 import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
 import {ModuleData} from "../models/ModuleData.interface";
 import {Subject, zip} from "rxjs";
+import {Forms} from "../models/Forms.interface";
+import {FieldGroup} from "../models/FieldGroup.interface";
+import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 interface ColumnItem {
   name: string;
@@ -236,12 +240,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   pageConfigurationCb = (resp: ModulePageConfiguration) => {
-    console.log(resp)
     if (resp && resp.viewConfig && resp.dataTypes && resp.actions) {
       this.viewConfig = resp.viewConfig;
       this.dataTypes = resp.dataTypes;
       this.actions = resp.actions;
-      //this.gridOptions = resp.viewConfig.config;
       this.makeListOfColumns(this.viewConfig?.config);
       this.idFieldName = this.viewConfig.config.idFieldName;
 
