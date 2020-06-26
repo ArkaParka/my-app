@@ -138,7 +138,7 @@ export const gridResponse2 = [
 ];
 
 export const gridResponse1AreaConfig = {
-  "areaNames": ["areaField1", "areaField2", "areaField3"],
+  "areaNames": ["areaField1", "areaField2", "areaField3", "areaField4"],
   "gridItems": [
     {
       "areaItemName": "areaField1",
@@ -154,8 +154,9 @@ export const gridResponse1AreaConfig = {
     }
   ],
   "gridAreaTemplate": [
-    "areaField1 . areaField2",
-    "areaField1 . areaField3",
+    "areaField1 areaField4 areaField2",
+    "areaField1 . .",
+    "areaField1  areaField3 areaField3",
   ]
 };
 
