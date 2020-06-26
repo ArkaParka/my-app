@@ -15,8 +15,9 @@ export class DynamicMenuServiceInterceptor implements HttpInterceptor {
         .pipe(
           catchError((error) => {
             if (error instanceof HttpErrorResponse) {
-              let errorMsg = error.message;
+              let errorMsg = error.error.message;
               this.notificator.error('Во время загрузки произошла ошибка!', errorMsg);
+              console.log(error)
               return of({})
             }
           })

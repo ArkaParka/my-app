@@ -78,6 +78,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
 
   destroy$: Subject<boolean> = new Subject<boolean>();
+
   ngOnDestroy(): void {
     this.destroy$.next(null);
     this.destroy$.complete();
@@ -149,7 +150,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     for (let item of this.actions) {
       if (e.target.value === item.execConfig.formActionType) {
         for (let elem of forms) {
-          if (item.execConfig.formKey == elem.formKey) {
+          if (item.execConfig.formKey == elem.formKey && (this.REQ_ONE || e.target.value === FormActionTypes.CREATE)) {
             this.putFormData = {
               indicator: e.target.value,
               formKey: elem.formKey,
@@ -174,14 +175,7 @@ export class MenuComponent implements OnInit, OnDestroy {
           }
         });
       });
-      this.bodyForRequest = {
-        data: this.form.value,
-        formKey: (this.putFormData as any)?.formKey,
-        hash: this.hash,
-        id: this.id,
-        type: this.typeForm
-      };
-      if (e.target['value']?.includes('edit') || e.target['value']?.includes('delete')) {
+      if (e.target.value===FormActionTypes.UPDATE) {
         this.getFormDataInstance(this.typeForm);
       }
     }
@@ -324,16 +318,25 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   private getFormDataInstance(typeForm: string): void {
-    this.dynamicMenuService.getFormDataInstance( this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
+    this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : { type: null, phone: null} ;
+      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
       this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
     });
   }
 
   private putFormDataInstance(): void {
+
+    this.bodyForRequest = {
+      data: this.form.value,
+      formKey: (this.putFormData as any)?.formKey,
+      hash: this.hash,
+      id: this.id,
+      type: this.typeForm
+    };
+
     if ((this.putFormData as any).indicator.includes('create')) {
       delete this.bodyForRequest.hash;
       delete this.bodyForRequest.id;

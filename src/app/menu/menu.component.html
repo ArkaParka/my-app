@@ -2,7 +2,7 @@
   <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
 </div>
 <div *ngIf="!isFormLoading">
-  <ng-template #dynamicButtons let-value="actionName" let-title="actionTitle" let-type="type">
+  <ng-template #dynamicButtons let-value="execConfig.formActionType" let-title="actionTitle" let-type="type">
     <button style="margin-bottom: 5px;"
             type="button"
             class="btn btn-secondary"
