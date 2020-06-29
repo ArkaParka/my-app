@@ -4,7 +4,6 @@ export class DynamicLayoutConfig {
   areas: string[];
   columnSize: string;
   gridTemplate: string[];
-  rowSize?: string;
 
   constructor() {
     this.gridTemplate = new Array<string>();

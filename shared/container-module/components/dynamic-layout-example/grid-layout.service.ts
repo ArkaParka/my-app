@@ -15,4 +15,8 @@ export class GridLayoutService {
     return of(layoutConfig);
   }
 
+  getGridAreaConfiguration(areaName: string): Observable<any> {
+    return of();
+  }
+
 }
