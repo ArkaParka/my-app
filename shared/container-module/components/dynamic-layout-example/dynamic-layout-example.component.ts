@@ -11,16 +11,12 @@ import {zip} from "rxjs";
 })
 export class DynamicLayoutExampleComponent {
   gridTemplate: DynamicLayoutConfig;
-  gridConfig1: DynamicLayoutConfig;
-  gridConfig2: DynamicLayoutConfig;
 
   isLoading: boolean = true;
 
   constructor(private route: ActivatedRoute, private gridLayoutService: GridLayoutService) {
-    zip(this.gridLayoutService.getGridConfiguration1(), this.gridLayoutService.getGridConfiguration2()).subscribe(result => {
-      this.gridConfig1 = result[0];
-      this.gridConfig2 = result[1];
-      this.gridTemplate = this.gridConfig1;
+    this.gridLayoutService.getGridConfiguration().subscribe(result => {
+      this.gridTemplate = result;
       this.isLoading = false;
     })
   }
