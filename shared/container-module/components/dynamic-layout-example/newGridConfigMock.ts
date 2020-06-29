@@ -1,6 +1,5 @@
 export const newGridResponse = [
   {
-    "breakPoint": "(min-width: 768px)",
     "columnSize": "20% 80%",
     "gridTemplate": [
       "sidebar header",
@@ -121,3 +120,26 @@ export const newGridResponse = [
   }
 
 ];
+
+export const layoutConfig = {
+  "areas": ["header", "sidebar", "main", "footer"],
+  "columnSize": "20% 80%",
+  "gridTemplate": [
+    "header header",
+    "sidebar main",
+    "footer footer"
+  ]
+};
+
+export const headerConfig = {
+  "items": [
+    {
+      "itemName": "defaultHeader",
+      "useComponent": "defaultHeaderComponent",
+    }
+  ]
+};
+
+export const sidebarConfig = {
+
+};

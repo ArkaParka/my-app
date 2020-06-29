@@ -15,29 +15,14 @@ import {GridArea} from "../../../../src/app/models/GridArea";
   styleUrls: ['./grid-container.component.scss']
 })
 export class GridContainerComponent implements OnInit {
-  activeTemplate: DynamicLayoutConfig = null;
-
-  private breakPoints: Array<string> = [];
-  private _gridTemplate: Array<DynamicLayoutConfig> = [];
+  private _gridTemplate: DynamicLayoutConfig = null;
   get gridTemplate() {
     return this._gridTemplate;
   };
 
   @Input('grid-template') set gridTemplate(gridTemplate) {
     this._gridTemplate = cloneDeep(gridTemplate);
-    this.gridTemplate.forEach(template => {
-      this.breakPoints.push(template.breakPoint);
-      template.gridTemplate.forEach((gtpl, i, array) => {
-        array[i] = `\"${gtpl}\"`;
-      });
-    });
-    this.breakpointObserver.observe(this.breakPoints).pipe(
-      switchMap((res) => {
-        return this.breakPointCb(res);
-      }),
-      tap((result:GridArea[]) => {
-      })
-    ).subscribe();
+    this.setGridTemplate();
     this.cd.detectChanges();
   };
 
@@ -57,17 +42,16 @@ export class GridContainerComponent implements OnInit {
     this.gridAutoRows = this.sanitizer.bypassSecurityTrustStyle(`minmax(100px,auto)`);
   }
 
-  breakPointCb(res: BreakpointState): Observable<any> {
-    let breakpoint = Object.keys(res.breakpoints).find(key => res.breakpoints[key] === true);
-    this.activeTemplate = this.gridTemplate.find(template => template.breakPoint === breakpoint);
-    this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.activeTemplate.gridTemplate.join(' ')}`);
-    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.activeTemplate.columnSize}`);
+  setGridTemplate(): void {
+    this.gridTemplate.gridTemplate.forEach((gtpl, i, array) => {
+      array[i] = `\"${gtpl}\"`;
+    });
 
-    console.log(this.activeTemplate)
+    this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.gridTemplate.join(' ')}`);
+    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.columnSize}`);
 
-    let gridAreasRequest = [];
-    // this.activeTemplate.gridAreas.forEach(gridItem => gridAreasRequest.push(this.gridLayoutService.getGridAreaTemplate(gridItem.areaName)));
-    return zip(...gridAreasRequest);
+    console.log(this.gridTemplate);
   }
+
 
 }

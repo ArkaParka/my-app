@@ -10,27 +10,20 @@ import {zip} from "rxjs";
   styleUrls: ['./dynamic-layout-example.component.scss']
 })
 export class DynamicLayoutExampleComponent {
-  gridTemplate: DynamicLayoutConfig[];
-  gridConfig1: DynamicLayoutConfig[];
-  gridConfig2: DynamicLayoutConfig[];
+  gridTemplate: DynamicLayoutConfig;
+  gridConfig1: DynamicLayoutConfig;
+  gridConfig2: DynamicLayoutConfig;
 
   isLoading: boolean = true;
 
   constructor(private route: ActivatedRoute, private gridLayoutService: GridLayoutService) {
-    zip(this.gridLayoutService.getGridCOnfiguration1(), this.gridLayoutService.getGridCOnfiguration2()).subscribe(result => {
+    zip(this.gridLayoutService.getGridConfiguration1(), this.gridLayoutService.getGridConfiguration2()).subscribe(result => {
       this.gridConfig1 = result[0];
       this.gridConfig2 = result[1];
       this.gridTemplate = this.gridConfig1;
       this.isLoading = false;
     })
   }
-
-  template1 = () => {
-    this.gridTemplate = this.gridConfig1
-  };
-  template2 = () => {
-    this.gridTemplate = this.gridConfig2
-  };
 
 
 }
