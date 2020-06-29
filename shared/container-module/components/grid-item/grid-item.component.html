@@ -1,6 +1,5 @@
 <div
-  *ngFor="let area of gridAreaTemplate.areaNames, let i=index"
-  [style.gridArea]="area"
-  style="border: 1px dashed blue"
->{{area}}
+  *ngFor="let item of gridAreaTemplate.areaItems, let i=index"
+  [style.gridArea]="item.itemName"
+  style="border: 1px dashed blue">{{item.itemData}}
 </div>

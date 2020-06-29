@@ -155,7 +155,6 @@ export const gridResponse1AreaConfig = {
   ],
   "gridAreaTemplate": [
     "areaField1 areaField4 areaField2",
-    "areaField1 . .",
     "areaField1  areaField3 areaField3",
   ]
 };

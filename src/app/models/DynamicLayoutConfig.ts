@@ -1,12 +1,14 @@
-import {GridItem} from "./GridItem";
+import {GridArea} from "./GridArea";
 
 export class DynamicLayoutConfig {
   breakPoint: string;
-  areaNames: any;
-  gridItems: GridItem[];
+  gridAreas: GridArea[];
   gridTemplate: string[];
+  columnSize: string;
+  rowSize?: string;
 
   constructor() {
     this.gridTemplate = new Array<string>();
+    this.gridAreas = new Array<GridArea>();
   }
 }

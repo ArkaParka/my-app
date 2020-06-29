@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import {switchMap, tap} from "rxjs/operators";
 import {Observable, of, zip} from "rxjs";
 import {GridLayoutService} from "../dynamic-layout-example/grid-layout.service";
-import {GridAreaConfig} from "../../../../src/app/models/GridAreaConfig";
+import {GridArea} from "../../../../src/app/models/GridArea";
 
 @Component({
   selector: 'app-grid-container',
@@ -16,7 +16,6 @@ import {GridAreaConfig} from "../../../../src/app/models/GridAreaConfig";
 })
 export class GridContainerComponent implements OnInit {
   activeTemplate: DynamicLayoutConfig = null;
-  activeGridAreasTemplate: GridAreaConfig[] = null;
 
   private breakPoints: Array<string> = [];
   private _gridTemplate: Array<DynamicLayoutConfig> = [];
@@ -36,22 +35,22 @@ export class GridContainerComponent implements OnInit {
       switchMap((res) => {
         return this.breakPointCb(res);
       }),
-      tap((result:GridAreaConfig[]) => {
-        this.activeGridAreasTemplate = result;
+      tap((result:GridArea[]) => {
       })
     ).subscribe();
     this.cd.detectChanges();
   };
 
   @HostBinding('style.grid-auto-rows') gridAutoRows;
+  @HostBinding('style.grid-auto-columns') gridAutoColumns;
   @HostBinding('style.grid-template-areas') gridTA;
+  @HostBinding('style.grid-template-columns') gridTemplateColumns;
 
 
   constructor(private sanitizer: DomSanitizer,
               private breakpointObserver: BreakpointObserver,
               private cd: ChangeDetectorRef,
               private gridLayoutService: GridLayoutService) {
-    console.log(this.gridTemplate)
   }
 
   ngOnInit(): void {
@@ -62,9 +61,12 @@ export class GridContainerComponent implements OnInit {
     let breakpoint = Object.keys(res.breakpoints).find(key => res.breakpoints[key] === true);
     this.activeTemplate = this.gridTemplate.find(template => template.breakPoint === breakpoint);
     this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.activeTemplate.gridTemplate.join(' ')}`);
+    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.activeTemplate.columnSize}`);
+
+    console.log(this.activeTemplate)
 
     let gridAreasRequest = [];
-    this.activeTemplate.gridItems.forEach(gridItem => gridAreasRequest.push(this.gridLayoutService.getGridAreaTemplate(gridItem.areaName)));
+    // this.activeTemplate.gridAreas.forEach(gridItem => gridAreasRequest.push(this.gridLayoutService.getGridAreaTemplate(gridItem.areaName)));
     return zip(...gridAreasRequest);
   }
 
