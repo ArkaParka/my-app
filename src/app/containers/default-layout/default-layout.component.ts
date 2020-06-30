@@ -6,6 +6,7 @@ import {Observable, Subject, zip} from "rxjs";
 import {switchMap, takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
 import {NzTreeNodeOptions} from "ng-zorro-antd";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   private changes: MutationObserver;
   public element: HTMLElement;
 
-  constructor(@Inject(DOCUMENT) _document?: any, private dynamicMenuService?: DynamicMenuService) {
+  constructor(@Inject(DOCUMENT) _document?: any,
+              private dynamicMenuService?: DynamicMenuService,
+              private router?: Router) {
     this.dynamicMenuChildren();
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -57,7 +60,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     modulesResponse.forEach(mr => {
       this.nzNavMenu.push({
           title: mr.module.moduleDisplayName,
-          key: mr.nodeName,
+          key: `/form-loader/${mr.nodeName}`,
           expanded: false,
           children: []
         }
@@ -81,9 +84,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       moduleActionsResponse.forEach(mar => {
         this.nzNavMenu[i].children.push({
           title: mar.displayName,
-          key: mar.actionName,
+          key: `${this.nzNavMenu[i].key}/${mar.actionName}`,
           expanded: false,
-          children: this.getNzNavChildren(mar),
+          children: this.getNzNavChildren(mar, `${this.nzNavMenu[i].key}/${mar.actionName}`),
         });
 
         this.dynamicMenu[i].children.push(
@@ -98,14 +101,14 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     })
   }
 
-  private getNzNavChildren(moduleAction: ModuleActionsResponse): NzTreeNodeOptions[] {
+  private getNzNavChildren(moduleAction: ModuleActionsResponse, parentKey: string): NzTreeNodeOptions[] {
     let children = [];
     moduleAction.childActions.forEach(childAction => {
       children.push({
         title: childAction.displayName,
-        key: childAction.actionName,
+        key: `${parentKey}.${childAction.actionName}`,
         expanded: false,
-        children: this.getNzNavChildren(childAction),
+        children: this.getNzNavChildren(childAction, `${parentKey}.${childAction.actionName}`),
       })
     });
     return children.length ? children : null;
@@ -141,8 +144,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   }
 
   nzNavItemClicked(e): void {
-    if (e.node.children && e.node.children.length)
+    if (e.node.children && e.node.children.length) {
       e.node.isExpanded = !e.node.isExpanded;
+    } else {
+      let route = e.node.key.split("/").filter(r => r !== "");
+      this.router.navigate(route);
+    }
   }
 
   ngOnDestroy(): void {
