@@ -22,7 +22,7 @@
     <app-sidebar [fixed]="true" [display]="'lg'">
       <!--      <app-sidebar-nav [navItems]="customNavItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>-->
       <nz-tree [nzData]="nzNavMenu"
-               [nzShowExpand]="false"
+               nzShowIcon [nzExpandedIcon]="customIcon"
                (nzClick)="nzNavItemClicked($event)"
                [nzVirtualHeight]="'calc(100vh - 55px - 50px)'"
       ></nz-tree>
@@ -43,4 +43,11 @@
   <app-footer>
 
   </app-footer>
+</ng-template>
+
+<ng-template #customIcon let-node>
+  <i *ngIf="node.children && node.children.length"
+     nz-icon [nzType]="node.isExpanded ? 'caret-down' : 'caret-right'"
+     class="custom-icon"
+  ></i>
 </ng-template>

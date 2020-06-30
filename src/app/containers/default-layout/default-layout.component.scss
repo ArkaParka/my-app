@@ -4,37 +4,47 @@ app-header {
 
 .app-tree-node {
   nz-tree {
-    background-color: rgb(35, 40, 44) !important;
-
+    background-color: rgb(35, 40, 44);
 
     nz-tree-node {
-      transition: all .3s;
-      padding: 0;
-      min-height: 50px;
+      transition: none !important;
+      -webkit-transition: none !important;
+      -moz-transition: none !important;
+      -o-transition: none !important;
 
-      nz-tree-node-title{
-        background-color: #7B1FA2;
-      }
-
-      //nz-tree-node-title:hover {
-      //  transition: none;
-      //  -moz-transition: none;
-      //  -webkit-transition: none;
-      //  -o-transition: none;
-      //  background-color: #20A8D8;
-      //
-      //  span {
-      //    background-color: #20A8D8;
-      //  }
-      //}
+      align-items: center !important;
+      min-height: 50px !important;
+      padding: 10px 16px !important;
     }
 
     nz-tree-node:hover {
-      background-color: #20A8D8;
+      background-color: #20A8D8 !important;
+    }
+
+    nz-tree-node-title {
+      -webkit-transition: none !important;
+      -moz-transition: none !important;
+      -o-transition: none !important;
+      transition: none !important;
+
+      background-color: inherit !important;
+      padding: 0 !important;
+      color: white !important;
+    }
+
+    nz-tree-node-switcher {
+      display: flex !important;
+      align-items: center !important;
+
+      .custom-icon {
+        color: white;
+      }
     }
   }
-
-
 }
+
+
+
+
 
 
