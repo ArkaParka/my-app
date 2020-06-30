@@ -60,6 +60,7 @@ import { HttpModule } from '@angular/http';
 //import {ContainerModule} from "../../shared/container-module/container.module";
 import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 import {MenuModule} from "./menu/menu.module";
+import {NzTreeModule} from "ng-zorro-antd";
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import {MenuModule} from "./menu/menu.module";
     ChartsModule,
     HttpClientModule,
     HttpModule,
-    MenuModule
+    MenuModule,
+    NzTreeModule
   ],
   declarations: [
     AppComponent,

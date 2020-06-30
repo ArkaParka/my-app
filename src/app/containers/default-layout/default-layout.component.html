@@ -1,41 +1,46 @@
 <div *ngIf="!customNavItems; else allApp" style="height: 100vh; display: flex; align-self: center;">
-<div class="d-flex align-self-center">
-  <div class="spinner-border" style="color: #2f353a;" role="status">
-    <span class="sr-only">Loading...</span>
+  <div class="d-flex align-self-center">
+    <div class="spinner-border" style="color: #2f353a;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
-</div>
 </div>
 
 <ng-template #allApp>
-<app-header
-  [navbarBrandRouterLink]="['/dashboard']"
-  [fixed]="true"
-  [navbarBrandFull]="{src: 'assets/img/brand/logo.svg', width: 89, height: 25, alt: 'CoreUI Logo'}"
-  [navbarBrandMinimized]="{src: 'assets/img/brand/sygnet.svg', width: 30, height: 30, alt: 'CoreUI Logo'}"
-  [sidebarToggler]="'lg'"
-  [asideMenuToggler]="'lg'">
+  <app-header
+    [navbarBrandRouterLink]="['/dashboard']"
+    [fixed]="true"
+    [navbarBrandFull]="{src: 'assets/img/brand/logo.svg', width: 89, height: 25, alt: 'CoreUI Logo'}"
+    [navbarBrandMinimized]="{src: 'assets/img/brand/sygnet.svg', width: 30, height: 30, alt: 'CoreUI Logo'}"
+    [sidebarToggler]="'lg'"
+    [asideMenuToggler]="'lg'">
 
-  <ul class="nav navbar-nav ml-auto"></ul>
-</app-header>
+    <ul class="nav navbar-nav ml-auto"></ul>
+  </app-header>
 
-<div class="app-body">
-  <app-sidebar [fixed]="true" [display]="'lg'">
-    <app-sidebar-nav [navItems]="customNavItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
-    <app-sidebar-minimizer></app-sidebar-minimizer>
-  </app-sidebar>
+  <div class="app-body">
+    <app-sidebar [fixed]="true" [display]="'lg'">
+      <!--      <app-sidebar-nav [navItems]="customNavItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>-->
+      <nz-tree [nzData]="nzNavMenu"
+               [nzShowExpand]="false"
+               (nzClick)="nzNavItemClicked($event)"
+               [nzVirtualHeight]="'calc(100vh - 55px - 50px)'"
+      ></nz-tree>
+      <app-sidebar-minimizer></app-sidebar-minimizer>
+    </app-sidebar>
 
-  <main class="main">
+    <main class="main">
 
-    <cui-breadcrumb>
-    </cui-breadcrumb>
+      <cui-breadcrumb>
+      </cui-breadcrumb>
 
-    <div class="container-fluid">
-      <router-outlet></router-outlet>
-    </div>
-  </main>
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
 
-</div>
-<app-footer>
+  </div>
+  <app-footer>
 
-</app-footer>
+  </app-footer>
 </ng-template>
