@@ -61,7 +61,7 @@ import { HttpModule } from '@angular/http';
 import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 import {MenuModule} from "./menu/menu.module";
 import {NzTreeModule} from "ng-zorro-antd";
-import {MinimizedNavigationComponent} from "./containers/default-layout/minimized-navigation/minimized-navigation.component";
+import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 
 @NgModule({
   imports: [
@@ -91,7 +91,7 @@ import {MinimizedNavigationComponent} from "./containers/default-layout/minimize
     LoginComponent,
     RegisterComponent,
     FormLoaderComponent,
-    MinimizedNavigationComponent
+    SidebarNavigationComponent
     //MenuComponent,
   ],
   providers: [

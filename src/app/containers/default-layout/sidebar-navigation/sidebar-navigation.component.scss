@@ -1,0 +1,97 @@
+.root-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  min-height: 50px;
+  padding: 10px;
+
+  .minimized-icon {
+    color: white;
+  }
+
+  .node-content {
+    display: none;
+  }
+
+  .child-node {
+    display: none;
+  }
+}
+
+.custom-node:hover {
+  background-color: #20A8D8;
+  cursor: pointer;
+  justify-content: space-evenly;
+
+  z-index: 100000 !important;
+  width: 200px;
+
+  .node-content {
+    text-align: center;
+    display: flex;
+  }
+}
+
+.child-node {
+  background-color: rgb(35, 40, 44);
+  min-height: 50px;
+  padding: 10px;
+}
+
+.custom-node:hover ~ .child-node {
+  background-color: rgb(35, 40, 44);
+  display: flex;
+  text-align: center;
+}
+
+.custom-node ~ .child-node {
+  display: none;
+}
+
+
+.app-tree-node {
+  nz-tree {
+    background-color: rgb(35, 40, 44);
+
+    nz-tree-node {
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: none !important;
+      -webkit-transition: none !important;
+      -moz-transition: none !important;
+      -o-transition: none !important;
+
+      align-items: center !important;
+      min-height: 50px !important;
+      padding: 10px 16px !important;
+    }
+
+    nz-tree-node:hover {
+      background-color: #20A8D8 !important;
+    }
+
+    nz-tree-node-title {
+      -webkit-transition: none !important;
+      -moz-transition: none !important;
+      -o-transition: none !important;
+      transition: none !important;
+
+      padding: 0 !important;
+      color: white !important;
+      background-color: transparent !important;
+    }
+
+    nz-tree-node-switcher {
+      display: flex !important;
+      align-items: center !important;
+
+      .custom-icon {
+        color: white;
+      }
+    }
+  }
+}
+
+

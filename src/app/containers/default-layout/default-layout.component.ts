@@ -6,16 +6,13 @@ import {Observable, Subject, zip} from "rxjs";
 import {switchMap, takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
 import {NzTreeNodeOptions} from "ng-zorro-antd";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
-  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
 
   private destroy$ = new Subject();
   public customNavItems;
@@ -27,8 +24,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public element: HTMLElement;
 
   constructor(@Inject(DOCUMENT) _document?: any,
-              private dynamicMenuService?: DynamicMenuService,
-              private router?: Router) {
+              private dynamicMenuService?: DynamicMenuService) {
     this.dynamicMenuChildren();
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -143,14 +139,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     }
   }
 
-  nzNavItemClicked(e): void {
-    if (e.node.children && e.node.children.length) {
-      e.node.isExpanded = !e.node.isExpanded;
-    } else {
-      let route = e.node.key.split("/").filter(r => r !== "");
-      this.router.navigate(route);
-    }
-  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

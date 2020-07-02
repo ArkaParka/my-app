@@ -1,0 +1,44 @@
+<div *ngIf="expanded; else minimizedSidebar">
+  <nz-tree [nzData]="navData"
+           nzShowIcon [nzExpandedIcon]="customIcon"
+           (nzClick)="nzNavItemClicked($event)"
+           [nzVirtualHeight]="'calc(100vh - 55px - 50px)'"
+  ></nz-tree>
+</div>
+
+<ng-template #minimizedSidebar>
+  <div
+    *ngFor="let node of navData"
+  >
+    <div class="custom-node root-node">
+      <i class="minimized-icon" nz-icon [nzType]="'send'"></i>
+      <div class="node-content">
+        {{node.title}}
+      </div>
+    </div>
+
+    <ng-container
+      [ngTemplateOutlet]="childNodes"
+      [ngTemplateOutletContext]="{children:node.children}"
+    ></ng-container>
+  </div>
+
+</ng-template>
+
+<ng-template #childNodes let-children="children">
+  <div class="child-node" *ngFor="let child of children">
+    <div>{{child.title}}</div>
+    <div *ngIf="child.children&&child.children.length">
+      <ng-container [ngTemplateOutlet]="childNodes"
+                    [ngTemplateOutletContext]="{children:child.children}"></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #customIcon let-node>
+  <i *ngIf="node.children && node.children.length"
+     nz-icon [nzType]="node.isExpanded ? 'caret-down' : 'caret-right'"
+     class="custom-icon"
+  ></i>
+</ng-template>
