@@ -19,13 +19,14 @@
   </app-header>
 
   <div class="app-body">
-    <app-sidebar [fixed]="true" [display]="'lg'">
+    <app-sidebar #sidebar [fixed]="true" [display]="'lg'">
       <!--      <app-sidebar-nav [navItems]="customNavItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>-->
-      <nz-tree [nzData]="nzNavMenu"
+      <nz-tree *ngIf="!sidebar.minimized" [nzData]="nzNavMenu"
                nzShowIcon [nzExpandedIcon]="customIcon"
                (nzClick)="nzNavItemClicked($event)"
                [nzVirtualHeight]="'calc(100vh - 55px - 50px)'"
       ></nz-tree>
+      <app-sidebar-nav-minimized></app-sidebar-nav-minimized>
       <app-sidebar-minimizer></app-sidebar-minimizer>
     </app-sidebar>
 
