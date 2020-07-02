@@ -9,7 +9,7 @@ export const layoutConfig = {
 };
 
 export const headerConfig = {
-
+  areaName: 'TestComponent'
 };
 
 export const sidebarConfig = {
