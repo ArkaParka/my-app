@@ -9,7 +9,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import ru from '@angular/common/locales/ru';
 import { registerLocaleData } from '@angular/common';
-import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import {NZ_ICONS, NzIconModule} from 'ng-zorro-antd/icon';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -60,6 +60,8 @@ import { HttpModule } from '@angular/http';
 //import {ContainerModule} from "../../shared/container-module/container.module";
 import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 import {MenuModule} from "./menu/menu.module";
+import {NzTreeModule} from "ng-zorro-antd";
+import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 
 @NgModule({
   imports: [
@@ -77,7 +79,9 @@ import {MenuModule} from "./menu/menu.module";
     ChartsModule,
     HttpClientModule,
     HttpModule,
-    MenuModule
+    MenuModule,
+    NzTreeModule,
+    NzIconModule
   ],
   declarations: [
     AppComponent,
@@ -87,6 +91,7 @@ import {MenuModule} from "./menu/menu.module";
     LoginComponent,
     RegisterComponent,
     FormLoaderComponent,
+    SidebarNavigationComponent
     //MenuComponent,
   ],
   providers: [
