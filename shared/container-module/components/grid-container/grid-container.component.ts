@@ -15,6 +15,7 @@ import {GridArea} from "../../../../src/app/models/GridArea";
   styleUrls: ['./grid-container.component.scss']
 })
 export class GridContainerComponent implements OnInit {
+
   private _gridTemplate: DynamicLayoutConfig = null;
   get gridTemplate() {
     return this._gridTemplate;
