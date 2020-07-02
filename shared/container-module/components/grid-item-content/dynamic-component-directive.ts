@@ -1,9 +1,9 @@
-import {Component, Directive, Input, ViewContainerRef} from "@angular/core";
+import {Directive, ViewContainerRef} from "@angular/core";
 
 @Directive({
   selector: '[dynamic-component]'
 })
 export class DynamicComponentDirective {
-  constructor(public viewContainerRef: ViewContainerRef) {
-  }
+  constructor(public viewContainerRef: ViewContainerRef) {}
+
 }
