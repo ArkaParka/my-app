@@ -7,6 +7,8 @@ import {ContainerRouting} from "./container.routing";
 import {
   DynamicComponentDirective,
 } from "./components/grid-item-content/dynamic-component-directive";
+import { TestComponent } from './components/avaiableComponents/test.component';
+import { DClayoutComponent } from './components/grid-item/dc-layout';
 
 
 @NgModule({
@@ -16,14 +18,17 @@ import {
   ],
   declarations: [
     GridContainerComponent,
-    GridItemComponent,
     DynamicComponentDirective,
-    DynamicLayoutExampleComponent
+    DynamicLayoutExampleComponent,
+    GridItemComponent,
+    DClayoutComponent,
+    TestComponent,
+    DynamicComponentDirective
   ],
   exports: [
     GridContainerComponent,
-    GridItemComponent,
-  ]
+  ],
+  entryComponents: [TestComponent],
 })
 export class ContainerModule {
 }
