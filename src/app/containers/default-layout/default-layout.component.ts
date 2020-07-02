@@ -14,20 +14,14 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
+  private navigationLoading: boolean = true;
   private destroy$ = new Subject();
   private nzNavMenu: NzTreeNodeOptions[] = [];
   private changes: MutationObserver;
-  public element: HTMLElement;
 
   constructor(@Inject(DOCUMENT) _document?: any,
               private dynamicMenuService?: DynamicMenuService) {
     this.dynamicMenuChildren();
-
-    this.element = _document.body;
-    this.changes.observe(<Element>this.element, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
   }
 
   ngOnInit() {
@@ -67,7 +61,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
           children: this.getNzNavChildren(mar, `${this.nzNavMenu[i].key}/${mar.actionName}`),
         });
       });
-    })
+    });
+    this.navigationLoading = false;
   }
 
   private getNzNavChildren(moduleAction: ModuleActionsResponse, parentKey: string): NzTreeNodeOptions[] {
