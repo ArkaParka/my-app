@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, HostBinding, Input, OnInit} from '@angular
 import {DomSanitizer} from "@angular/platform-browser";
 import cloneDeep from 'lodash/cloneDeep'
 import {GridArea} from "../../../../src/app/models/GridArea";
+import { GridLayoutService } from '../dynamic-layout-example/grid-layout.service';
 
 @Component({
   selector: 'app-grid-item',
@@ -10,7 +11,9 @@ import {GridArea} from "../../../../src/app/models/GridArea";
 })
 export class GridItemComponent implements OnInit {
 
-  @Input('value') value;
+  componentsArray: any[];
+
+  @Input('areaName') areaName:string;
   @Input('gridAreaName') gridAreaName: string;
   @HostBinding('style.grid-area') gridArea;
   @HostBinding('style.grid-template-areas') areaGridTemplate;
@@ -18,11 +21,15 @@ export class GridItemComponent implements OnInit {
   @HostBinding('style.grid-template-rows') gridTemplateRows;
 
   constructor(private sanitizer: DomSanitizer,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private gridLayoutService: GridLayoutService) {
   }
-
 
   ngOnInit(): void {
     this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
+    this.gridLayoutService.getGridAreaConfiguration(this.areaName).subscribe(data => {
+      this.componentsArray = data;
+    });
+
   }
 }

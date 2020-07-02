@@ -1,1 +1,4 @@
-<div>{{value}}</div>
+<div *ngFor="let item of componentsArray">
+    <dc-component  [dynamicLayout]="item"></dc-component>
+</div>
+
