@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {DynamicLayoutExampleComponent} from "./components/dynamic-layout-example/dynamic-layout-example.component";
+import {DynamicLayoutExampleComponent} from "./components/dynamic-layout/dynamic-layout-example.component";
 
 const routes: Routes = [
   {

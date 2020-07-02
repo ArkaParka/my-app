@@ -21,16 +21,15 @@ export class DClayoutComponent implements OnInit {
               private injector: Injector) { }
 
   ngOnInit() {
-    console.log(this.dynamicLayout)
     this.loadComponent();
   }
 
   loadComponent() {
     const component = getComponent(this.dynamicLayout);
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component.component);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component['component']);
     const viewContainerRef = this.dynamicComponent.viewContainerRef;
     viewContainerRef.clear();
-    const injector =  this.createInjector(component.services);
+    const injector =  this.createInjector(component['services']);
     viewContainerRef.createComponent(componentFactory, 0, injector);
   }
 

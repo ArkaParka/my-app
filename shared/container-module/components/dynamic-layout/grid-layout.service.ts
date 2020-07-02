@@ -18,7 +18,7 @@ export class GridLayoutService {
   getGridAreaConfiguration(areaName:string): Observable<any> {
 
     switch(areaName) {
-      case'main': return of(['header']);
+      case'main': return of(['TestComponent']);
       default: return of([])
     }
     

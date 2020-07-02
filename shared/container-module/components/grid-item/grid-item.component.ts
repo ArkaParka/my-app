@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, HostBinding, Input, OnInit} from '@angular
 import {DomSanitizer} from "@angular/platform-browser";
 import cloneDeep from 'lodash/cloneDeep'
 import {GridArea} from "../../../../src/app/models/GridArea";
-import { GridLayoutService } from '../dynamic-layout-example/grid-layout.service';
+import { GridLayoutService } from '../dynamic-layout/grid-layout.service';
 
 @Component({
   selector: 'app-grid-item',

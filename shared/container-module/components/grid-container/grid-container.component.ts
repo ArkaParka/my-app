@@ -6,7 +6,7 @@ import {DynamicLayoutConfig} from "../../../../src/app/models/DynamicLayoutConfi
 import cloneDeep from 'lodash/cloneDeep'
 import {switchMap, tap} from "rxjs/operators";
 import {Observable, of, zip} from "rxjs";
-import {GridLayoutService} from "../dynamic-layout-example/grid-layout.service";
+import {GridLayoutService} from "../dynamic-layout/grid-layout.service";
 import {GridArea} from "../../../../src/app/models/GridArea";
 
 @Component({
@@ -50,8 +50,6 @@ export class GridContainerComponent implements OnInit {
 
     this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.gridTemplate.join(' ')}`);
     this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.columnSize}`);
-
-    console.log(this.gridTemplate);
   }
 
 
