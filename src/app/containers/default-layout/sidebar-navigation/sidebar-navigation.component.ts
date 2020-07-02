@@ -9,9 +9,7 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
   encapsulation: ViewEncapsulation.None
 })
 export class SidebarNavigationComponent {
-  @Input('expanded') expanded: boolean = true;
   @Input('navData') navData: NzTreeNodeOptions[] = [];
-
   @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
 
   constructor(private router?: Router) {
