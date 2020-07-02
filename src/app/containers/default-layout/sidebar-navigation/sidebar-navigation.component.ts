@@ -5,7 +5,7 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
 @Component({
   selector: 'app-sidebar-nav-custom',
   templateUrl: './sidebar-navigation.component.html',
-  styleUrls: ['./sidebar-navigation.component.scss'],
+  styleUrls: ['./sidebar-navigation.component.scss', './scrollbar-styles.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class SidebarNavigationComponent {
