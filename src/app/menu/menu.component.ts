@@ -151,7 +151,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     for (let item of this.actions) {
       if (e.target.value === item.execConfig.formActionType) {
         for (let elem of forms) {
-          if (item.execConfig.formKey == elem.formKey && (this.REQ_ONE || e.target.value === FormActionTypes.CREATE)) {
+          if (item.execConfig.formKey == elem.formKey) {
             this.putFormData = {
               indicator: e.target.value,
               formKey: elem.formKey,
@@ -306,7 +306,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   public done(): void {
-    if ((this.putFormData as any).indicator.includes('delete')) {
+    if ((this.putFormData as any).indicator === FormActionTypes.DELETE) {
       this.deleteFormDataInstance(this.typeForm);
     } else {
       this.putFormDataInstance();
@@ -359,7 +359,10 @@ export class MenuComponent implements OnInit, OnDestroy {
         return this.addData(this.pageIndex, this.pageSize, null, null);
       }),
       takeUntil(this.destroy$)
-    ).subscribe((result) => this.getModuleDataCb(result));
+    ).subscribe((result) => {
+      this.getModuleDataCb(result);
+      this.multy_id = [];
+    });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
