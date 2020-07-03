@@ -1,0 +1,17 @@
+<div>
+  <nz-tree [nzData]="navData"
+           nzShowIcon [nzExpandedIcon]="customIcon"
+           (nzClick)="nzNavItemClicked($event)"
+           [nzVirtualHeight]="'calc(100vh - 55px)'"
+  ></nz-tree>
+</div>
+
+<ng-template #customIcon let-node>
+  <i *ngIf="node.children && node.children.length"
+     nz-icon [nzType]="node.isExpanded ? 'caret-down' : 'caret-right'"
+     class="custom-icon"
+  ></i>
+  <i *ngIf="!(node.children && node.children.length)"
+     nz-icon [nzType]="'table'"
+     class="custom-icon"></i>
+</ng-template>

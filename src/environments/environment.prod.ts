@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiPath: 'http://pbs.ec-t.space'
 };

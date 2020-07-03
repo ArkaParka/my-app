@@ -57,12 +57,12 @@ export const routes: Routes = [
         loadChildren: () => import('./../../shared/container-module/container.module').then(m => m.ContainerModule)
       },
       // обертка для отображения любой формы по параметрам
-      {
-        path: 'form-loader/:moduleKey/:configPath',
-        component: FormLoaderComponent
-      },
+      // {
+      //   path: 'form-loader/:moduleKey/:configPath',
+      //   component: FormLoaderComponent
+      // },
       { //вот тут менюшка
-        path: 'staff-structure',
+        path: '',
         loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
       },
       {
