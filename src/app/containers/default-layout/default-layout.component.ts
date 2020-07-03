@@ -14,7 +14,7 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
-  private navigationLoading: boolean = true;
+  public navigationLoading: boolean = true;
   private destroy$ = new Subject();
   private nzNavMenu: NzTreeNodeOptions[] = [];
   private changes: MutationObserver;
