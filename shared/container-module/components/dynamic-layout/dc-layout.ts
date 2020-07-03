@@ -7,7 +7,6 @@ import { getComponent } from '../avaiableComponents/list-components';
   selector: 'dc-component',
   template: `
               <div>
-                <h1>TEST</h1>
                 <ng-template dynamic-component></ng-template>
               </div>
             `

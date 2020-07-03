@@ -1,0 +1,8 @@
+<div class="likeNav">
+    <button class="btn btn-link" (click)="requirementsFunc()">Требования</button>
+    <button class="btn btn-link">Задачи</button>
+    <button class="btn btn-link">Компоненты</button>
+</div>
+<div>
+    <nz-tree [nzData]="nodes" nzBlockNode (nzClick)="nzClick($event)"></nz-tree>
+</div>

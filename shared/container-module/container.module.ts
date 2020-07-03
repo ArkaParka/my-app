@@ -9,12 +9,16 @@ import {
 } from "./components/grid-item-content/dynamic-component-directive";
 import { TestComponent } from './components/avaiableComponents/test.component';
 import { DClayoutComponent } from './components/dynamic-layout/dc-layout';
+import { ProjectsComponent } from './components/avaiableComponents/projects/projects.component';
+import { NavInProjectComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    ContainerRouting
+    ContainerRouting,
+    NzTreeModule
   ],
   declarations: [
     GridContainerComponent,
@@ -23,12 +27,19 @@ import { DClayoutComponent } from './components/dynamic-layout/dc-layout';
     GridItemComponent,
     DClayoutComponent,
     TestComponent,
-    DynamicComponentDirective
+    ProjectsComponent,
+    NavInProjectComponent
   ],
   exports: [
     GridContainerComponent,
+    NzTreeModule
   ],
-  entryComponents: [TestComponent],
+  entryComponents: [
+    TestComponent, 
+    NavInProjectComponent, 
+    ProjectsComponent
+  ],
+  
 })
 export class ContainerModule {
 }

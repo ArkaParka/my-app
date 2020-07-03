@@ -72,7 +72,6 @@ import {FormLoaderComponent} from "./containers/form-loader/form-loader.componen
     LoginComponent,
     RegisterComponent,
     FormLoaderComponent,
-    //MenuComponent,
   ],
   providers: [{
     provide: LocationStrategy,

@@ -1,17 +1,8 @@
 import { TestComponent } from './test.component';
 import { TestService } from './test.servise';
+import { NavInProjectComponent } from './nav-in-project/nav-in-project.component';
 
 const components = [
-    // header: {
-    //     component: TestComponent,
-    //     services: [
-    //         {
-    //             provide: TestService,
-    //             useClass: TestService,
-    //             deps: []
-    //         }
-    //     ]
-    // },
     {
         TestComponent: {
             component: TestComponent,
@@ -24,12 +15,22 @@ const components = [
             ]
         }
         
+    },
+    {
+        NavInProjectComponent: {
+            component: NavInProjectComponent,
+            services: [
+                {
+                    provide: TestService,
+                    useClass: TestService,
+                    deps: []
+                }
+            ]
+        }
     }
-
 ];
 
 export const getComponent = (nameComopnent: string) => {
-    const result = components.map(elem => elem[nameComopnent]);
-    console.log();
-    return result[0];
+    const result = components.find(elem => elem[nameComopnent]);
+    return result[nameComopnent];
 }
