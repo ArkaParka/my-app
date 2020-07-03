@@ -21,6 +21,7 @@ import {Forms} from "../models/Forms.interface";
 import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
+import { KeyValue } from '@angular/common';
 
 interface ColumnItem {
   name: string;
@@ -70,7 +71,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   listOfModuleData: object[] = [];
   public loadingTable = true;
   public pageSize = 10;
-  pageIndex = 1;
+  pageIndex = 0;
   public checked = false;
   public indeterminate = false;
   listOfCurrentPageData: object[] = [];
@@ -268,29 +269,38 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
   }
 
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
+
   getModuleDataCb = (data: ModuleData) => {
     this.loadingTable = false;
     this.total = data.total_size;
     this.listOfModuleData = data.data;
+    console.log('Данные',  this.listOfModuleData);
   };
 
-  addData(pageIndex: number,
-          pageSize: number,
-          sortField: string | null,
-          sortOrder: string | null) {
-    const bodyForGetModuleData = {
-      action_name: this.configPath,
-      order_info: [
+  addData(pageIndex: number, pageSize: number, sortField: string | null, sortOrder: string | null) {
+    let sort = [];
+    if (sortField && sortOrder) {
+      sort = [
         {
           field_path: sortField,
           order: sortOrder
         }
-      ],
+      ];
+    }
+    
+    const bodyForGetModuleData = {
+      action_name: this.configPath,
+      order_info: sort,
+      page_filters: [],
       page_info: {
         pageIndex: pageIndex,
         pageSize: pageSize
       }
     };
+    console.log('Запрос данных с сервера', bodyForGetModuleData);
     this.loadingTable = true;
     return this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData);
   }
@@ -352,6 +362,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   private deleteFormDataInstance(typeForm: string): void {
     let deleteRequest = [];
+    console.log('Элементы для удаления', this.multy_id);
     this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
 
     zip(...deleteRequest).pipe(
@@ -371,7 +382,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.pageIndex = pageIndex;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
+    let sortOrder = (currentSort && currentSort.value) || null;
+    if (sortOrder) sortOrder = sortOrder.replace(/end/i, '').toUpperCase();
     this.addData(pageIndex, pageSize, sortField, sortOrder)
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => this.getModuleDataCb(result));
