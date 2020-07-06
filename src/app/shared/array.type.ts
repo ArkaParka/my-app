@@ -10,7 +10,7 @@ import { FieldArrayType } from '@ngx-formly/core';
     <div class="alert alert-danger" role="alert" *ngIf="showError && formControl.errors">
       <formly-validation-message [field]="field"></formly-validation-message>
     </div>
-
+    {{field.fieldGroup | json}}
     <div *ngFor="let field of field.fieldGroup;let i = index;" class="row">
       <formly-field class="col-sm-10" [field]="field"></formly-field>
       <div class="col-sm-2">
@@ -21,7 +21,7 @@ import { FieldArrayType } from '@ngx-formly/core';
       <div class="col-sm-2 offset-sm-10">
         <button class="btn btn-primary" type="button" (click)="add()">Add</button>
       </div>
-    <div>
+    </div>
   `,
 })
 export class ArrayTypeComponent extends FieldArrayType {

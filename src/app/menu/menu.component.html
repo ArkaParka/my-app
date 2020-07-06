@@ -61,7 +61,7 @@
       <div class="modal-body">
         <div *ngIf="!isModalDataLoading">
           <form [formGroup]="form" (ngSubmit)="submit()">
-            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form" (modelChange)="modelChanged($event)"></formly-form>
           </form>
         </div>
         <div class="text-center">

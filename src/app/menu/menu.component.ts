@@ -21,6 +21,7 @@ import {Forms} from "../models/Forms.interface";
 import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
+import {clone} from "@ngx-formly/core/lib/utils";
 
 interface ColumnItem {
   name: string;
@@ -39,6 +40,12 @@ interface ColumnItem {
 })
 
 export class MenuComponent implements OnInit, OnDestroy {
+  testModel = {
+    phoneInfos: [
+      {type: null, phone: null}
+    ],
+    emails: [null]
+  };
 
   moduleKey: string;
   configPath: string;
@@ -51,7 +58,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
-  //TODO: заменить any на нормальную модель
   public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
@@ -172,6 +178,10 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (e.target.value === FormActionTypes.UPDATE) {
               this.getFormDataInstance(this.typeForm);
             }
+            if (e.target.value === FormActionTypes.CREATE) {
+              console.log("CREATE-FIELDS",this.fields)
+              console.log("CREATE-MODEL",this.model)
+            }
             this.largeModal.show();
           }
         }
@@ -191,22 +201,35 @@ export class MenuComponent implements OnInit, OnDestroy {
     return newField;
   }
 
+  getFieldGroupArray(fieldGroup: FieldGroup[], actionType: string) {
+    return fieldGroup.map(fg => {
+      let field = cloneDeep(fg.defaultProperties);
+
+      if (field.type === 'array') console.log("old", field)
+
+      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
+
+      if (field.fieldArray && field.fieldArray.fieldGroup && field.fieldArray.fieldGroup.length) {
+        let fieldArray = cloneDeep(field.fieldArray);
+        field.fieldArray.fieldGroup = this.getFieldGroupArray(fieldArray.fieldGroup, actionType);
+      }
+
+      if (field.type === 'array') console.log("new", field)
+
+      return field;
+    });
+  }
 
   generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
     let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
 
-    fieldGroup = fieldGroup.map(fg => {
-      let field = cloneDeep(fg.defaultProperties);
-      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
-      return field;
-    });
+    fieldGroup = this.getFieldGroupArray(fieldGroup, actionType);
 
     result.push({
       fieldGroup: fieldGroup,
       fieldGroupClassName: schema[0].fieldGroupClassName
     });
-
     return result;
   }
 
@@ -239,13 +262,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.makeListOfColumns(this.viewConfig?.config);
       this.idFieldName = this.viewConfig.config.idFieldName;
 
-      const testModel = {
-        phoneInfos: [
-          {type: null, phone: null}
-        ],
-        emails: [null]
-      };
-      this.model = testModel;
+      // this.model = cloneDeep(this.testModel);
 
       this.isFormLoading = false;
     }
@@ -299,9 +316,11 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   public hideForm(): void {
+    console.log(cloneDeep(this.model))
     this.form.reset();
     this.id = null;
     this.fields = null;
+    // this.model = cloneDeep(this.testModel);
     this.largeModal.hide();
   }
 
@@ -311,18 +330,22 @@ export class MenuComponent implements OnInit, OnDestroy {
     } else {
       this.putFormDataInstance();
     }
-    this.largeModal.hide();
-    this.fields = null;
+    this.hideForm();
   }
 
   private getFormDataInstance(typeForm: string): void {
     this.isModalDataLoading = true;
     this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
-      this.model = data.data;
+      // this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
-      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      // this.model = cloneDeep(this.testModel)
+      // this.model.phoneInfos = cloneDeep(this.testModel.phoneInfos);
+      // this.model.emails = cloneDeep(this.testModel.emails);
+
+      console.log("EDIT-FIELDS",this.fields)
+      console.log("EDIT-MODEL",this.model)
+      // this.options.resetModel();
       this.isModalDataLoading = false;
     });
   }
@@ -375,5 +398,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.addData(pageIndex, pageSize, sortField, sortOrder)
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => this.getModuleDataCb(result));
+  }
+
+  modelChanged(event) {
+    console.log(event)
   }
 }
