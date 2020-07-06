@@ -62,8 +62,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   private typeForm;
   public viewConfig;
   public options: FormlyFormOptions = {};
-  private REQ_ONE;
-  private REQ_MULTY;
+  private REQ_ONE = false;
+  private REQ_MULTY = false;
   private one_id: string = null;
   private multy_id: string[] = [];
 
@@ -213,6 +213,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    
   }
 
   disableFunc(type: string): boolean {
@@ -277,10 +278,15 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.loadingTable = false;
     this.total = data.total_size;
     this.listOfModuleData = data.data;
-    console.log('Данные',  this.listOfModuleData);
   };
 
   addData(pageIndex: number, pageSize: number, sortField: string | null, sortOrder: string | null) {
+    this.multy_id = [];
+    this.REQ_MULTY = false;
+    this.one_id = null;
+    this.REQ_ONE = false;
+    this.setOfCheckedId.clear();
+
     let sort = [];
     if (sortField && sortOrder) {
       sort = [
@@ -300,7 +306,6 @@ export class MenuComponent implements OnInit, OnDestroy {
         pageSize: pageSize
       }
     };
-    console.log('Запрос данных с сервера', bodyForGetModuleData);
     this.loadingTable = true;
     return this.dynamicMenuService.getModuleData(this.moduleKey, bodyForGetModuleData);
   }
