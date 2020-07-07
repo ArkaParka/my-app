@@ -1,10 +1,10 @@
 export const layoutConfig = {
-  "areas": ["header", "sidebar", "main", "footer"],
+  "areas": ["header", "sidebar", "main"],
   "columnSize": "20% 80%",
+  "rowSize": "10% 90%",
   "gridTemplate": [
-    "header header",
+    "sidebar header",
     "sidebar main",
-    "footer footer"
   ]
 };
 

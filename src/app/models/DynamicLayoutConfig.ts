@@ -3,6 +3,7 @@ import {GridArea} from "./GridArea";
 export class DynamicLayoutConfig {
   areas: string[];
   columnSize: string;
+  rowSize: string;
   gridTemplate: string[];
 
   constructor() {

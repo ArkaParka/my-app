@@ -31,6 +31,7 @@ export class GridContainerComponent implements OnInit {
   @HostBinding('style.grid-auto-columns') gridAutoColumns;
   @HostBinding('style.grid-template-areas') gridTA;
   @HostBinding('style.grid-template-columns') gridTemplateColumns;
+  @HostBinding('style.grid-template-rows') gridTemplateRows;
 
 
   constructor(private sanitizer: DomSanitizer,
@@ -40,7 +41,7 @@ export class GridContainerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.gridAutoRows = this.sanitizer.bypassSecurityTrustStyle(`minmax(100px,auto)`);
+    //this.gridAutoRows = this.sanitizer.bypassSecurityTrustStyle(`minmax(100px,auto)`);
   }
 
   setGridTemplate(): void {
@@ -50,6 +51,7 @@ export class GridContainerComponent implements OnInit {
 
     this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.gridTemplate.join(' ')}`);
     this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.columnSize}`);
+    this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.rowSize}`);
   }
 
 
