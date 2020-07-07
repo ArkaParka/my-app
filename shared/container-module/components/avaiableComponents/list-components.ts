@@ -1,6 +1,7 @@
 import { TestComponent } from './test.component';
 import { TestService } from './test.servise';
 import { NavInProjectComponent } from './nav-in-project/nav-in-project.component';
+import { NavInProjectService } from './nav-in-project/nav-in-project.service';
 
 const components = [
     {
@@ -21,8 +22,8 @@ const components = [
             component: NavInProjectComponent,
             services: [
                 {
-                    provide: TestService,
-                    useClass: TestService,
+                    provide: NavInProjectService,
+                    useClass: NavInProjectService,
                     deps: []
                 }
             ]

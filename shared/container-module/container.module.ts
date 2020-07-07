@@ -8,11 +8,11 @@ import {
   DynamicComponentDirective,
 } from "./components/grid-item-content/dynamic-component-directive";
 import { TestComponent } from './components/avaiableComponents/test.component';
-import { DClayoutComponent } from './components/dynamic-layout/dc-layout';
 import { ProjectsComponent } from './components/avaiableComponents/projects/projects.component';
-import { NavInProjectComponent, NzTabContentNzTreeComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
+import { NavInProjectComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTabContentNzTreeComponent } from './components/avaiableComponents/nav-in-project/nzTab-content-nzTree.component';
 
 
 @NgModule({
@@ -27,7 +27,6 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     DynamicComponentDirective,
     DynamicLayoutExampleComponent,
     GridItemComponent,
-    DClayoutComponent,
     TestComponent,
     ProjectsComponent,
     NavInProjectComponent,
