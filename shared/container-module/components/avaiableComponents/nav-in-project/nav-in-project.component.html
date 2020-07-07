@@ -1,8 +1,7 @@
-<div class="likeNav">
-    <button class="btn btn-link" (click)="requirementsFunc()">Требования</button>
-    <button class="btn btn-link">Задачи</button>
-    <button class="btn btn-link">Компоненты</button>
-</div>
-<div>
-    <nz-tree [nzData]="nodes" nzBlockNode (nzClick)="nzClick($event)"></nz-tree>
-</div>
+<nz-tabset [nzType]="'card'">
+    <nz-tab *ngFor="let tab of listOfTabs" [nzTitle]="tab" >
+        <ng-template nz-tab  class="card-container">
+            <nz-tab-content-nzTree [tabName]="tab"></nz-tab-content-nzTree>
+        </ng-template>
+    </nz-tab>
+</nz-tabset>

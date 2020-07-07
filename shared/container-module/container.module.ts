@@ -10,15 +10,17 @@ import {
 import { TestComponent } from './components/avaiableComponents/test.component';
 import { DClayoutComponent } from './components/dynamic-layout/dc-layout';
 import { ProjectsComponent } from './components/avaiableComponents/projects/projects.component';
-import { NavInProjectComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
+import { NavInProjectComponent, NzTabContentNzTreeComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 
 @NgModule({
   imports: [
     CommonModule,
     ContainerRouting,
-    NzTreeModule
+    NzTreeModule,
+    NzTabsModule
   ],
   declarations: [
     GridContainerComponent,
@@ -28,11 +30,13 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
     DClayoutComponent,
     TestComponent,
     ProjectsComponent,
-    NavInProjectComponent
+    NavInProjectComponent,
+    NzTabContentNzTreeComponent
   ],
   exports: [
     GridContainerComponent,
-    NzTreeModule
+    NzTreeModule,
+    NzTabsModule
   ],
   entryComponents: [
     TestComponent, 
