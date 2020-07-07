@@ -19,8 +19,8 @@ import { NavInProjectService } from './nav-in-project.service';
         this.nodes = data;
       });
     }
-    
+
     nzClick(event: NzFormatEmitEvent) {
-      console.log('Click on tree');
+      console.log('Click on tree', event);
     }
   }
