@@ -3,6 +3,8 @@ import {TestService} from './test.servise';
 import {NavInProjectComponent} from './nav-in-project/nav-in-project.component';
 import {NavInProjectService} from './nav-in-project/nav-in-project.service';
 import {ClaimComponent} from "./claim-component/claim.component";
+import {element} from "protractor";
+import {ElementContainerComponent} from "./element-container/element-container.component";
 
 const components = [
   {
@@ -35,10 +37,16 @@ const components = [
       component: ClaimComponent,
       services: []
     }
+  },
+  {
+    ElementContainerComponent: {
+      component: ElementContainerComponent,
+      services: []
+    }
   }
 ];
 
 export const getComponent = (nameComopnent: string) => {
   const result = components.find(elem => elem[nameComopnent]);
   return result[nameComopnent];
-}
+};

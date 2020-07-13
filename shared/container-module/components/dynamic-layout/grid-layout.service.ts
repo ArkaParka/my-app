@@ -20,7 +20,7 @@ export class GridLayoutService {
     switch(areaName) {
       case'header': return of(['TestComponent']);
       case'sidebar': return of(['NavInProjectComponent']);
-      case'main': return of(['ClaimComponent'])
+      case'main': return of(['ElementContainerComponent']);
       default: return of([])
     }
 

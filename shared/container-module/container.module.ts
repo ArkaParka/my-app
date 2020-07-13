@@ -14,14 +14,21 @@ import {NzTreeModule} from 'ng-zorro-antd/tree';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzTabContentNzTreeComponent} from './components/avaiableComponents/nav-in-project/nzTab-content-nzTree.component';
 import {ClaimComponent} from "./components/avaiableComponents/claim-component/claim.component";
+import {NzColDirective, NzDatePickerModule, NzGridModule} from "ng-zorro-antd";
+import {NgSelectModule} from "@ng-select/ng-select";
+import {SharedModule} from "../../src/app/shared/shared.module";
+import {ElementContainerComponent} from "./components/avaiableComponents/element-container/element-container.component";
 
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     ContainerRouting,
     NzTreeModule,
-    NzTabsModule
+    NzTabsModule,
+    NzGridModule,
+    NzDatePickerModule
   ],
   declarations: [
     GridContainerComponent,
@@ -32,7 +39,8 @@ import {ClaimComponent} from "./components/avaiableComponents/claim-component/cl
     ProjectsComponent,
     NavInProjectComponent,
     NzTabContentNzTreeComponent,
-    ClaimComponent
+    ClaimComponent,
+    ElementContainerComponent
   ],
   exports: [
     GridContainerComponent,
@@ -43,7 +51,8 @@ import {ClaimComponent} from "./components/avaiableComponents/claim-component/cl
     TestComponent,
     NavInProjectComponent,
     ProjectsComponent,
-    ClaimComponent
+    ClaimComponent,
+    ElementContainerComponent
   ],
 
 })
