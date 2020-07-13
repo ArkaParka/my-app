@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="navData.length">
   <nz-tree #tree [nzData]="navData"
            nzShowIcon [nzExpandedIcon]="customIcon"
            (nzClick)="nzNavItemClicked($event)"

@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, HostBinding, Input, OnInit, ViewChild, ViewEncapsulation} from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  Input,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
 import {Router} from "@angular/router";
 import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
 import {Observable} from "rxjs";
@@ -11,11 +19,21 @@ import {delay, tap} from "rxjs/operators";
   encapsulation: ViewEncapsulation.None
 })
 export class SidebarNavigationComponent implements AfterViewInit {
-  @Input('navData') navData: NzTreeNodeOptions[] = [];
+  private _navData: NzTreeNodeOptions[] = [];
+
+  @Input('navData') set navData(value: NzTreeNodeOptions[]) {
+    this._navData = value;
+    this.cd.detectChanges();
+  };
+
   @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
   @ViewChild('tree') nzTree: NzTreeComponent;
 
-  constructor(private router?: Router) {
+  get navData(): NzTreeNodeOptions[] {
+    return this._navData;
+  }
+
+  constructor(private router?: Router, private cd?: ChangeDetectorRef) {
     this.router.events.subscribe(() => {
       this.expandNavMenu()
     })
@@ -31,15 +49,17 @@ export class SidebarNavigationComponent implements AfterViewInit {
   }
 
   expandNavMenu() {
-    this.nzTree.getCheckedNodeList().forEach(node => this.switchOffCheckedNodes(node));
-    let activeNode = this.nzTree.getTreeNodes().find(node => this.router.url.includes(node.key));
-    if (activeNode) {
-      this.getNodeWithChildren(activeNode)
-        .filter(node => this.router.url.includes(node.key))
-        .forEach((node: NzTreeNode) => {
-          node.isChecked = true;
-          if (node.children && node.children.length) node.isExpanded = true;
-        })
+    if (this.nzTree) {
+      this.nzTree.getCheckedNodeList().forEach(node => this.switchOffCheckedNodes(node));
+      let activeNode = this.nzTree.getTreeNodes().find(node => this.router.url.includes(node.key));
+      if (activeNode) {
+        this.getNodeWithChildren(activeNode)
+          .filter(node => this.router.url.includes(node.key))
+          .forEach((node: NzTreeNode) => {
+            node.isChecked = true;
+            if (node.children && node.children.length) node.isExpanded = true;
+          })
+      }
     }
   }
 
@@ -53,6 +73,7 @@ export class SidebarNavigationComponent implements AfterViewInit {
       });
 
       let route = e.node.key.split("/").filter(r => r !== "");
+      console.log(route)
       this.router.navigate(route);
     }
   }
