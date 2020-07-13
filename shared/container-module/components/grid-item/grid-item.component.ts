@@ -1,8 +1,9 @@
-import {ChangeDetectorRef, Component, HostBinding, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostBinding, Input, OnInit, HostListener} from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 import cloneDeep from 'lodash/cloneDeep'
 import {GridArea} from "../../../../src/app/models/GridArea";
 import { GridLayoutService } from '../dynamic-layout/grid-layout.service';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 @Component({
   selector: 'app-grid-item',
@@ -30,6 +31,6 @@ export class GridItemComponent implements OnInit {
     this.gridLayoutService.getGridAreaConfiguration(this.areaName).subscribe(data => {
       this.componentsArray = data;
     });
-
   }
+
 }

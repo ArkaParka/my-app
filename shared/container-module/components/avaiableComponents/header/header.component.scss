@@ -1,0 +1,23 @@
+h4 {
+    margin: 5px;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    background: #fafafa;
+}
+
+.status {
+    color: red;
+    align-items: baseline;
+}
+
+.infoBlock {
+    display: flex;
+    align-items: baseline;
+}
+
+.infoBlock > button {
+    margin: 1px 5px 0 5px;
+}

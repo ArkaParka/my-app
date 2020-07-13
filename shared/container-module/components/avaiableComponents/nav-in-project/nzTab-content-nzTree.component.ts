@@ -11,7 +11,6 @@ import { NavInProjectService } from './nav-in-project.service';
   export class NzTabContentNzTreeComponent implements OnInit {
     @Input('tabName') tabName;
     public nodes: NzTreeNodeOptions[];
-
     constructor(private navInProjectService: NavInProjectService) { }
 
     ngOnInit(): void {
@@ -21,6 +20,6 @@ import { NavInProjectService } from './nav-in-project.service';
     }
 
     nzClick(event: NzFormatEmitEvent) {
-      console.log('Click on tree', event);
+
     }
   }

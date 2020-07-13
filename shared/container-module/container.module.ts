@@ -12,7 +12,9 @@ import { ProjectsComponent } from './components/avaiableComponents/projects/proj
 import { NavInProjectComponent } from './components/avaiableComponents/nav-in-project/nav-in-project.component';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzTabContentNzTreeComponent } from './components/avaiableComponents/nav-in-project/nzTab-content-nzTree.component';
+import { HeaderForProductsComponent } from './components/avaiableComponents/header/header.component';
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { NzTabContentNzTreeComponent } from './components/avaiableComponents/nav
     CommonModule,
     ContainerRouting,
     NzTreeModule,
-    NzTabsModule
+    NzTabsModule,
+    NzDropDownModule
   ],
   declarations: [
     GridContainerComponent,
@@ -30,19 +33,21 @@ import { NzTabContentNzTreeComponent } from './components/avaiableComponents/nav
     TestComponent,
     ProjectsComponent,
     NavInProjectComponent,
-    NzTabContentNzTreeComponent
+    NzTabContentNzTreeComponent,
+    HeaderForProductsComponent
   ],
   exports: [
     GridContainerComponent,
     NzTreeModule,
-    NzTabsModule
+    NzTabsModule,
+    NzDropDownModule
   ],
   entryComponents: [
     TestComponent, 
     NavInProjectComponent, 
-    ProjectsComponent
+    ProjectsComponent,
+    HeaderForProductsComponent
   ],
-  
 })
 export class ContainerModule {
 }

@@ -1,0 +1,18 @@
+<div class="head">
+    <h4>{{ title }}</h4>
+    <div class="infoBlock" *ngIf="detector">
+        <label class="status">{{ status }}</label>
+        <button class="btn btn-secondary">Изменить</button>
+        <button class="btn btn-secondary" (click)="getTasks()" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+            Задачи
+        </button>
+    </div>
+</div>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+        <li nz-menu-item *ngFor="let task of tasks">
+            <a href="{{task.link}}" >{{ task.name }}</a>
+        </li>
+    </ul>
+</nz-dropdown-menu>

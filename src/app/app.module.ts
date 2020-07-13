@@ -64,7 +64,6 @@ import {MenuModule} from "./menu/menu.module";
 import {NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -93,9 +92,7 @@ import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-na
     LoginComponent,
     RegisterComponent,
     FormLoaderComponent,
-
-    SidebarNavigationComponent
-    //MenuComponent,
+    SidebarNavigationComponent,
   ],
   providers: [
     {

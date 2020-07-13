@@ -26,7 +26,10 @@ export class DynamicComponentDirective implements OnInit {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component['component']);
     this.viewContainerRef.clear();
     const injector =  this.createInjector(component['services']);
-    this.viewContainerRef.createComponent(componentFactory, 0, injector);
+    const componentRef = this.viewContainerRef.createComponent(componentFactory, 0, injector);
+    // (componentRef.instance as any).test.subscribe(data => {
+    //   console.log('Клик с кнопки', data);
+    // });
   }
 
   createInjector(services){
