@@ -3,13 +3,13 @@
     <div class="infoBlock" *ngIf="detector">
         <label class="status">{{ status }}</label>
         <button class="btn btn-secondary">Изменить</button>
-        <button class="btn btn-secondary" (click)="getTasks()" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        <button class="btn btn-secondary" (click)="getTasks()" nz-dropdown nzTrigger="click" [nzDropdownMenu]="tasksList">
             Задачи
         </button>
     </div>
 </div>
 
-<nz-dropdown-menu #menu="nzDropdownMenu">
+<nz-dropdown-menu #tasksList="nzDropdownMenu">
     <ul nz-menu>
         <li nz-menu-item *ngFor="let task of tasks">
             <a href="{{task.link}}" >{{ task.name }}</a>
