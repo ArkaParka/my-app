@@ -2,11 +2,9 @@ import {
   Component,
   Inject,
   OnDestroy,
-  OnInit,
   ViewChild,
   ElementRef,
-  AfterViewInit,
-  AfterContentInit, AfterContentChecked
+  AfterContentChecked
 } from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
@@ -14,7 +12,7 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
 import {NzTreeNodeOptions} from "ng-zorro-antd";
-import {AppHeaderComponent} from "@coreui/angular";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -35,6 +33,7 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
     this.dynamicMenuChildren();
   }
 
+  //TODO: Заменить хук на что нибудь нормальное
   ngAfterContentChecked() {
     if (this.widgetsContent && this.widgetsContent.nativeElement)
       if (this.widgetsContent.nativeElement.offsetHeight < this.widgetsContent.nativeElement.scrollHeight ||
