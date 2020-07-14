@@ -39,6 +39,26 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         nodeName: mr.nodeName,
         key: `/form-loader/${mr.nodeName}`
       });
+      this.activeModules.push({
+        title: mr.module.moduleDisplayName,
+        nodeName: mr.nodeName,
+        key: `/form-loader/${mr.nodeName}`
+      });
+      this.activeModules.push({
+        title: mr.module.moduleDisplayName,
+        nodeName: mr.nodeName,
+        key: `/form-loader/${mr.nodeName}`
+      });
+      this.activeModules.push({
+        title: mr.module.moduleDisplayName,
+        nodeName: mr.nodeName,
+        key: `/form-loader/${mr.nodeName}`
+      });
+      this.activeModules.push({
+        title: mr.module.moduleDisplayName,
+        nodeName: mr.nodeName,
+        key: `/form-loader/${mr.nodeName}`
+      });
     });
     this.navigationLoading = false;
   }
