@@ -4,7 +4,12 @@ import {NavInProjectService} from './nav-in-project.service';
 import {EventBusService} from "../../event-bus/event-bus.service";
 import {BusEvent} from "../../event-bus/BusEvent";
 
-
+@Component({
+  selector: 'nz-tab-content-nzTree',
+  template: `
+    <nz-tree [nzData]="nodes" nzBlockNode (nzClick)="nzClick($event)"></nz-tree>
+  `
+})
 export class NzTabContentNzTreeComponent implements OnInit {
   @Input('tabName') tabName;
   public nodes: NzTreeNodeOptions[];
@@ -17,6 +22,7 @@ export class NzTabContentNzTreeComponent implements OnInit {
       this.nodes = data;
     });
   }
+
   nzClick(event: NzFormatEmitEvent) {
     console.log('Click on tree', event);
     this.eventBus.emit(new BusEvent("NavTreeItemClicked", event))

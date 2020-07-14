@@ -34,6 +34,18 @@ const components = [
     }
   },
   {
+    HeaderForProductsComponent: {
+      component: HeaderForProductsComponent,
+      services: [
+        {
+          provide: HeaderForProductsService,
+          useClass: HeaderForProductsService,
+          deps: []
+        }
+      ]
+    }
+  },
+  {
     ClaimComponent: {
       component: ClaimComponent,
       services: []
