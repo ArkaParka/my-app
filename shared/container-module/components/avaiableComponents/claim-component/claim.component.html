@@ -1,1 +1,103 @@
-<p>Claim Component works!</p>
+<div *ngIf="!isClaimLoading" class="p-10">
+  <nz-row>
+    <nz-col nzSpan="15">
+      <nz-row class="p-t-10">
+        <nz-col nz-col nzSpan="6">
+          <label>Тип задачи</label>
+        </nz-col>
+        <nz-col nz-col nzSpan="18">
+          <ng-select [items]="taskTypes" [(ngModel)]="claim.claimInfo.taskType"></ng-select>
+        </nz-col>
+      </nz-row>
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label>Компонент в сборке</label>
+        </nz-col>
+        <nz-col nzSpan="18">
+          <ng-select [items]="buildComponents" [(ngModel)]="claim.claimInfo.buildComponent"></ng-select>
+        </nz-col>
+      </nz-row>
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label>Спецификация</label>
+        </nz-col>
+        <nz-col nzSpan="18">
+          <a [href]="'/#/grid-layout'">{{claim.claimInfo.spec}}</a>
+        </nz-col>
+      </nz-row>
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label>Ответственный</label>
+        </nz-col>
+        <nz-col nzSpan="18">
+          <ng-select [items]="taskResponsibles" [(ngModel)]="claim.claimInfo.taskResponsible"></ng-select>
+        </nz-col>
+      </nz-row>
+    </nz-col>
+    <nz-col nzSpan="3"></nz-col>
+    <nz-col nzSpan="6">
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label class="pull-right m-r-10">Создана</label>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-date-picker [nzAllowClear]="false" [(ngModel)]="claim.claimDeadline.createDate"></nz-date-picker>
+        </nz-col>
+      </nz-row>
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label class="pull-right m-r-10">Срок до</label>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <nz-date-picker [nzAllowClear]="false" [(ngModel)]="claim.claimDeadline.executionDeadline"></nz-date-picker>
+        </nz-col>
+      </nz-row>
+      <nz-row class="p-t-10">
+        <nz-col nzSpan="6">
+          <label class="pull-right m-r-10">Объём</label>
+        </nz-col>
+        <nz-col nzSpan="15">
+          <input [(ngModel)]="claim.claimDeadline.time">
+        </nz-col>
+      </nz-row>
+    </nz-col>
+  </nz-row>
+  <nz-row class="p-t-10">
+    <nz-col nzSpan="2">
+      <label>Описание</label>
+    </nz-col>
+    <nz-col nzSpan="22">
+      <textarea [(ngModel)]="claim.claimInfo.taskDescription"></textarea>
+    </nz-col>
+  </nz-row>
+  <nz-row class="p-t-10">
+    <nz-col nzSpan="2">
+      <label>Результат</label>
+    </nz-col>
+    <nz-col nzSpan="22">
+      <textarea [(ngModel)]="claim.claimInfo.taskResult"></textarea>
+    </nz-col>
+  </nz-row>
+  <nz-row class="p-t-10">
+    <nz-col nzSpan="2">
+      <label>Связанные</label>
+    </nz-col>
+    <nz-col nzSpan="10">
+      <nz-row *ngFor="let relatedTask of claim.claimInfo.relatedTasks">
+        <a [href]="'/#/grid-layout'">{{relatedTask.taskName}}</a>
+        <label class="m-l-10">{{relatedTask.taskRelation}}</label>
+      </nz-row>
+    </nz-col>
+  </nz-row>
+  <nz-row class="p-t-10">
+    <nz-col nzSpan="2">
+      <label>Связанные</label>
+    </nz-col>
+    <nz-col nzSpan="10">
+      <nz-row *ngFor="let file of claim.claimInfo.taskFiles">
+        <a [href]="'/#/grid-layout'">{{file.fileName}}</a>
+      </nz-row>
+    </nz-col>
+  </nz-row>
+</div>
+

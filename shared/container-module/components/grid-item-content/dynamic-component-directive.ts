@@ -9,6 +9,7 @@ import {
   Directive
 } from '@angular/core';
 import { getComponent } from '../avaiableComponents/list-components';
+import {EventBusService} from "../event-bus/event-bus.service";
 
 
 @Directive({
@@ -19,7 +20,12 @@ export class DynamicComponentDirective implements OnInit {
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private injector: Injector,
-              private viewContainerRef: ViewContainerRef) { }
+              private viewContainerRef: ViewContainerRef,
+              private eventBus: EventBusService) {
+    this.eventBus.on("NavTreeItemClicked", (event)=>{
+      console.log("DynamicComponentDirective Event:", event)
+    })
+  }
 
   ngOnInit() {
     this.loadComponent();

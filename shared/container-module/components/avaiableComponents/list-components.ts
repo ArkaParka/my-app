@@ -5,7 +5,8 @@ import { NavInProjectService } from './nav-in-project/nav-in-project.service';
 import { HeaderForProductsService } from './header/header.service';
 import { HeaderForProductsComponent } from './header/header.component';
 import { ClaimComponent } from './claim-component/claim.component';
-
+import {element} from "protractor";
+import {ElementContainerComponent} from "./element-container/element-container.component";
 
 const components = [
   {
@@ -32,27 +33,21 @@ const components = [
       ]
     }
   },
-    {
-      ClaimComponent: {
-        component: ClaimComponent,
-        services: []
-      }
-    },
-    {
-      HeaderForProductsComponent: {
-          component: HeaderForProductsComponent,
-          services: [
-              {
-                  provide: HeaderForProductsService,
-                  useClass: HeaderForProductsService,
-                  deps: []
-              }
-          ]
-      }
+  {
+    ClaimComponent: {
+      component: ClaimComponent,
+      services: []
+    }
   },
+  {
+    ElementContainerComponent: {
+      component: ElementContainerComponent,
+      services: []
+    }
+  }
 ];
 
 export const getComponent = (nameComopnent: string) => {
   const result = components.find(elem => elem[nameComopnent]);
   return result[nameComopnent];
-}
+};
