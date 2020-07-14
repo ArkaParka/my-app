@@ -3,15 +3,16 @@ app-header {
   flex-wrap: nowrap !important;
 }
 
-
 .modules-list {
   height: 100%;
+  width: 90%;
   display: flex;
-  flex-direction: row;
+  overflow: hidden;
 }
 
 .btn-outline-secondary {
   max-width: 200px;
+  min-width: 200px;
   border: none;
   color: black;
 }
@@ -26,4 +27,9 @@ app-header {
 
 .btn-outline-secondary:focus {
   box-shadow: 0 0 0 0.1rem rgba(200, 206, 211, 0.5);
+}
+
+.scrollButtons {
+  max-width: 50px;
+  min-width: 50px;
 }

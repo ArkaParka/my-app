@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {Subject} from "rxjs";
@@ -17,6 +17,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   private destroy$ = new Subject();
   private activeModules = [];
   private menuChildren: NzTreeNodeOptions[] = [];
+
+  @ViewChild('widgetsContent', { read: ElementRef }) public widgetsContent: ElementRef<any>;
 
   constructor(@Inject(DOCUMENT) _document?: any,
               private dynamicMenuService?: DynamicMenuService) {
@@ -39,28 +41,17 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         nodeName: mr.nodeName,
         key: `/form-loader/${mr.nodeName}`
       });
-      this.activeModules.push({
-        title: mr.module.moduleDisplayName,
-        nodeName: mr.nodeName,
-        key: `/form-loader/${mr.nodeName}`
-      });
-      this.activeModules.push({
-        title: mr.module.moduleDisplayName,
-        nodeName: mr.nodeName,
-        key: `/form-loader/${mr.nodeName}`
-      });
-      this.activeModules.push({
-        title: mr.module.moduleDisplayName,
-        nodeName: mr.nodeName,
-        key: `/form-loader/${mr.nodeName}`
-      });
-      this.activeModules.push({
-        title: mr.module.moduleDisplayName,
-        nodeName: mr.nodeName,
-        key: `/form-loader/${mr.nodeName}`
-      });
     });
     this.navigationLoading = false;
+  }
+
+  public scrollRight(): void {
+    console.log('Скролл', this.widgetsContent.nativeElement.overflow);
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft + 150), behavior: 'smooth' });
+  }
+
+  public scrollLeft(): void {
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 150), behavior: 'smooth' });
   }
 
   private getModuleAction(moduleActionsResponse: Array<ModuleActionsResponse>, moduleKey: string): void {
