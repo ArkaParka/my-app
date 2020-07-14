@@ -16,31 +16,36 @@
     [asideMenuToggler]="false">
 
     <div style="float: left">
-      <button class="btn btn-outline-secondary scrollButtons" (click)="scrollLeft()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+      <button
+        [class.hiddenButton]="menuOverflow$|async"
+        class="btn btn-outline-secondary scrollButtons"
+        (click)="scrollLeft()">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      </button>
     </div>
+
+
 
     <div #widgetsContent class="modules-list">
       <button *ngFor="let module of activeModules"
-      class="btn btn-outline-secondary"
-      (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
+              class="btn btn-outline-secondary"
+              (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
     </div>
 
     <div style="float: right">
-      <button class="btn btn-outline-secondary scrollButtons" (click)="scrollRight()"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+      <button
+        [class.hiddenButton]="menuOverflow$|async"
+        class="btn btn-outline-secondary scrollButtons"
+        (click)="scrollRight()">
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </button>
     </div>
     <ul class="nav navbar-nav ml-auto"></ul>
   </app-header>
 
-  <!-- 
-    <div class="modules-list">
-      <button *ngFor="let module of activeModules"
-      class="btn btn-outline-secondary"
-      (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
-    </div>
-   -->
 
   <div class="app-body">
-    <app-sidebar #sidebar [fixed]="true" [display]="'lg'" >
+    <app-sidebar #sidebar [fixed]="true" [display]="'lg'">
       <app-sidebar-nav-custom [navData]="menuChildren"></app-sidebar-nav-custom>
     </app-sidebar>
 
