@@ -20,7 +20,7 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
   styleUrls: ['./default-layout.component.scss'],
 })
 export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
-  private navigationLoading = true;
+  public navigationLoading = true;
   private menuOverflow$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject();
   private activeModules = [];
