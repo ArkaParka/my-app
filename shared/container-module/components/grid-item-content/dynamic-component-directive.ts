@@ -1,14 +1,18 @@
-import { Component, Input, OnInit, ViewChild, ComponentFactoryResolver, Injector, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  ComponentFactoryResolver,
+  Injector,
+  ViewContainerRef,
+  Directive
+} from '@angular/core';
 import { getComponent } from '../avaiableComponents/list-components';
 
 
-@Component({
-  selector: 'dc-component',
-  template: `
-              <div>
-                <ng-template></ng-template>
-              </div>
-            `
+@Directive({
+  selector: '[dc-component]',
 })
 export class DynamicComponentDirective implements OnInit {
   @Input('dynamicLayout') dynamicLayout;

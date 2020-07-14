@@ -15,7 +15,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzTabContentNzTreeComponent } from './components/avaiableComponents/nav-in-project/nzTab-content-nzTree.component';
 import { HeaderForProductsComponent } from './components/avaiableComponents/header/header.component';
-
+import { ClaimComponent } from './components/avaiableComponents/claim-component/claim.component';
 
 @NgModule({
   imports: [
@@ -34,7 +34,8 @@ import { HeaderForProductsComponent } from './components/avaiableComponents/head
     ProjectsComponent,
     NavInProjectComponent,
     NzTabContentNzTreeComponent,
-    HeaderForProductsComponent
+    HeaderForProductsComponent,
+    ClaimComponent
   ],
   exports: [
     GridContainerComponent,
@@ -46,7 +47,9 @@ import { HeaderForProductsComponent } from './components/avaiableComponents/head
     TestComponent, 
     NavInProjectComponent, 
     ProjectsComponent,
-    HeaderForProductsComponent
+    HeaderForProductsComponent,
+    ClaimComponent
+
   ],
 })
 export class ContainerModule {
