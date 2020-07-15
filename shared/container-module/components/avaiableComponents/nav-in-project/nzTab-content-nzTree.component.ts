@@ -8,7 +8,7 @@ import {BusEvent} from "../../event-bus/BusEvent";
   selector: 'nz-tab-content-nzTree',
   template: `
     <nz-tree [nzData]="nodes" nzBlockNode (nzClick)="nzClick($event)"></nz-tree>
-  `
+  `,
 })
 export class NzTabContentNzTreeComponent implements OnInit {
   @Input('tabName') tabName;
