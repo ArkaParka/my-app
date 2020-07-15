@@ -9,21 +9,38 @@ export class HeaderForProductsService {
     return of();
   }
 
-  getTasks(): Observable<any> {
-    return of([
-      {
-        name: 'Задача на разработку 1',
-        link: '#'
-      },
-      {
-        name: 'Задача на тестирование 1',
-        link: '#'
-      },
-      {
-        name: 'Задача на сборку',
-        link: '#'
-      }
-    ]);
+  getListItems(item: string): Observable<any> {
+    const listItems = {
+      tasks: [
+        {
+          name: 'Задача на разработку 1',
+          link: '#'
+        },
+        {
+          name: 'Задача на тестирование 1',
+          link: '#'
+        },
+        {
+          name: 'Задача на сборку',
+          link: '#'
+        }
+      ],
+      versions: [
+        {
+          name: 'Версия 1.0',
+          link: '#'
+        },
+        {
+          name: 'Версия 1.1',
+          link: '#'
+        },
+        {
+          name: 'Версия 1.2',
+          link: '#'
+        }
+      ]
+    }
+    return of(listItems[item]);
   }
 
 }

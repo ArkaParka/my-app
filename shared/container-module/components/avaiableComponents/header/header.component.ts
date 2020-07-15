@@ -15,7 +15,7 @@ export class HeaderForProductsComponent {
   public title = "Реализовать требования Pr-1026";
   public status = 'Утвержденно';
   public detector = true;
-  public tasks;
+  public listItems;
 
   constructor(private headerForProductsService: HeaderForProductsService) { }
 
@@ -23,9 +23,10 @@ export class HeaderForProductsComponent {
     //console.log('ngOnInit инпут', this.input?.node.origin.title);
   }
 
-  getTasks() {
-    this.headerForProductsService.getTasks().subscribe(data => {
-      this.tasks = data;
+  getListItems(event) {
+    this.headerForProductsService.getListItems(event.target.value).subscribe(data => {
+      console.log('Эвент с кнопки', data);
+      this.listItems = data;
     });
   }
 

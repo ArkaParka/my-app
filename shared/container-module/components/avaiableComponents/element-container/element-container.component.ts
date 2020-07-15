@@ -14,9 +14,9 @@ export class ElementContainerComponent implements OnInit {
       console.log("Лог в обертке", event)
     })
   }
+
   ngOnInit(): void {
     
   }
-
 
 }
