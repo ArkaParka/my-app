@@ -1,14 +1,12 @@
-body {
-    height: 100%;
-}
-
 h4 {
     margin: 5px;
 }
 
 .head {
+    height: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background: #fafafa;
 }
 
