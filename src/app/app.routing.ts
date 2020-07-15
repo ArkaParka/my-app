@@ -62,7 +62,7 @@ export const routes: Routes = [
       // },
       { //вот тут менюшка
         path: '',
-        loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule)
+        loadChildren: () => import('./containers/form-loader/form-loader.module').then(m => m.FormLoaderModule)
       },
       {
         path: 'datatable',
