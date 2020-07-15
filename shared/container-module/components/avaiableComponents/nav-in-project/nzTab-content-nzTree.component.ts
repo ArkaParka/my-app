@@ -24,7 +24,6 @@ export class NzTabContentNzTreeComponent implements OnInit {
   }
 
   nzClick(event: NzFormatEmitEvent) {
-    console.log('Click on tree', event);
     this.eventBus.emit(new BusEvent("NavTreeItemClicked", event))
   }
 }

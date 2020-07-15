@@ -17,14 +17,13 @@ import {EventBusService} from "../event-bus/event-bus.service";
 })
 export class DynamicComponentDirective implements OnInit {
   @Input('dynamicLayout') dynamicLayout;
+  //eventFromTree;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private injector: Injector,
               private viewContainerRef: ViewContainerRef,
               private eventBus: EventBusService) {
-    this.eventBus.on("NavTreeItemClicked", (event)=>{
-      console.log("DynamicComponentDirective Event:", event)
-    })
+    
   }
 
   ngOnInit() {
@@ -32,14 +31,14 @@ export class DynamicComponentDirective implements OnInit {
   }
 
   loadComponent() {
+    console.log('Список компонентов', this.dynamicLayout);
     const component = getComponent(this.dynamicLayout);
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component['component']);
     this.viewContainerRef.clear();
     const injector =  this.createInjector(component['services']);
     const componentRef = this.viewContainerRef.createComponent(componentFactory, 0, injector);
-    // (componentRef.instance as any).test.subscribe(data => {
-    //   console.log('Клик с кнопки', data);
-    // });
+    // console.log('Лог при создании компонента', this.eventFromTree);
+    // (componentRef.instance as any).input = this.eventFromTree;
   }
 
   createInjector(services){

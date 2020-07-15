@@ -7,6 +7,7 @@ import { HeaderForProductsComponent } from './header/header.component';
 import { ClaimComponent } from './claim-component/claim.component';
 import {element} from "protractor";
 import {ElementContainerComponent} from "./element-container/element-container.component";
+import { EventBusService } from '../event-bus/event-bus.service';
 
 const components = [
   {

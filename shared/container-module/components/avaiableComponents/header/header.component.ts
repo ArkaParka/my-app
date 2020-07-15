@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { HeaderForProductsService } from './header.service';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import {ModalDirective} from "ngx-bootstrap/modal";
@@ -8,17 +8,19 @@ import {ModalDirective} from "ngx-bootstrap/modal";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderForProductsComponent implements OnInit {
+export class HeaderForProductsComponent {
+
+  //@Input() input;
 
   public title = "Реализовать требования Pr-1026";
   public status = 'Утвержденно';
-  public detector = false;
+  public detector = true;
   public tasks;
 
   constructor(private headerForProductsService: HeaderForProductsService) { }
 
   ngOnInit(): void {
-
+    //console.log('ngOnInit инпут', this.input?.node.origin.title);
   }
 
   getTasks() {
