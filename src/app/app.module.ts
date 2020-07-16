@@ -56,10 +56,12 @@ import { ChartsModule } from 'ng2-charts';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+
 //import {ContainerModule} from "../../shared/container-module/container.module";
 import {NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 import { FormLoaderModule } from './containers/form-loader/form-loader.module';
+import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 
 @NgModule({
   imports: [
@@ -79,7 +81,7 @@ import { FormLoaderModule } from './containers/form-loader/form-loader.module';
     HttpModule,
     FormLoaderModule,
     NzTreeModule,
-    NzIconModule
+    NzIconModule,
   ],
   declarations: [
     AppComponent,
@@ -88,7 +90,7 @@ import { FormLoaderModule } from './containers/form-loader/form-loader.module';
     P500Component,
     LoginComponent,
     RegisterComponent,
-    SidebarNavigationComponent
+    SidebarNavigationComponent,
   ],
   providers: [
     {

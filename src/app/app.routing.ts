@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
 // Import Containers
-import { DefaultLayoutComponent } from './containers';
+import {DefaultLayoutComponent} from './containers';
 
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
+import {P404Component} from './views/error/404.component';
+import {P500Component} from './views/error/500.component';
+import {LoginComponent} from './views/login/login.component';
+import {RegisterComponent} from './views/register/register.component';
+import {DynamicLayoutExampleComponent} from "../../shared/container-module/components/dynamic-layout/dynamic-layout-example.component";
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
 
 export const routes: Routes = [
@@ -51,10 +52,10 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
-      // {
-      //   path: 'grid-layout',
-      //   component: GridLayoutComponent
-      // },
+      {
+        path: 'grid-layout',
+        loadChildren: () => import('./../../shared/container-module/container.module').then(m => m.ContainerModule)
+      },
       // обертка для отображения любой формы по параметрам
       // {
       //   path: 'form-loader/:moduleKey/:configPath',
@@ -118,11 +119,12 @@ export const routes: Routes = [
       }
     ]
   },
-  { path: '**', component: P404Component }
+  {path: '**', component: P404Component}
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
