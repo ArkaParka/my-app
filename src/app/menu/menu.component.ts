@@ -247,7 +247,10 @@ export class MenuComponent implements OnInit, OnDestroy {
         ],
         emails: [null]
       };
-      this.model = testModel;
+      if(this.model.phoneInfos && this.model.emails) {
+        this.model = testModel;
+      }
+      
 
       this.isFormLoading = false;
     }
@@ -338,8 +341,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      this.model.phoneInfos = this.model.phoneInfos.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
-      this.model.emails = this.model.emails.length > 0 ? this.model.emails : [null];
+      this.model.phoneInfos = this.model.phoneInfos?.length > 0 ? this.model.phoneInfos : {type: null, phone: null};
+      this.model.emails = this.model.emails?.length > 0 ? this.model.emails : [null];
       this.isModalDataLoading = false;
     });
   }
