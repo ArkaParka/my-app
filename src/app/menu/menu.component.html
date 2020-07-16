@@ -1,51 +1,57 @@
-<ng-template #dynamicButtons let-value="execConfig.formActionType" let-title="actionTitle" let-type="type">
-  <button style="margin-bottom: 5px;"
-          type="button"
-          class="btn btn-secondary"
-    [disabled]="disableFunc(type)"
-    value="{{value}}"
-    (click)="actionButtonClicked($event)">{{ title }}</button>
-</ng-template>
-<div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
-  <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
+<div class="text-center">
+  <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
 </div>
+<div *ngIf="!isFormLoading">
+  <ng-template #dynamicButtons let-value="execConfig.formActionType" let-title="actionTitle" let-type="type">
+    <button style="margin-bottom: 5px;"
+            type="button"
+            class="btn btn-secondary"
+      [disabled]="disableFunc(type)"
+      value="{{value}}"
+      (click)="actionButtonClicked($event)">{{ title }}</button>
+  </ng-template>
+  <div *ngFor="let action of actions" style="display: inline-block; margin-right: 5px;">
+    <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
+  </div>
 
-<nz-table
-  nzBordered
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="listOfModuleData"
-  [nzFrontPagination]="false"
-  [nzLoading]="loadingTable"
-  [nzTotal]="total"
-  [nzPageSize]="pageSize"
-  [nzPageIndex]="pageIndex"
-  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
-  (nzQueryParams)="onQueryParamsChange($event)"
->
-  <thead>
-    <tr>
-      <th
-        [(nzChecked)]="checked"
-        [nzIndeterminate]="indeterminate"
-        (nzCheckedChange)="onAllChecked($event)"
-      ></th>
-      <th
-        *ngFor="let column of listOfColumns"
-        [nzColumnKey]="column.columnKey"
-        [nzSortFn]="column.sortFn"
-      >
-        {{column.name}}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of listOfModuleData">
-      <td [nzChecked]="setOfCheckedId.has(data[idFieldName])" (nzCheckedChange)="onItemChecked(data[idFieldName], $event)"></td>
-      <td *ngFor="let property of data | keyvalue: originalOrder">{{property.value}}</td>
-    </tr>
-  </tbody>
-</nz-table>
+  <nz-table
+    nzBordered
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="listOfModuleData"
+    [nzFrontPagination]="false"
+    [nzLoading]="loadingTable"
+    [nzTotal]="total"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+      <tr>
+        <th
+          class="fixedWidth"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+        ></th>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzColumnKey]="column.columnKey"
+          [nzSortFn]="column.sortFn"
+        >
+          {{column.name}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfModuleData">
+        <td [nzChecked]="setOfCheckedId.has(data[idFieldName])" (nzCheckedChange)="onItemChecked(data[idFieldName], $event)"></td>
+        <td *ngFor="let property of data | keyvalue: originalOrder">{{property.value}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
