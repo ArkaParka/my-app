@@ -9,20 +9,40 @@
 <ng-template #allApp>
   <app-header
     [navbarBrandRouterLink]="['/dashboard']"
-    [fixed]="true"
+    [fixed]="false"
     [navbarBrandFull]="{src: 'assets/img/brand/logo.svg', width: 89, height: 25, alt: 'CoreUI Logo'}"
     [navbarBrandMinimized]="{src: 'assets/img/brand/sygnet.svg', width: 30, height: 30, alt: 'CoreUI Logo'}"
     [sidebarToggler]="'lg'"
-    [asideMenuToggler]="'lg'">
+    [asideMenuToggler]="false">
 
-    <div class="modules-list">
-      <button *ngFor="let module of activeModules"
-      class="btn btn-outline-secondary"
-      (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
+    <div style="float: left">
+      <button
+        [class.hiddenButton]="menuOverflow$|async"
+        class="btn btn-outline-secondary scrollButtons"
+        (click)="scrollLeft()">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+      </button>
     </div>
 
+
+
+    <div #widgetsContent class="modules-list">
+      <button *ngFor="let module of activeModules"
+              class="btn btn-outline-secondary"
+              (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
+    </div>
+
+    <div style="float: right">
+      <button
+        [class.hiddenButton]="menuOverflow$|async"
+        class="btn btn-outline-secondary scrollButtons"
+        (click)="scrollRight()">
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
     <ul class="nav navbar-nav ml-auto"></ul>
   </app-header>
+
 
   <div class="app-body">
     <app-sidebar #sidebar [fixed]="true" [display]="'lg'">

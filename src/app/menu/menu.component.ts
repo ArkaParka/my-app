@@ -71,7 +71,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   listOfModuleData: object[] = [];
   public loadingTable = true;
   public pageSize = 10;
-  pageIndex = 0;
+  pageIndex = 1;
   public checked = false;
   public indeterminate = false;
   listOfCurrentPageData: object[] = [];
@@ -291,6 +291,8 @@ export class MenuComponent implements OnInit, OnDestroy {
         }
       ];
     }
+
+    pageIndex = pageIndex != 0 ? pageIndex- 1 : pageIndex;
     
     const bodyForGetModuleData = {
       action_name: this.configPath,
@@ -354,7 +356,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).pipe(
       switchMap(data => {
         this.updateCheckedSet(data.id, null);
-        return this.addData(this.pageIndex, this.pageSize, null, null);
+        return this.addData(this.pageIndex - 1, this.pageSize, null, null);
       }),
       takeUntil(this.destroy$)
     ).subscribe((result) => this.getModuleDataCb(result));

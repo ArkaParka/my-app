@@ -1,29 +1,45 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterContentChecked
+} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
-import {Subject} from "rxjs";
-import { takeUntil} from "rxjs/operators";
+import {BehaviorSubject, Subject} from "rxjs";
+import {takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
 import {NzTreeNodeOptions} from "ng-zorro-antd";
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss'],
 })
-export class DefaultLayoutComponent implements OnDestroy, OnInit {
-
-  public navigationLoading: boolean = true;
+export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
+  public navigationLoading = true;
+  private menuOverflow$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject();
   private activeModules = [];
   private menuChildren: NzTreeNodeOptions[] = [];
+
+  @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
 
   constructor(@Inject(DOCUMENT) _document?: any,
               private dynamicMenuService?: DynamicMenuService) {
     this.dynamicMenuChildren();
   }
 
-  ngOnInit() {
+  //TODO: Заменить хук на что нибудь нормальное
+  ngAfterContentChecked() {
+    if (this.widgetsContent && this.widgetsContent.nativeElement)
+      if (this.widgetsContent.nativeElement.offsetHeight < this.widgetsContent.nativeElement.scrollHeight ||
+        this.widgetsContent.nativeElement.offsetWidth < this.widgetsContent.nativeElement.scrollWidth)
+        this.menuOverflow$.next(false);
+      else this.menuOverflow$.next(true);
   }
 
   private dynamicMenuChildren() {
@@ -41,6 +57,20 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       });
     });
     this.navigationLoading = false;
+  }
+
+  public scrollRight(): void {
+    this.widgetsContent.nativeElement.scrollTo({
+      left: (this.widgetsContent.nativeElement.scrollLeft + 150),
+      behavior: 'smooth'
+    });
+  }
+
+  public scrollLeft(): void {
+    this.widgetsContent.nativeElement.scrollTo({
+      left: (this.widgetsContent.nativeElement.scrollLeft - 150),
+      behavior: 'smooth'
+    });
   }
 
   private getModuleAction(moduleActionsResponse: Array<ModuleActionsResponse>, moduleKey: string): void {
@@ -73,7 +103,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(moduleActionsResponse => this.getModuleAction(moduleActionsResponse, moduleKey))
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next();
