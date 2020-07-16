@@ -53,15 +53,15 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts';
-import { MenuComponent } from './menu/menu.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+
 //import {ContainerModule} from "../../shared/container-module/container.module";
-import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
-import {MenuModule} from "./menu/menu.module";
 import {NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
+import { FormLoaderModule } from './containers/form-loader/form-loader.module';
+import { FormLoaderComponent } from './containers/form-loader/form-loader.component';
 
 @NgModule({
   imports: [
@@ -79,9 +79,9 @@ import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-na
     ChartsModule,
     HttpClientModule,
     HttpModule,
-    MenuModule,
+    FormLoaderModule,
     NzTreeModule,
-    NzIconModule
+    NzIconModule,
   ],
   declarations: [
     AppComponent,
@@ -90,9 +90,7 @@ import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-na
     P500Component,
     LoginComponent,
     RegisterComponent,
-    FormLoaderComponent,
-    SidebarNavigationComponent
-    //MenuComponent,
+    SidebarNavigationComponent,
   ],
   providers: [
     {

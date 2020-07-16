@@ -10,7 +10,7 @@ import {DOCUMENT} from '@angular/common';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {BehaviorSubject, Subject} from "rxjs";
 import {takeUntil, tap} from "rxjs/operators";
-import {ModuleActionsResponse} from "../../models/ModuleActionsResponse";
+import {ModuleActionsResponse, ModuleActionType} from "../../models/ModuleActionsResponse";
 import {NzTreeNodeOptions} from "ng-zorro-antd";
 
 
@@ -24,7 +24,7 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   private menuOverflow$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject();
   private activeModules = [];
-  private menuChildren: NzTreeNodeOptions[] = [];
+  private moduleMenuChildren: NzTreeNodeOptions[] = [];
 
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
 
@@ -73,26 +73,27 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
     });
   }
 
-  private getModuleAction(moduleActionsResponse: Array<ModuleActionsResponse>, moduleKey: string): void {
-    this.menuChildren = [];
-    moduleActionsResponse.forEach((mar, i) => {
-      this.menuChildren.push({
+
+  private getModuleAction(moduleActionsResponse: ModuleActionsResponse[], moduleKey: string) {
+    this.moduleMenuChildren = [];
+    moduleActionsResponse.forEach(mar => {
+      this.moduleMenuChildren.push({
         title: mar.displayName,
-        key: `${moduleKey}/${mar.actionName}`,
         expanded: false,
-        children: this.getNzNavChildren(mar, `${moduleKey}/${mar.actionName}`),
+        key: mar.type === ModuleActionType.ROOT ? null : `${moduleKey}/${mar.actionName}`,
+        children: mar.type === ModuleActionType.ROOT ? this.getModuleActionChildren(mar, moduleKey, mar.actionName) : null
       });
-    });
+    })
   }
 
-  private getNzNavChildren(moduleAction: ModuleActionsResponse, parentKey: string): NzTreeNodeOptions[] {
-    let children = [];
+  getModuleActionChildren(moduleAction: ModuleActionsResponse, moduleKey: string, parentKey: string,): NzTreeNodeOptions[] {
+    let children: NzTreeNodeOptions[] = [];
     moduleAction.childActions.forEach(childAction => {
       children.push({
         title: childAction.displayName,
-        key: `${parentKey}.${childAction.actionName}`,
         expanded: false,
-        children: this.getNzNavChildren(childAction, `${parentKey}.${childAction.actionName}`),
+        key: childAction.type === ModuleActionType.ROOT ? null : `${moduleKey}/${parentKey}.${childAction.actionName}`,
+        children: childAction.type === ModuleActionType.ROOT ? this.getModuleActionChildren(childAction, moduleKey, childAction.actionName) : null
       })
     });
     return children.length ? children : null;
@@ -101,7 +102,9 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   private moduleClicked(nodeName: string, moduleKey: string) {
     this.dynamicMenuService.getModuleActions(nodeName)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(moduleActionsResponse => this.getModuleAction(moduleActionsResponse, moduleKey))
+      .subscribe(moduleActionsResponse => {
+        this.getModuleAction(moduleActionsResponse, moduleKey);
+      })
   }
 
   ngOnDestroy(): void {
