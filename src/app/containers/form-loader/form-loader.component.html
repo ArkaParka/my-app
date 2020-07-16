@@ -1,0 +1,11 @@
+<div class="text-center">
+    <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
+</div>
+<div *ngIf="!isFormLoading">
+    <div *ngIf="viewType == 'BaseTableVew'">
+        <app-base-table-view [dataForComponent]="dataForComponent"></app-base-table-view>
+    </div>
+    <div *ngIf="viewType == 'BaseDynamicView'">
+        <app-base-dynamic-view></app-base-dynamic-view>
+    </div>
+</div>

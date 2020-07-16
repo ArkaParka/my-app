@@ -1,30 +1,35 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-
-import {MenuRoutingModule} from './menu-routing.module';
-import {MenuComponent} from './menu.component';
+import {FormLoaderRoutingModule} from './form-loader-routing.module';
 import {AgGridModule} from 'ag-grid-angular';
-import {SharedModule} from '../shared/shared.module';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {DynamicMenuServiceInterceptor} from "../services/dynamic-menu-service-interceptor";
 import {NzNotificationModule} from "ng-zorro-antd";
+import { SharedModule } from '../../shared/shared.module';
+import { FormLoaderComponent } from './form-loader.component';
+import { DynamicMenuServiceInterceptor } from '../../services/dynamic-menu-service-interceptor';
+import { MenuComponent } from '../../menu/menu.component';
+import { ContainerModule } from '../../../../shared/container-module/container.module';
 
 @NgModule({
   imports: [
     SharedModule,
     CommonModule,
-    MenuRoutingModule,
+    FormLoaderRoutingModule,
     AgGridModule.withComponents([]),
     NzTableModule,
     NzNotificationModule,
     ScrollingModule,
     DragDropModule,
+    ContainerModule,
   ],
-  declarations: [MenuComponent],
+  declarations: [
+    FormLoaderComponent,
+    MenuComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -33,5 +38,5 @@ import {NzNotificationModule} from "ng-zorro-antd";
     },
   ]
 })
-export class MenuModule {
+export class FormLoaderModule {
 }
