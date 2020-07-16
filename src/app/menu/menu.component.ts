@@ -88,7 +88,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
-    console.log('Данные для компонента', data);
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
     this.pageConfigurationCb(data.pageConfiguration);
