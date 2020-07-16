@@ -12,6 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormLoaderComponent } from './form-loader.component';
 import { DynamicMenuServiceInterceptor } from '../../services/dynamic-menu-service-interceptor';
 import { MenuComponent } from '../../menu/menu.component';
+import { ContainerModule } from '../../../../shared/container-module/container.module';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { MenuComponent } from '../../menu/menu.component';
     NzNotificationModule,
     ScrollingModule,
     DragDropModule,
+    ContainerModule,
   ],
   declarations: [
     FormLoaderComponent,

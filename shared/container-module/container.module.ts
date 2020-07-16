@@ -26,7 +26,7 @@ import {ElementContainerComponent} from "./components/avaiableComponents/element
   imports: [
     CommonModule,
     SharedModule,
-    ContainerRouting,
+    //ContainerRouting,
     NzTreeModule,
     NzTabsModule,
     NzDropDownModule,
