@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GridContainerComponent} from './components/grid-container/grid-container.component';
 import {GridItemComponent} from './components/grid-item/grid-item.component';
-import {DynamicLayoutExampleComponent} from "./components/dynamic-layout/dynamic-layout-example.component";
+import {DynamicLayoutComponent} from "./components/dynamic-layout/dynamic-layout-example.component";
 import {ContainerRouting} from "./container.routing";
 import {
   DynamicComponentDirective,
@@ -26,7 +26,7 @@ import {ElementContainerComponent} from "./components/avaiableComponents/element
   imports: [
     CommonModule,
     SharedModule,
-    //ContainerRouting,
+    ContainerRouting,
     NzTreeModule,
     NzTabsModule,
     NzDropDownModule,
@@ -36,7 +36,7 @@ import {ElementContainerComponent} from "./components/avaiableComponents/element
   declarations: [
     GridContainerComponent,
     DynamicComponentDirective,
-    DynamicLayoutExampleComponent,
+    DynamicLayoutComponent,
     GridItemComponent,
     TestComponent,
     ProjectsComponent,
@@ -47,6 +47,7 @@ import {ElementContainerComponent} from "./components/avaiableComponents/element
     ElementContainerComponent
   ],
   exports: [
+    DynamicLayoutComponent,
     GridContainerComponent,
     NzTreeModule,
     NzTabsModule,

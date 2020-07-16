@@ -4,11 +4,11 @@ import {DynamicLayoutConfig} from "../../../../src/app/models/DynamicLayoutConfi
 import {GridLayoutService} from "./grid-layout.service";
 
 @Component({
-  selector: 'app-form-loader',
+  selector: 'app-base-dynamic-view',
   templateUrl: './dynamic-layout-example.component.html',
   styleUrls: ['./dynamic-layout-example.component.scss']
 })
-export class DynamicLayoutExampleComponent {
+export class DynamicLayoutComponent {
 
   gridTemplate: DynamicLayoutConfig;
   isLoading: boolean = true;

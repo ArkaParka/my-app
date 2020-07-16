@@ -41,7 +41,6 @@ export class FormLoaderComponent {
       takeUntil(this.destroy$)
     )
     .subscribe(resp =>{
-      console.log('ОТвет от сервера',  resp);
       this.dataForComponent = {
         moduleKey: this.moduleKey,
         configPath: this.configPath,
