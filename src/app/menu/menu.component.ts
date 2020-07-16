@@ -1,11 +1,10 @@
-import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy, Input} from '@angular/core';
 import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
 import {Actions, FormActionTypes} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
-import {ActivatedRoute} from '@angular/router';
 import {
   NzTableQueryParams,
   NzTableFilterFn,
@@ -35,6 +34,7 @@ interface ColumnItem {
 }
 
 @Component({
+  selector: 'app-base-table-view',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
@@ -87,19 +87,14 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-
-  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.pipe(
-      switchMap((params) => {
-        this.isFormLoading = true;
-        this.moduleKey = params['moduleKey'];
-        this.configPath = params['configPath'];
-        return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
-      }),
-      takeUntil(this.destroy$)
-    )
-      .subscribe(resp => this.pageConfigurationCb(resp));
+  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
+    console.log('Данные для компонента', data);
+    this.moduleKey = data.moduleKey;
+    this.configPath = data.configPath;
+    this.pageConfigurationCb(data.pageConfiguration);
   }
+
+  constructor(private dynamicMenuService: DynamicMenuService) {}
 
   updateCheckedSet(item: string, checked: boolean): void {
     if (checked) {
