@@ -4,3 +4,9 @@ export class ModuleActionsResponse {
   type: string;
   childActions: Array<ModuleActionsResponse>;
 }
+
+export enum ModuleActionType {
+  ROOT = 'ROOT',
+  PAGE = 'PAGE',
+  ACTION = 'ACTION'
+}
