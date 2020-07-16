@@ -25,7 +25,6 @@ export class HeaderForProductsComponent {
 
   getListItems(event) {
     this.headerForProductsService.getListItems(event.target.value).subscribe(data => {
-      console.log('Эвент с кнопки', data);
       this.listItems = data;
     });
   }
