@@ -4,36 +4,43 @@ import { FieldType } from '@ngx-formly/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
-    selector: 'select-with-search',
+    selector: 'custom-datepicker',
     template: `
     <legend *ngIf="to.label">{{ to.label }}</legend>
     <legend *ngIf="to.description">{{ to.description }}</legend>
     <nz-date-picker
       [nzShowTime]="showTime"
-      nzFormat="yyyy-MM-dd HH:mm"
+      nzFormat="dd.MM.yyyy"
       nzPlaceHolder="Выберите дату/время"
       ngModel
       (ngModelChange)="onChange($event)"
-      (nzOnOk)="onOk($event)"
+      (nzOnOk)="onChange($event)"
     ></nz-date-picker>
     `
 })
-export class CustomDataPickerbComponent extends FieldType implements OnInit {
+export class CustomDatePickerbComponent extends FieldType implements OnInit {
 
-    public showTime = false;
+    public showTime: any = false;
 
     constructor() {
         super();
     }
 
     ngOnInit(): void {
-        //{ nzFormat: 'HH:mm' }
+        if ((this.field as any).widgetOptions.showTime == true) {
+            this.showTime = { nzFormat: 'HH:mm' };
+        }
     }
 
-    public onOk(result: Date | Date[] | null): void {
-        this.formControl.setValue(result);
-    }
+    public onChange(result: Date | Date[] | null): void {
+        if (result) {
+            console.log('Selected Time: ', result);
+            //TODO: уточнить нужный формат даты и времени для передачи на сервер
+            this.formControl.setValue(result);
+        }
+      }
 
 }
