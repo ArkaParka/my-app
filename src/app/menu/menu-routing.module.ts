@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FormLoaderComponent } from './form-loader.component';
+import { MenuComponent } from './menu.component';
 
 const routes: Routes = [
   {  
@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: 'form-loader/:moduleKey/:configPath',
-        component: FormLoaderComponent
+        component: MenuComponent
         }
     ]
   }
@@ -21,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FormLoaderRoutingModule {}
+export class MenuRoutingModule {}
