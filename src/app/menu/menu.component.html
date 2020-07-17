@@ -10,44 +10,42 @@
   <ng-container *ngTemplateOutlet="dynamicButtons; context: action"></ng-container>
 </div>
 
-  <nz-table
-    nzBordered
-    nzShowSizeChanger
-    nzSize="small"
-    [nzData]="listOfModuleData"
-    [nzFrontPagination]="false"
-    [nzLoading]="loadingTable"
-    [nzTotal]="total"
-    [nzPageSize]="pageSize"
-    [nzPageIndex]="pageIndex"
-    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
-    (nzQueryParams)="onQueryParamsChange($event)"
-  >
-    <thead>
-      <tr>
-        <th
-          class="fixedWidth"
-          [(nzChecked)]="checked"
-          [nzIndeterminate]="indeterminate"
-          (nzCheckedChange)="onAllChecked($event)"
-        ></th>
-        <th
-          *ngFor="let column of listOfColumns"
-          [nzColumnKey]="column.columnKey"
-          [nzSortFn]="column.sortFn"
-        >
-          {{column.name}}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of listOfModuleData">
-        <td [nzChecked]="setOfCheckedId.has(data[idFieldName])" (nzCheckedChange)="onItemChecked(data[idFieldName], $event)"></td>
-        <td *ngFor="let property of data | keyvalue: originalOrder">{{property.value}}</td>
-      </tr>
-    </tbody>
-  </nz-table>
-</div>
+<nz-table
+  nzBordered
+  nzShowSizeChanger
+  nzSize="small"
+  [nzData]="listOfModuleData"
+  [nzFrontPagination]="false"
+  [nzLoading]="loadingTable"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+    <tr>
+      <th
+        [(nzChecked)]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th
+        *ngFor="let column of listOfColumns"
+        [nzColumnKey]="column.columnKey"
+        [nzSortFn]="column.sortFn"
+      >
+        {{column.name}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfModuleData">
+      <td [nzChecked]="setOfCheckedId.has(data[idFieldName])" (nzCheckedChange)="onItemChecked(data[idFieldName], $event)"></td>
+      <td *ngFor="let property of data | keyvalue: originalOrder">{{property.value}}</td>
+    </tr>
+  </tbody>
+</nz-table>
 
 <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
