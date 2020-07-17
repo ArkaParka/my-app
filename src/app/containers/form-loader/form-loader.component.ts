@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import { ModulePageConfiguration } from '../../models/ModulePageConfiguration.interface';
 import { Subject } from 'rxjs';
@@ -10,7 +10,7 @@ import { DynamicMenuService } from '../../services/dynamic-menu.service';
   templateUrl: './form-loader.component.html',
   styleUrls: ['./form-loader.component.scss']
 })
-export class FormLoaderComponent {
+export class FormLoaderComponent implements OnDestroy{
 
   moduleKey: string;
   configPath: string;
@@ -20,7 +20,6 @@ export class FormLoaderComponent {
     configPath: string,
     pageConfiguration: ModulePageConfiguration
   };
-  //public pageConfiguration: ModulePageConfiguration;
   public isFormLoading: boolean = true;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -41,15 +40,12 @@ export class FormLoaderComponent {
       takeUntil(this.destroy$)
     )
     .subscribe(resp =>{
-      console.log('ОТвет от сервера',  resp);
       this.dataForComponent = {
         moduleKey: this.moduleKey,
         configPath: this.configPath,
         pageConfiguration: resp
       };
-      this.viewType = resp.viewConfig.type; 
+      this.viewType = resp.viewConfig.type;
     });
   }
-
-
 }
