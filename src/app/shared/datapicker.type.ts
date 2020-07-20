@@ -30,9 +30,8 @@ export class CustomDatePickerbComponent extends FieldType implements OnInit {
         }
     }
 
-    public onChange(result: string): void {
+    public onChange(result: Date | Date[] | null): void {
         if (result) {
-            console.log('Selected Time: ', result);
             if ((this.field as any).widgetOptions.showTime == true) {
                 this.formControl.setValue(result.toLocaleString().substring(0, 10));
             } else  this.formControl.setValue(result.toLocaleString());
