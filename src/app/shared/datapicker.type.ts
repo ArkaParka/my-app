@@ -1,10 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
-import { IfStmt } from '@angular/compiler';
 
 @Component({
     selector: 'custom-datepicker',
@@ -37,9 +32,9 @@ export class CustomDatePickerbComponent extends FieldType implements OnInit {
 
     public onChange(result: Date | Date[] | null): void {
         if (result) {
-            console.log('Selected Time: ', result);
-            //TODO: уточнить нужный формат даты и времени для передачи на сервер
-            this.formControl.setValue(result);
+            if ((this.field as any).widgetOptions.showTime == true) {
+                this.formControl.setValue(result.toLocaleString().substring(0, 10));
+            } else  this.formControl.setValue(result.toLocaleString());
         }
       }
 
