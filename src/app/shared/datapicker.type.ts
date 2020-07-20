@@ -1,10 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DynamicMenuService } from '../services/dynamic-menu.service';
 import { FieldType } from '@ngx-formly/core';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, filter, tap, takeUntil } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
-import { IfStmt } from '@angular/compiler';
 
 @Component({
     selector: 'custom-datepicker',
