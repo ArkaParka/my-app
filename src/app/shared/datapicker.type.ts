@@ -35,11 +35,12 @@ export class CustomDatePickerbComponent extends FieldType implements OnInit {
         }
     }
 
-    public onChange(result: Date | Date[] | null): void {
+    public onChange(result: string): void {
         if (result) {
             console.log('Selected Time: ', result);
-            //TODO: уточнить нужный формат даты и времени для передачи на сервер
-            this.formControl.setValue(result);
+            if ((this.field as any).widgetOptions.showTime == true) {
+                this.formControl.setValue(result.toLocaleString().substring(0, 10));
+            } else  this.formControl.setValue(result.toLocaleString());
         }
       }
 
