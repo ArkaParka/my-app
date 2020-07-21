@@ -20,7 +20,7 @@ import {Forms} from "../models/Forms.interface";
 import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import { KeyValue } from '@angular/common';
+import {KeyValue} from '@angular/common';
 
 interface ColumnItem {
   name: string;
@@ -87,13 +87,15 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
+
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
     this.pageConfigurationCb(data.pageConfiguration);
   }
 
-  constructor(private dynamicMenuService: DynamicMenuService) {}
+  constructor(private dynamicMenuService: DynamicMenuService) {
+  }
 
   updateCheckedSet(item: string, checked: boolean): void {
     if (checked) {
@@ -201,7 +203,6 @@ export class MenuComponent implements OnInit, OnDestroy {
       fieldGroup: fieldGroup,
       fieldGroupClassName: schema[0].fieldGroupClassName
     });
-
     return result;
   }
 
@@ -241,7 +242,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         ],
         emails: [null]
       };
-      if(this.model.phoneInfos && this.model.emails) {
+      if (this.model.phoneInfos && this.model.emails) {
         this.model = testModel;
       }
 
@@ -267,7 +268,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+  originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
     return 0;
   }
 
@@ -294,7 +295,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       ];
     }
 
-    pageIndex = pageIndex != 0 ? pageIndex- 1 : pageIndex;
+    pageIndex = pageIndex != 0 ? pageIndex - 1 : pageIndex;
 
     const bodyForGetModuleData = {
       action_name: this.configPath,
