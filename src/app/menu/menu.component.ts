@@ -188,16 +188,26 @@ export class MenuComponent implements OnInit, OnDestroy {
     return newField;
   }
 
+  getFieldGroupArray(fieldGroup: FieldGroup[], actionType: string) {
+    return fieldGroup.map(fg => {
+      let field = cloneDeep(fg.defaultProperties);
+
+      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
+
+      if (field.fieldArray && field.fieldArray.fieldGroup && field.fieldArray.fieldGroup.length) {
+        let fieldArray = cloneDeep(field.fieldArray);
+        field.fieldArray.fieldGroup = this.getFieldGroupArray(fieldArray.fieldGroup, actionType);
+      }
+
+      return field;
+    });
+  }
 
   generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
     let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
 
-    fieldGroup = fieldGroup.map(fg => {
-      let field = cloneDeep(fg.defaultProperties);
-      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
-      return field;
-    });
+    fieldGroup = this.getFieldGroupArray(fieldGroup, actionType);
 
     result.push({
       fieldGroup: fieldGroup,
@@ -367,7 +377,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   private deleteFormDataInstance(typeForm: string): void {
     let deleteRequest = [];
-    console.log('Элементы для удаления', this.multy_id);
     this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
 
     zip(...deleteRequest).pipe(
