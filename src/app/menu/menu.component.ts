@@ -1,11 +1,10 @@
-import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy} from '@angular/core';
+import {Component, OnInit, HostListener, ViewChild, ElementRef, OnDestroy, Input} from '@angular/core';
 import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
 import {Actions, FormActionTypes} from '../models/Actions.interface';
 import {DataTypes} from '../models/DataTypes.interface';
-import {ActivatedRoute} from '@angular/router';
 import {
   NzTableQueryParams,
   NzTableFilterFn,
@@ -21,7 +20,7 @@ import {Forms} from "../models/Forms.interface";
 import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import {clone} from "@ngx-formly/core/lib/utils";
+import { KeyValue } from '@angular/common';
 
 interface ColumnItem {
   name: string;
@@ -35,17 +34,12 @@ interface ColumnItem {
 }
 
 @Component({
+  selector: 'app-base-table-view',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
 
 export class MenuComponent implements OnInit, OnDestroy {
-  testModel = {
-    phoneInfos: [
-      {type: null, phone: null}
-    ],
-    emails: [null]
-  };
 
   moduleKey: string;
   configPath: string;
@@ -58,6 +52,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
+  //TODO: заменить any на нормальную модель
   public putFormData: any = {};
   private hash: string = null;
   private idFieldName = null;
@@ -67,8 +62,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   private typeForm;
   public viewConfig;
   public options: FormlyFormOptions = {};
-  private REQ_ONE;
-  private REQ_MULTY;
+  private REQ_ONE = false;
+  private REQ_MULTY = false;
   private one_id: string = null;
   private multy_id: string[] = [];
 
@@ -92,19 +87,13 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
-
-  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {
-    route.params.pipe(
-      switchMap((params) => {
-        this.isFormLoading = true;
-        this.moduleKey = params['moduleKey'];
-        this.configPath = params['configPath'];
-        return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
-      }),
-      takeUntil(this.destroy$)
-    )
-      .subscribe(resp => this.pageConfigurationCb(resp));
+  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
+    this.moduleKey = data.moduleKey;
+    this.configPath = data.configPath;
+    this.pageConfigurationCb(data.pageConfiguration);
   }
+
+  constructor(private dynamicMenuService: DynamicMenuService) {}
 
   updateCheckedSet(item: string, checked: boolean): void {
     if (checked) {
@@ -178,10 +167,6 @@ export class MenuComponent implements OnInit, OnDestroy {
             if (e.target.value === FormActionTypes.UPDATE) {
               this.getFormDataInstance(this.typeForm);
             }
-            if (e.target.value === FormActionTypes.CREATE) {
-              console.log("CREATE-FIELDS",this.fields)
-              console.log("CREATE-MODEL",this.model)
-            }
             this.largeModal.show();
           }
         }
@@ -201,40 +186,28 @@ export class MenuComponent implements OnInit, OnDestroy {
     return newField;
   }
 
-  getFieldGroupArray(fieldGroup: FieldGroup[], actionType: string) {
-    return fieldGroup.map(fg => {
-      let field = cloneDeep(fg.defaultProperties);
-
-      if (field.type === 'array') console.log("old", field)
-
-      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
-
-      if (field.fieldArray && field.fieldArray.fieldGroup && field.fieldArray.fieldGroup.length) {
-        let fieldArray = cloneDeep(field.fieldArray);
-        field.fieldArray.fieldGroup = this.getFieldGroupArray(fieldArray.fieldGroup, actionType);
-      }
-
-      if (field.type === 'array') console.log("new", field)
-
-      return field;
-    });
-  }
 
   generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
     let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
 
-    fieldGroup = this.getFieldGroupArray(fieldGroup, actionType);
+    fieldGroup = fieldGroup.map(fg => {
+      let field = cloneDeep(fg.defaultProperties);
+      field = this.modifyFormlyField(field, fg.additionalProperties, actionType);
+      return field;
+    });
 
     result.push({
       fieldGroup: fieldGroup,
       fieldGroupClassName: schema[0].fieldGroupClassName
     });
+
     return result;
   }
 
 
   ngOnInit(): void {
+
   }
 
   disableFunc(type: string): boolean {
@@ -262,7 +235,16 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.makeListOfColumns(this.viewConfig?.config);
       this.idFieldName = this.viewConfig.config.idFieldName;
 
-      // this.model = cloneDeep(this.testModel);
+      const testModel = {
+        phoneInfos: [
+          {type: null, phone: null}
+        ],
+        emails: [null]
+      };
+      if(this.model.phoneInfos && this.model.emails) {
+        this.model = testModel;
+      }
+
 
       this.isFormLoading = false;
     }
@@ -285,24 +267,39 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
   }
 
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
+
   getModuleDataCb = (data: ModuleData) => {
     this.loadingTable = false;
     this.total = data.total_size;
     this.listOfModuleData = data.data;
   };
 
-  addData(pageIndex: number,
-          pageSize: number,
-          sortField: string | null,
-          sortOrder: string | null) {
-    const bodyForGetModuleData = {
-      action_name: this.configPath,
-      order_info: [
+  addData(pageIndex: number, pageSize: number, sortField: string | null, sortOrder: string | null) {
+    this.multy_id = [];
+    this.REQ_MULTY = false;
+    this.one_id = null;
+    this.REQ_ONE = false;
+    this.setOfCheckedId.clear();
+
+    let sort = [];
+    if (sortField && sortOrder) {
+      sort = [
         {
           field_path: sortField,
           order: sortOrder
         }
-      ],
+      ];
+    }
+
+    pageIndex = pageIndex != 0 ? pageIndex- 1 : pageIndex;
+
+    const bodyForGetModuleData = {
+      action_name: this.configPath,
+      order_info: sort,
+      page_filters: [],
       page_info: {
         pageIndex: pageIndex,
         pageSize: pageSize
@@ -316,11 +313,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   public hideForm(): void {
-    console.log(cloneDeep(this.model))
     this.form.reset();
     this.id = null;
     this.fields = null;
-    // this.model = cloneDeep(this.testModel);
     this.largeModal.hide();
   }
 
@@ -330,22 +325,18 @@ export class MenuComponent implements OnInit, OnDestroy {
     } else {
       this.putFormDataInstance();
     }
-    this.hideForm();
+    this.largeModal.hide();
+    this.fields = null;
   }
 
   private getFormDataInstance(typeForm: string): void {
     this.isModalDataLoading = true;
     this.dynamicMenuService.getFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, this.one_id).subscribe(data => {
-      // this.model = data.data;
+      this.model = data.data;
       this.hash = data.hash;
       this.id = data.id;
-      // this.model = cloneDeep(this.testModel)
-      // this.model.phoneInfos = cloneDeep(this.testModel.phoneInfos);
-      // this.model.emails = cloneDeep(this.testModel.emails);
-
-      console.log("EDIT-FIELDS",this.fields)
-      console.log("EDIT-MODEL",this.model)
-      // this.options.resetModel();
+      this.model.phoneInfos = this.model.phoneInfos?.length > 0 ? this.model.phoneInfos : [{type: null, phone: null}];
+      this.model.emails = this.model.emails?.length > 0 ? this.model.emails : [null];
       this.isModalDataLoading = false;
     });
   }
@@ -367,7 +358,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.dynamicMenuService.putFormDataInstance(this.moduleKey, this.bodyForRequest).pipe(
       switchMap(data => {
         this.updateCheckedSet(data.id, null);
-        return this.addData(this.pageIndex, this.pageSize, null, null);
+        return this.addData(this.pageIndex - 1, this.pageSize, null, null);
       }),
       takeUntil(this.destroy$)
     ).subscribe((result) => this.getModuleDataCb(result));
@@ -375,6 +366,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   private deleteFormDataInstance(typeForm: string): void {
     let deleteRequest = [];
+    console.log('Элементы для удаления', this.multy_id);
     this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
 
     zip(...deleteRequest).pipe(
@@ -394,13 +386,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.pageIndex = pageIndex;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
+    let sortOrder = (currentSort && currentSort.value) || null;
+    if (sortOrder) sortOrder = sortOrder.replace(/end/i, '').toUpperCase();
     this.addData(pageIndex, pageSize, sortField, sortOrder)
       .pipe(takeUntil(this.destroy$))
       .subscribe(result => this.getModuleDataCb(result));
-  }
-
-  modelChanged(event) {
-    console.log(event)
   }
 }

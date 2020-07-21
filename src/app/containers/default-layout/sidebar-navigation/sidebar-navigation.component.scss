@@ -2,13 +2,15 @@
   nz-tree {
     background-color: rgb(35, 40, 44);
 
-    nz-tree-node {
-      background-color: rgba(0, 0, 0, 0.2);
+    nz-tree-node::ng-deep {
       transition: none !important;
       -webkit-transition: none !important;
       -moz-transition: none !important;
       -o-transition: none !important;
+    }
 
+    nz-tree-node {
+      background-color: rgba(0, 0, 0, 0.2);
       align-items: center !important;
       min-height: 50px !important;
       padding: 10px 16px !important;
@@ -18,12 +20,11 @@
       background-color: #20A8D8 !important;
     }
 
-    nz-tree-node-title {
-      -webkit-transition: none !important;
-      -moz-transition: none !important;
-      -o-transition: none !important;
-      transition: none !important;
+    nz-tree-node.ant-tree-treenode-checkbox-checked {
+      background-color: #1c6c91 !important;
+    }
 
+    nz-tree-node-title {
       padding: 0 !important;
       color: white !important;
       background-color: transparent !important;

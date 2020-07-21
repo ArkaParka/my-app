@@ -32,6 +32,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
 import { SearchDefaultComponent } from './select-with-search-default.type';
+import { CustomDatePickerbComponent } from './datapicker.type';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 export function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   return `should NOT have fewer than ${field.templateOptions.minItems} items`;
@@ -178,6 +180,7 @@ export function constValidationMessage(err, field: FormlyFieldConfig) {
         { name: 'object', component: ObjectTypeComponent },
         { name: 'custom-select-with-search', component: CustomSelectTypeComponent },
         { name: 'select-with-search', component: SearchDefaultComponent },
+        { name: 'datepicker', component: CustomDatePickerbComponent },
       ],
     }),
     FormlyBootstrapModule,
@@ -188,7 +191,8 @@ export function constValidationMessage(err, field: FormlyFieldConfig) {
     MatIconModule,
     NgSelectModule,
     NgOptionHighlightModule,
-    FormsModule
+    FormsModule,
+    NzDatePickerModule
   ],
   declarations: [
     NullTypeComponent,
@@ -202,7 +206,8 @@ export function constValidationMessage(err, field: FormlyFieldConfig) {
     CustomGridTypeComponent,
     DatatableType,
     CustomSelectTypeComponent,
-    SearchDefaultComponent
+    SearchDefaultComponent,
+    CustomDatePickerbComponent
   ],
   exports: [
     ReactiveFormsModule,
@@ -222,6 +227,7 @@ export function constValidationMessage(err, field: FormlyFieldConfig) {
     AgGridModule,
     ModalModule,
     NgSelectModule,
+    NzDatePickerModule,
     NgOptionHighlightModule,
     FormsModule
   ]

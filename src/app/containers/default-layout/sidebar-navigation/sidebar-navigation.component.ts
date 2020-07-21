@@ -1,6 +1,13 @@
-import {Component, HostBinding, Input, ViewEncapsulation} from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  Input,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
 import {Router} from "@angular/router";
-import {NzTreeNodeOptions} from "ng-zorro-antd";
+import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
 
 @Component({
   selector: 'app-sidebar-nav-custom',
@@ -9,19 +16,51 @@ import {NzTreeNodeOptions} from "ng-zorro-antd";
   encapsulation: ViewEncapsulation.None
 })
 export class SidebarNavigationComponent {
-  @Input('navData') navData: NzTreeNodeOptions[] = [];
-  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
+  private _navData: NzTreeNodeOptions[] = [];
 
-  constructor(private router?: Router) {
+  @Input('navData') set navData(value: NzTreeNodeOptions[]) {
+    this._navData = value;
+    this.cd.detectChanges();
+  };
+
+  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
+  @ViewChild('tree') nzTree: NzTreeComponent;
+
+  get navData(): NzTreeNodeOptions[] {
+    return this._navData;
   }
 
+  constructor(private router?: Router, private cd?: ChangeDetectorRef) {
+  }
 
   nzNavItemClicked(e): void {
     if (e.node.children && e.node.children.length) {
       e.node.isExpanded = !e.node.isExpanded;
     } else {
+      this.nzTree.getTreeNodes().forEach(node => this.switchOffCheckedNodes(node));
+      [e.node, ...this.getNodeParents(e.node)].forEach((node: NzTreeNode) => {
+        node.isChecked = true;
+      });
+
       let route = e.node.key.split("/").filter(r => r !== "");
       this.router.navigate(route);
     }
+  }
+
+  getNodeParents(node: NzTreeNode) {
+    return node.parentNode
+      ? [node.parentNode, ...this.getNodeParents(node.parentNode)]
+      : [];
+  }
+
+  getNodeWithChildren(node: NzTreeNode): NzTreeNode[] {
+    let array = [node];
+    node.children.forEach(childNode => array.push(...this.getNodeWithChildren(childNode)));
+    return array;
+  }
+
+  switchOffCheckedNodes(node: NzTreeNode) {
+    node.isChecked = false;
+    node.children.forEach(childNode => this.switchOffCheckedNodes(childNode));
   }
 }

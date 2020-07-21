@@ -30,6 +30,7 @@
     <thead>
       <tr>
         <th
+          class="fixedWidth"
           [(nzChecked)]="checked"
           [nzIndeterminate]="indeterminate"
           (nzCheckedChange)="onAllChecked($event)"
@@ -39,16 +40,14 @@
           [nzColumnKey]="column.columnKey"
           [nzSortFn]="column.sortFn"
         >
-          {{ column.name }}
+          {{column.name}}
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of listOfModuleData">
-        <td [nzChecked]="setOfCheckedId.has(data.login)" (nzCheckedChange)="onItemChecked(data.login, $event)"></td>
-        <td>{{ data.login }}</td>
-        <td>{{ data.fullName }}</td>
-        <td>{{ data.status }}</td>
+        <td [nzChecked]="setOfCheckedId.has(data[idFieldName])" (nzCheckedChange)="onItemChecked(data[idFieldName], $event)"></td>
+        <td *ngFor="let property of data | keyvalue: originalOrder">{{property.value}}</td>
       </tr>
     </tbody>
   </nz-table>
