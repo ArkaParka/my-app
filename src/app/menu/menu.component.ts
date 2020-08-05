@@ -21,6 +21,8 @@ import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {KeyValue} from '@angular/common';
+import {ISelectableParent} from "../models/ISelectableParent";
+import {FieldGroupAdditionalProperties} from "../models/FieldGroupAdditionalProperties";
 
 interface ColumnItem {
   name: string;
@@ -176,13 +178,25 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  modifyFormlyField(field, additionalProperties, actionType) {
+  modifyFormlyField(field, additionalProperties: FieldGroupAdditionalProperties, actionType) {
     let newField = cloneDeep(field);
     if (additionalProperties) {
       if (additionalProperties.readOnly && additionalProperties.readOnly.length) {
         if (additionalProperties.readOnly.includes(actionType)) {
           newField.templateOptions.readonly = true;
         }
+      }
+      if (additionalProperties.parentFields && additionalProperties.parentFields.length) {
+        let fieldParents: ISelectableParent[] = [];
+        let disableValue: string = "";
+
+        additionalProperties.parentFields.forEach(parentField => {
+          disableValue += !disableValue.length ? `!model.${parentField}` : `&&!model.${parentField}`;
+          fieldParents.push({parentFieldName: parentField, parentFieldValue: null});
+        });
+
+        newField.expressionProperties = {...field.expressionProperties, 'templateOptions.disabled': disableValue};
+        newField.widgetOptions.parents = fieldParents;
       }
     }
     return newField;

@@ -1,3 +1,4 @@
 export interface FieldGroupAdditionalProperties {
-  readOnly?: string[]
+  readOnly?: string[],
+  parentFields?: string[]
 }
