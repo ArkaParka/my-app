@@ -4,9 +4,10 @@ import {Observable, throwError, of} from 'rxjs';
 import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
-import { tap, catchError } from 'rxjs/operators';
-import { ModulePageConfiguration } from '../models/ModulePageConfiguration.interface';
-import { ModuleData } from '../models/ModuleData.interface';
+import {tap, catchError} from 'rxjs/operators';
+import {ModulePageConfiguration} from '../models/ModulePageConfiguration.interface';
+import {ModuleData} from '../models/ModuleData.interface';
+import {ISelectableParent} from "../models/ISelectableParent";
 
 
 @Injectable({
@@ -38,8 +39,8 @@ export class DynamicMenuService {
     return this.http.post<ModuleData>(`/pbs/modules/${nodeName}/base/v1/data`, JSON.stringify(body), {headers});
   }
 
-  public findSelectableData(nodeName: string, endpoint: string, filter: string): Observable<any> {
-    return this.http.get(`/pbs/modules/${nodeName}/base/v1/selectable/${endpoint}/${filter}`);
+  public findSelectableData(nodeName: string, endpoint: string, filter: string, parents: ISelectableParent[]): Observable<any> {
+    return this.http.post(`/pbs/modules/${nodeName}/base/v1/selectable/${endpoint}/${filter}`, parents);
   };
 
   public putFormDataInstance(nodeName: string, body: object): Observable<any> {

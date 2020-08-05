@@ -21,6 +21,8 @@ import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {KeyValue} from '@angular/common';
+import {ISelectableParent} from "../models/ISelectableParent";
+import {FieldGroupAdditionalProperties} from "../models/FieldGroupAdditionalProperties";
 
 interface ColumnItem {
   name: string;
@@ -176,7 +178,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  modifyFormlyField(field, additionalProperties, actionType) {
+  modifyFormlyField(field, additionalProperties: FieldGroupAdditionalProperties, actionType) {
     let newField = cloneDeep(field);
     if (additionalProperties) {
       if (additionalProperties.readOnly && additionalProperties.readOnly.length) {
@@ -197,6 +199,21 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (field.fieldArray && field.fieldArray.fieldGroup && field.fieldArray.fieldGroup.length) {
         let fieldArray = cloneDeep(field.fieldArray);
         field.fieldArray.fieldGroup = this.getFieldGroupArray(fieldArray.fieldGroup, actionType);
+      }
+
+      //TODO: перенести этот код в formly компонент
+      if (field.type === 'select-with-search') {
+        if (field.widgetOptions.parentFields && field.widgetOptions.parentFields.value) {
+          let disableValue = "";
+          field.widgetOptions.parentFields.value.forEach(parentField => {
+            disableValue += !disableValue.length ? `!model.${parentField}` : `&&!model.${parentField}`;
+          });
+
+          field.expressionProperties = {
+            ...field.expressionProperties,
+            'templateOptions.disabled': disableValue
+          };
+        }
       }
 
       return field;
