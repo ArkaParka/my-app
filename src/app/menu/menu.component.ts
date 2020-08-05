@@ -186,18 +186,6 @@ export class MenuComponent implements OnInit, OnDestroy {
           newField.templateOptions.readonly = true;
         }
       }
-      if (additionalProperties.parentFields && additionalProperties.parentFields.length) {
-        let fieldParents: ISelectableParent[] = [];
-        let disableValue: string = "";
-
-        additionalProperties.parentFields.forEach(parentField => {
-          disableValue += !disableValue.length ? `!model.${parentField}` : `&&!model.${parentField}`;
-          fieldParents.push({parentFieldName: parentField, parentFieldValue: null});
-        });
-
-        newField.expressionProperties = {...field.expressionProperties, 'templateOptions.disabled': disableValue};
-        newField.widgetOptions.parents = fieldParents;
-      }
     }
     return newField;
   }
@@ -211,6 +199,21 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (field.fieldArray && field.fieldArray.fieldGroup && field.fieldArray.fieldGroup.length) {
         let fieldArray = cloneDeep(field.fieldArray);
         field.fieldArray.fieldGroup = this.getFieldGroupArray(fieldArray.fieldGroup, actionType);
+      }
+
+      //TODO: перенести этот код в formly компонент
+      if (field.type === 'select-with-search') {
+        if (field.widgetOptions.parentFields && field.widgetOptions.parentFields.value) {
+          let disableValue = "";
+          field.widgetOptions.parentFields.value.forEach(parentField => {
+            disableValue += !disableValue.length ? `!model.${parentField}` : `&&!model.${parentField}`;
+          });
+
+          field.expressionProperties = {
+            ...field.expressionProperties,
+            'templateOptions.disabled': disableValue
+          };
+        }
       }
 
       return field;

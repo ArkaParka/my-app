@@ -45,8 +45,8 @@ export class SearchDefaultComponent extends FieldType implements OnInit, OnDestr
       tap(() => this.itemsLoading$.next(true)),
       switchMap(value =>
         this.dynamicMenuService.findSelectableData(
-          (this.field as any).widgetOptions.module,
-          (this.field as any).widgetOptions.endPoint,
+          (this.field as any).widgetOptions.module.value,
+          (this.field as any).widgetOptions.endPoint.value,
           value, this.getParentSelectValues())
           .pipe(
             tap(() => this.itemsLoading$.next(false))
@@ -59,17 +59,35 @@ export class SearchDefaultComponent extends FieldType implements OnInit, OnDestr
 
   getParentSelectValues(): ISelectableParent[] {
     let result: ISelectableParent[] = [];
-    if ((this.field as any).widgetOptions.parents) {
-      (this.field as any).widgetOptions.parents.forEach((parent: ISelectableParent) => {
+    if ((this.field as any).widgetOptions.parentFields.value) {
+      (this.field as any).widgetOptions.parentFields.value.forEach(parent => {
         result.push({
-          parentFieldName: parent.parentFieldName,
-          parentFieldValue: this.model[`${parent.parentFieldName}`]
+          fieldName: parent,
+          fieldValue: this.model[`${parent}`]
         })
       });
     }
     return result;
   }
 
+  //TODO: разобраться, почему expressionProperties для филда не связаны с to.disabled
+  getDisableValue(): void {
+    if ((this.field as any).widgetOptions.parentFields.value) {
+      let disableValue = "";
+      (this.field as any).widgetOptions.parentFields.value.forEach(parentField => {
+        disableValue += !disableValue.length ? `!model.${parentField}` : `&&!model.${parentField}`;
+      });
+
+      this.field.expressionProperties = {
+        ...this.field.expressionProperties,
+        'templateOptions.disabled': disableValue
+      };
+
+      console.log(this.field)
+    }
+  }
+
+  //TODO: если в селекте будет выбран id=0, "model.field==false" => to.disabled будет true, найти способ пофиксить
   onChange($event) {
     this.formControl.setValue($event.id);
   }

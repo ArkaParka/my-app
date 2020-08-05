@@ -1,4 +1,4 @@
 export interface ISelectableParent {
-  parentFieldName: string,
-  parentFieldValue: any
+  fieldName: string,
+  fieldValue: any
 }
