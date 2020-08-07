@@ -25,11 +25,10 @@
     </div>
 
 
-
     <div #widgetsContent class="modules-list">
       <button *ngFor="let module of activeModules"
               class="btn btn-outline-secondary"
-              (click)="moduleClicked(module.nodeName, module.key)">{{module.title}}</button>
+              (click)="moduleClicked(module.nodeName, module.key, module.title)">{{module.title}}</button>
     </div>
 
     <div style="float: right">
@@ -46,13 +45,16 @@
 
   <div class="app-body">
     <app-sidebar #sidebar [fixed]="true" [display]="'lg'">
-      <app-sidebar-nav-custom [navData]="moduleMenuChildren"></app-sidebar-nav-custom>
+      <app-sidebar-nav-custom
+        [navData]="moduleMenuChildren"
+        (onNavItemClicked)="navItemClicked($event)"></app-sidebar-nav-custom>
     </app-sidebar>
 
     <main class="main">
 
-      <cui-breadcrumb>
-      </cui-breadcrumb>
+      <app-breadcrumbs
+        [currentModule]="breadcrumbsModule"
+        [modulePages]="breadcrumbsPages"></app-breadcrumbs>
 
       <div class="container-fluid">
         <router-outlet></router-outlet>

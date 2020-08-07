@@ -3,11 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { FormLoaderComponent } from './form-loader.component';
 
 const routes: Routes = [
-  {  
+  {
     path:'',
-    data: {
-      title: 'Штатная структура'
-    },
     children: [
       {
         path: 'form-loader/:moduleKey/:configPath',

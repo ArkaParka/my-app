@@ -11,7 +11,9 @@ import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {BehaviorSubject, Subject} from "rxjs";
 import {takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse, ModuleActionType} from "../../models/ModuleActionsResponse";
-import {NzTreeNodeOptions} from "ng-zorro-antd";
+import {NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
+import {ActivatedRoute, Router} from "@angular/router";
+import last from 'lodash/last'
 
 
 @Component({
@@ -26,10 +28,19 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   private activeModules = [];
   private moduleMenuChildren: NzTreeNodeOptions[] = [];
 
+  private breadcrumbsModule: string = null;
+  private breadcrumbsPages: NzTreeNode[] = [];
+
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
 
   constructor(@Inject(DOCUMENT) _document?: any,
-              private dynamicMenuService?: DynamicMenuService) {
+              private dynamicMenuService?: DynamicMenuService,
+              private router?: Router,
+              private route?:ActivatedRoute) {
+    this.route.params.pipe(
+      tap((params)=>{
+        console.log(params)})
+    ).subscribe()
     this.dynamicMenuChildren();
   }
 
@@ -45,10 +56,10 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   private dynamicMenuChildren() {
     this.dynamicMenuService.getModules()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(modulesResponse => this.getModules(modulesResponse));
+      .subscribe(modulesResponse => this.setActiveModules(modulesResponse));
   }
 
-  private getModules(modulesResponse): void {
+  private setActiveModules(modulesResponse): void {
     modulesResponse.forEach(mr => {
       this.activeModules.push({
         title: mr.module.moduleDisplayName,
@@ -99,9 +110,11 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
     return children.length ? children : null;
   }
 
-  private moduleClicked(nodeName: string, moduleKey: string) {
+  private moduleClicked(nodeName: string, moduleKey: string, moduleTitle: string) {
     this.dynamicMenuService.getModuleActions(nodeName)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        tap(() => this.breadcrumbsModule = moduleTitle))
       .subscribe(moduleActionsResponse => {
         this.getModuleAction(moduleActionsResponse, moduleKey);
       })
@@ -110,5 +123,15 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  navItemClicked($event: NzTreeNode[]) {
+    console.log($event)
+
+    this.breadcrumbsPages = [];
+    $event.forEach(node => this.breadcrumbsPages.push(node));
+
+    let route = last($event).key.split("/").filter(r => r !== "");
+    this.router.navigate(route);
   }
 }

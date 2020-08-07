@@ -1,8 +1,8 @@
 import {
   ChangeDetectorRef,
-  Component,
+  Component, EventEmitter,
   HostBinding,
-  Input,
+  Input, Output,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
@@ -23,14 +23,18 @@ export class SidebarNavigationComponent {
     this.cd.detectChanges();
   };
 
-  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
-  @ViewChild('tree') nzTree: NzTreeComponent;
-
   get navData(): NzTreeNodeOptions[] {
     return this._navData;
   }
 
-  constructor(private router?: Router, private cd?: ChangeDetectorRef) {
+  @Output() onNavItemClicked = new EventEmitter<NzTreeNode[]>();
+
+
+  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
+  @ViewChild('tree') nzTree: NzTreeComponent;
+
+
+  constructor(private cd?: ChangeDetectorRef) {
   }
 
   nzNavItemClicked(e): void {
@@ -38,18 +42,22 @@ export class SidebarNavigationComponent {
       e.node.isExpanded = !e.node.isExpanded;
     } else {
       this.nzTree.getTreeNodes().forEach(node => this.switchOffCheckedNodes(node));
-      [e.node, ...this.getNodeParents(e.node)].forEach((node: NzTreeNode) => {
+      let nodeWithParents = [...this.getNodeParents(e.node), e.node];
+
+      nodeWithParents.forEach((node: NzTreeNode) => {
         node.isChecked = true;
       });
 
-      let route = e.node.key.split("/").filter(r => r !== "");
-      this.router.navigate(route);
+
+      this.onNavItemClicked.emit(nodeWithParents);
+      // let route = e.node.key.split("/").filter(r => r !== "");
+      // this.router.navigate(route);
     }
   }
 
   getNodeParents(node: NzTreeNode) {
     return node.parentNode
-      ? [node.parentNode, ...this.getNodeParents(node.parentNode)]
+      ? [...this.getNodeParents(node.parentNode), node.parentNode]
       : [];
   }
 
