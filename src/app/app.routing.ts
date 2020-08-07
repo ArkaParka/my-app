@@ -61,8 +61,8 @@ export const routes: Routes = [
       //   component: FormLoaderComponent
       // },
       { //вот тут менюшка
-        path: '',
-        loadChildren: () => import('./containers/form-loader/form-loader.module').then(m => m.FormLoaderModule)
+        path: 'form-loader/:moduleKey/:configPath',
+        component: FormLoaderComponent
       },
       {
         path: 'datatable',

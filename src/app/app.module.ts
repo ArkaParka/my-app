@@ -60,6 +60,7 @@ import {HttpModule} from '@angular/http';
 import {NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/breadcurmbs-component";
+import {FormLoaderModule} from "./containers/form-loader/form-loader.module";
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/brea
     HttpClientModule,
     HttpModule,
     NzTreeModule,
-    NzIconModule
+    NzIconModule,
+    FormLoaderModule
   ],
   declarations: [
     AppComponent,
