@@ -4,12 +4,12 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
-  AfterContentChecked
+  AfterContentChecked, ChangeDetectorRef
 } from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {BehaviorSubject, Subject} from "rxjs";
-import {takeUntil, tap} from "rxjs/operators";
+import {map, switchMap, takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse, ModuleActionType} from "../../models/ModuleActionsResponse";
 import {NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -22,26 +22,43 @@ import last from 'lodash/last'
   styleUrls: ['./default-layout.component.scss'],
 })
 export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
-  public navigationLoading = true;
+  public appLoading = true;
   private menuOverflow$ = new BehaviorSubject<boolean>(false);
   private destroy$ = new Subject();
-  private activeModules = [];
+  private availableModules = [];
   private moduleMenuChildren: NzTreeNodeOptions[] = [];
 
-  private breadcrumbsModule: string = null;
-  private breadcrumbsPages: NzTreeNode[] = [];
+  private activeModule: string = null;
+  private activePage: string = null;
+  private activeModulePages: NzTreeNode[] = [];
+
+  private moduleKey: string = "";
+  private configPath: string = "";
 
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
 
   constructor(@Inject(DOCUMENT) _document?: any,
               private dynamicMenuService?: DynamicMenuService,
               private router?: Router,
-              private route?:ActivatedRoute) {
+              private route?: ActivatedRoute,
+              private cd?:ChangeDetectorRef) {
     this.route.params.pipe(
-      tap((params)=>{
-        console.log(params)})
+      takeUntil(this.destroy$),
+      switchMap((params) => {
+        this.moduleKey = params['moduleKey'];
+        this.configPath = params['configPath'];
+        return this.dynamicMenuService.getModules()
+      }),
+      switchMap((modulesResponse) => {
+        this.setActiveModules(modulesResponse);
+        this.activeModule = this.getActiveModule(this.moduleKey).title;
+        this.activePage = this.configPath;
+        return this.dynamicMenuService.getModuleActions(this.moduleKey)
+      }),
+      tap((moduleActionsResponse) => {
+        this.getModuleAction(moduleActionsResponse, this.getActiveModule(this.moduleKey).key);
+      })
     ).subscribe()
-    this.dynamicMenuChildren();
   }
 
   //TODO: Заменить хук на что нибудь нормальное
@@ -53,21 +70,20 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
       else this.menuOverflow$.next(true);
   }
 
-  private dynamicMenuChildren() {
-    this.dynamicMenuService.getModules()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(modulesResponse => this.setActiveModules(modulesResponse));
+  private getActiveModule(moduleKey: string) {
+    return this.availableModules.find(module => module.key.includes(moduleKey));
   }
 
   private setActiveModules(modulesResponse): void {
+    this.availableModules = [];
     modulesResponse.forEach(mr => {
-      this.activeModules.push({
+      this.availableModules.push({
         title: mr.module.moduleDisplayName,
         nodeName: mr.nodeName,
         key: `/form-loader/${mr.nodeName}`
       });
     });
-    this.navigationLoading = false;
+    this.appLoading = false;
   }
 
   public scrollRight(): void {
@@ -114,7 +130,7 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
     this.dynamicMenuService.getModuleActions(nodeName)
       .pipe(
         takeUntil(this.destroy$),
-        tap(() => this.breadcrumbsModule = moduleTitle))
+        tap(() => this.activeModule = moduleTitle))
       .subscribe(moduleActionsResponse => {
         this.getModuleAction(moduleActionsResponse, moduleKey);
       })
@@ -126,12 +142,12 @@ export class DefaultLayoutComponent implements OnDestroy, AfterContentChecked {
   }
 
   navItemClicked($event: NzTreeNode[]) {
-    console.log($event)
-
-    this.breadcrumbsPages = [];
-    $event.forEach(node => this.breadcrumbsPages.push(node));
-
     let route = last($event).key.split("/").filter(r => r !== "");
     this.router.navigate(route);
+  }
+
+  navigationLoaded($event: NzTreeNode[]) {
+    this.activeModulePages=[...$event];
+    this.cd.detectChanges();
   }
 }

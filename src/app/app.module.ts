@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+import {LocationStrategy, HashLocationStrategy, CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
@@ -54,13 +54,20 @@ import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import {ChartsModule} from 'ng2-charts';
 
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {HttpModule} from '@angular/http';
 
-import {NzTreeModule} from "ng-zorro-antd";
+import {NzNotificationModule, NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
 import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/breadcurmbs-component";
-import {FormLoaderModule} from "./containers/form-loader/form-loader.module";
+import {DynamicMenuServiceInterceptor} from "./services/dynamic-menu-service-interceptor";
+import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
+import {MenuComponent} from "./menu/menu.component";
+import {NzTableModule} from "ng-zorro-antd/table";
+import {ScrollingModule} from "@angular/cdk/scrolling";
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {SharedModule} from "./shared/shared.module";
+import {AgGridModule} from "ag-grid-angular";
 
 @NgModule({
   imports: [
@@ -80,7 +87,13 @@ import {FormLoaderModule} from "./containers/form-loader/form-loader.module";
     HttpModule,
     NzTreeModule,
     NzIconModule,
-    FormLoaderModule
+    NzTableModule,
+    NzNotificationModule,
+    ScrollingModule,
+    DragDropModule,
+    SharedModule,
+    CommonModule,
+    AgGridModule.withComponents([]),
   ],
   declarations: [
     AppComponent,
@@ -90,14 +103,21 @@ import {FormLoaderModule} from "./containers/form-loader/form-loader.module";
     LoginComponent,
     RegisterComponent,
     SidebarNavigationComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    FormLoaderComponent,
+    MenuComponent
   ],
   providers: [
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
-    {provide: NZ_I18N, useValue: ru_RU}, {provide: NZ_ICONS, useValue: icons}
+    {provide: NZ_I18N, useValue: ru_RU}, {provide: NZ_ICONS, useValue: icons},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DynamicMenuServiceInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

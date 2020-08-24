@@ -15,12 +15,11 @@ export class BreadcrumbsComponent {
 
   @Input('currentModule') set module(value) {
     this._module = value;
-    this.cd.detectChanges();
+    this._pages = [];
   }
 
   @Input('modulePages') set pages(value) {
     this._pages = value;
-    this.cd.detectChanges();
   }
 
   get module() {
