@@ -68,6 +68,8 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {SharedModule} from "./shared/shared.module";
 import {AgGridModule} from "ag-grid-angular";
+import {HomePageComponent} from "./containers/home-page/home-page.component";
+import {ModuleButtonsComponent} from "./containers/default-layout/module-buttons/module-buttons.component";
 
 @NgModule({
   imports: [
@@ -105,7 +107,9 @@ import {AgGridModule} from "ag-grid-angular";
     SidebarNavigationComponent,
     BreadcrumbsComponent,
     FormLoaderComponent,
-    MenuComponent
+    MenuComponent,
+    HomePageComponent,
+    ModuleButtonsComponent,
   ],
   providers: [
     {

@@ -7,7 +7,7 @@ import {NzTreeNode} from "ng-zorro-antd";
   styleUrls: ['./breadcrumbs-component.scss']
 })
 export class BreadcrumbsComponent {
-  private _module: string = null;
+  private _module: string = 'Home';
   private _pages: NzTreeNode[] = [];
 
   constructor(private cd: ChangeDetectorRef) {
