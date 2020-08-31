@@ -1,7 +1,7 @@
 <ng-container>
   <div style="float: left">
     <button
-      [class.hiddenButton]="menuOverflow$|async"
+      [class.hiddenButton]="hideOverflowButtons$|async"
       class="btn btn-outline-secondary scrollButtons"
       (click)="scrollLeft()">
       <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -10,12 +10,13 @@
 
   <div #widgetsContent class="modules-list">
     <button *ngFor="let module of availableModules"
-            class="btn btn-outline-secondary">{{module.title}}</button>
+            class="btn btn-outline-secondary"
+            (click)="moduleButtonClicked(module)">{{module.title}}</button>
   </div>
 
   <div style="float: right">
     <button
-      [class.hiddenButton]="menuOverflow$|async"
+      [class.hiddenButton]="hideOverflowButtons$|async"
       class="btn btn-outline-secondary scrollButtons"
       (click)="scrollRight()">
       <i class="fa fa-arrow-right" aria-hidden="true"></i>

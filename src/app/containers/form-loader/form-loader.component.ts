@@ -1,37 +1,20 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ModulePageConfiguration} from '../../models/ModulePageConfiguration.interface';
-import {Subject} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
-import {log} from "ng-zorro-antd";
+import {RoutingService} from "../../services/routing.service";
+import {DocumentBaseComponent} from "../document-base.component";
 
 @Component({
   selector: 'app-form-loader',
   templateUrl: './form-loader.component.html',
   styleUrls: ['./form-loader.component.scss']
 })
-export class FormLoaderComponent implements OnDestroy {
+export class FormLoaderComponent extends DocumentBaseComponent {
 
-  @Input('moduleKey') set moduleKey(value) {
-    this._moduleKey = value;
-  }
-
-  @Input('configPath') set configPath(value) {
-    this._configPath = value;
-    this.loadForm();
-  }
-
-  get moduleKey() {
-    return this._moduleKey;
-  }
-
-  get configPath() {
-    return this._configPath;
-  }
-
-  _moduleKey: string;
-  _configPath: string;
+  private moduleKey: string;
+  private configPath: string;
   public viewType;
   public dataForComponent: {
     moduleKey: string,
@@ -40,8 +23,6 @@ export class FormLoaderComponent implements OnDestroy {
   };
   public isFormLoading: boolean = true;
 
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
 
   loadForm() {
     this.isFormLoading = false;
@@ -49,8 +30,8 @@ export class FormLoaderComponent implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(resp => {
       this.dataForComponent = {
-        moduleKey: this._moduleKey,
-        configPath: this._configPath,
+        moduleKey: this.moduleKey,
+        configPath: this.configPath,
         pageConfiguration: resp
       };
       this.viewType = resp.viewConfig.type;
@@ -58,10 +39,17 @@ export class FormLoaderComponent implements OnDestroy {
     })
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(null);
-    this.destroy$.complete();
-  }
 
-  constructor(private dynamicMenuService: DynamicMenuService, private route: ActivatedRoute) {}
+  constructor(private dynamicMenuService: DynamicMenuService,
+              private rs: RoutingService,
+              private route: ActivatedRoute) {
+    super();
+
+    this.route.params.subscribe(params => {
+      this.moduleKey = params['moduleKey'];
+      this.configPath = params['configPath'];
+      this.rs.emit(params);
+      this.loadForm();
+    })
+  }
 }

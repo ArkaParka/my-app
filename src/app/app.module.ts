@@ -27,7 +27,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 import {AppComponent} from './app.component';
 
 // Import containers
-import {DefaultLayoutComponent} from './containers';
+import {SkeletonComponent} from "./containers/skeleton/skeleton.component";
 
 import {P404Component} from './views/error/404.component';
 import {P500Component} from './views/error/500.component';
@@ -35,7 +35,7 @@ import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
 
 const APP_CONTAINERS = [
-  DefaultLayoutComponent
+  SkeletonComponent
 ];
 
 import {
@@ -68,8 +68,8 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {SharedModule} from "./shared/shared.module";
 import {AgGridModule} from "ag-grid-angular";
-import {HomePageComponent} from "./containers/home-page/home-page.component";
 import {ModuleButtonsComponent} from "./containers/default-layout/module-buttons/module-buttons.component";
+import {ModuleHomePageComponent} from "./containers/module-home-page/module-home-page.component";
 
 @NgModule({
   imports: [
@@ -108,8 +108,8 @@ import {ModuleButtonsComponent} from "./containers/default-layout/module-buttons
     BreadcrumbsComponent,
     FormLoaderComponent,
     MenuComponent,
-    HomePageComponent,
     ModuleButtonsComponent,
+    ModuleHomePageComponent,
   ],
   providers: [
     {

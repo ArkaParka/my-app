@@ -9,7 +9,8 @@ import {P500Component} from './views/error/500.component';
 import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
-import {HomePageComponent} from "./containers/home-page/home-page.component";
+import {ModuleHomePageComponent} from "./containers/module-home-page/module-home-page.component";
+import {SkeletonComponent} from "./containers/skeleton/skeleton.component";
 
 export const routes: Routes = [
   {
@@ -47,7 +48,7 @@ export const routes: Routes = [
   },
   {
     path: 'app',
-    component: HomePageComponent,
+    component: SkeletonComponent,
     children: [
       {
         path: '',
@@ -59,12 +60,12 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
-        path: ':module/moduleKey/:configPath',
-        component: FormLoaderComponent
+        path: 'module/:moduleKey',
+        component: ModuleHomePageComponent
       },
       {
-        path: 'module/:moduleKey',
-        redirectTo: 'home'
+        path: ':module/:moduleKey/:configPath',
+        component: FormLoaderComponent
       },
     ]
   },

@@ -23,6 +23,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import {KeyValue} from '@angular/common';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {FieldGroupAdditionalProperties} from "../models/FieldGroupAdditionalProperties";
+import {DocumentBaseComponent} from "../containers/document-base.component";
 
 interface ColumnItem {
   name: string;
@@ -41,7 +42,7 @@ interface ColumnItem {
   styleUrls: ['./menu.component.scss']
 })
 
-export class MenuComponent implements OnInit, OnDestroy {
+export class MenuComponent extends DocumentBaseComponent implements OnInit {
 
   moduleKey: string;
   configPath: string;
@@ -80,14 +81,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   setOfCheckedId = new Set<string>();
   public listOfColumns: ColumnItem[];
 
-
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
-  ngOnDestroy(): void {
-    this.destroy$.next(null);
-    this.destroy$.complete();
-  }
-
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
@@ -97,6 +90,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   constructor(private dynamicMenuService: DynamicMenuService) {
+    super();
   }
 
   updateCheckedSet(item: string, checked: boolean): void {

@@ -1,9 +1,11 @@
 import {
   AfterContentChecked,
   Component, ElementRef,
-  Input, ViewChild
+  EventEmitter, Input,
+  Output, ViewChild
 } from "@angular/core";
 import {BehaviorSubject} from "rxjs";
+import {IModuleInfo} from "../../../models/IModuleInfo";
 
 @Component({
   selector: 'app-active-module-buttons',
@@ -11,17 +13,18 @@ import {BehaviorSubject} from "rxjs";
   styleUrls: ['module-buttons.component.scss'],
 })
 export class ModuleButtonsComponent implements AfterContentChecked {
-  @Input('modules') availableModules: any[];
+  @Input('modules') availableModules: IModuleInfo[];
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
+  @Output() onModuleClick = new EventEmitter<IModuleInfo>();
 
-  private menuOverflow$ = new BehaviorSubject<boolean>(false);
+  private hideOverflowButtons$ = new BehaviorSubject<boolean>(true);
 
   ngAfterContentChecked() {
     if (this.widgetsContent && this.widgetsContent.nativeElement) {
       if (this.widgetsContent.nativeElement.offsetHeight < this.widgetsContent.nativeElement.scrollHeight ||
         this.widgetsContent.nativeElement.offsetWidth < this.widgetsContent.nativeElement.scrollWidth)
-        this.menuOverflow$.next(false);
-      else this.menuOverflow$.next(true);
+        this.hideOverflowButtons$.next(false);
+      else this.hideOverflowButtons$.next(true);
     }
   }
 
@@ -37,5 +40,9 @@ export class ModuleButtonsComponent implements AfterContentChecked {
       left: (this.widgetsContent.nativeElement.scrollLeft - 200),
       behavior: 'smooth'
     });
+  }
+
+  moduleButtonClicked(module: IModuleInfo) {
+    this.onModuleClick.emit(module);
   }
 }

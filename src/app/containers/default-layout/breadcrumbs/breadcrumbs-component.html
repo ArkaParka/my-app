@@ -1,11 +1,10 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">{{module}}</li>
-    <li *ngFor="let page of pages; let last = last"
+    <li *ngFor="let link of [module].concat(pages); let last = last"
         class="breadcrumb-item"
         [ngClass]="{active:last}">
-      <a *ngIf="page.key; else plainText" [href]="'/#'+page.key">{{page.title}}</a>
-      <ng-template #plainText>{{page.title}}</ng-template>
+      <a *ngIf="link?.key&&!last; else plainText" [routerLink]="'./'+link?.key">{{link?.title}}</a>
+      <ng-template #plainText>{{link?.title}}</ng-template>
     </li>
   </ol>
 </nav>

@@ -15,7 +15,9 @@
     [sidebarToggler]="'lg'"
     [asideMenuToggler]="false">
 
-    <app-active-module-buttons [modules]="availableModules"></app-active-module-buttons>
+    <app-active-module-buttons
+      [modules]="availableModules"
+      (onModuleClick)="moduleClicked($event)"></app-active-module-buttons>
 
     <ul class="nav navbar-nav ml-auto"></ul>
 
@@ -24,10 +26,18 @@
 
   <div class="app-body">
     <app-sidebar #sidebar [fixed]="true" [display]="'lg'">
+      <app-sidebar-nav-custom
+        [navData]="availableModulePages"
+        [activePage]="activePage"
+        (onNavItemClicked)="navItemClicked($event)"
+        (onNavigationLoaded)="navigationLoaded($event)"></app-sidebar-nav-custom>
     </app-sidebar>
 
     <main class="main">
-      <app-breadcrumbs></app-breadcrumbs>
+      <app-breadcrumbs
+        [currentModule]="breadcrumbsModule"
+        [modulePages]="breadcrumbsPages"
+      ></app-breadcrumbs>
 
 
       <div class="container-fluid">
