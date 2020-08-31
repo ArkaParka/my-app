@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {MenuComponent} from "./menu.component";
+import {TableViewComponent} from "./table-view.component";
 import {NzTableModule} from "ng-zorro-antd";
 import {SharedModule} from "../shared/shared.module";
 import {CommonModule} from "@angular/common";
@@ -11,12 +11,12 @@ import {CommonModule} from "@angular/common";
     CommonModule
   ],
   exports: [
-    MenuComponent
+    TableViewComponent
   ],
   declarations: [
-    MenuComponent
+    TableViewComponent
   ]
 })
-export class MenuModule {
+export class TableViewModule {
 
 }

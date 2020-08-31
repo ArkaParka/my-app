@@ -21,7 +21,6 @@ import {FieldGroup} from "../models/FieldGroup.interface";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {KeyValue} from '@angular/common';
-import {ISelectableParent} from "../models/ISelectableParent";
 import {FieldGroupAdditionalProperties} from "../models/FieldGroupAdditionalProperties";
 import {DocumentBaseComponent} from "../containers/document-base.component";
 
@@ -38,11 +37,11 @@ interface ColumnItem {
 
 @Component({
   selector: 'app-base-table-view',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  templateUrl: './table-view.component.html',
+  styleUrls: ['./table-view.component.scss']
 })
 
-export class MenuComponent extends DocumentBaseComponent implements OnInit {
+export class TableViewComponent extends DocumentBaseComponent implements OnInit {
 
   moduleKey: string;
   configPath: string;

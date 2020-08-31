@@ -69,7 +69,8 @@ import {SharedModule} from "./shared/shared.module";
 import {AgGridModule} from "ag-grid-angular";
 import {ModuleButtonsComponent} from "./containers/default-layout/module-buttons/module-buttons.component";
 import {ModuleHomePageComponent} from "./containers/module-home-page/module-home-page.component";
-import {MenuModule} from "./menu/menu.module";
+import {TableViewModule} from "./table-view/table-view.module";
+import {DynamicPageViewModule} from "./dynamic-page-view/dynamic-page-view.module";
 
 @NgModule({
   imports: [
@@ -96,7 +97,8 @@ import {MenuModule} from "./menu/menu.module";
     SharedModule,
     CommonModule,
     AgGridModule.withComponents([]),
-    MenuModule
+    TableViewModule,
+    DynamicPageViewModule
   ],
   declarations: [
     AppComponent,
