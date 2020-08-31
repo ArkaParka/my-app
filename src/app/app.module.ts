@@ -62,7 +62,6 @@ import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-na
 import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/breadcurmbs-component";
 import {DynamicMenuServiceInterceptor} from "./services/dynamic-menu-service-interceptor";
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
-import {MenuComponent} from "./menu/menu.component";
 import {NzTableModule} from "ng-zorro-antd/table";
 import {ScrollingModule} from "@angular/cdk/scrolling";
 import {DragDropModule} from "@angular/cdk/drag-drop";
@@ -70,6 +69,7 @@ import {SharedModule} from "./shared/shared.module";
 import {AgGridModule} from "ag-grid-angular";
 import {ModuleButtonsComponent} from "./containers/default-layout/module-buttons/module-buttons.component";
 import {ModuleHomePageComponent} from "./containers/module-home-page/module-home-page.component";
+import {MenuModule} from "./menu/menu.module";
 
 @NgModule({
   imports: [
@@ -96,6 +96,7 @@ import {ModuleHomePageComponent} from "./containers/module-home-page/module-home
     SharedModule,
     CommonModule,
     AgGridModule.withComponents([]),
+    MenuModule
   ],
   declarations: [
     AppComponent,
@@ -107,7 +108,6 @@ import {ModuleHomePageComponent} from "./containers/module-home-page/module-home
     SidebarNavigationComponent,
     BreadcrumbsComponent,
     FormLoaderComponent,
-    MenuComponent,
     ModuleButtonsComponent,
     ModuleHomePageComponent,
   ],
