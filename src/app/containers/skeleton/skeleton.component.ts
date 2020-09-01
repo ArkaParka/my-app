@@ -36,9 +36,7 @@ export class SkeletonComponent extends DocumentBaseComponent {
     super();
 
     combineLatest(this.dynamicMenuService.getModules(), this.rs.routeChanged$).pipe(
-      mergeMap(response => {
-        let moduleResponse = response[0];
-        let routerParams = response[1];
+      mergeMap(([moduleResponse, routerParams]) => {
         this.setupActiveModules(moduleResponse);
         return this.setupRouterParams(routerParams);
       }),
