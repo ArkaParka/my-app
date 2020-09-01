@@ -7,7 +7,7 @@ import {tap} from "rxjs/operators";
   template: `<p>Заглавная страница модуля "{{currentModule}}"</p>`,
 })
 export class ModuleHomePageComponent {
-  private currentModule: string;
+  public currentModule: string;
 
   constructor(private route: ActivatedRoute,
               private rs: RoutingService) {

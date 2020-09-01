@@ -17,7 +17,7 @@ export class ModuleButtonsComponent implements AfterContentChecked {
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
   @Output() onModuleClick = new EventEmitter<IModuleInfo>();
 
-  private hideOverflowButtons$ = new BehaviorSubject<boolean>(true);
+  public hideOverflowButtons$ = new BehaviorSubject<boolean>(true);
 
   ngAfterContentChecked() {
     if (this.widgetsContent && this.widgetsContent.nativeElement) {
