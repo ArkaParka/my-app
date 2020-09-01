@@ -1,19 +1,20 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
 // Import Containers
-import { DefaultLayoutComponent } from './containers';
 
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
+import {P404Component} from './views/error/404.component';
+import {P500Component} from './views/error/500.component';
+import {LoginComponent} from './views/login/login.component';
+import {RegisterComponent} from './views/register/register.component';
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
+import {ModuleHomePageComponent} from "./containers/module-home-page/module-home-page.component";
+import {SkeletonComponent} from "./containers";
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'app/home',
     pathMatch: 'full',
   },
   {
@@ -45,84 +46,34 @@ export const routes: Routes = [
     }
   },
   {
-    path: '',
-    component: DefaultLayoutComponent,
-    data: {
-      title: 'Home'
-    },
+    path: 'app',
+    component: SkeletonComponent,
     children: [
-      // {
-      //   path: 'grid-layout',
-      //   component: GridLayoutComponent
-      // },
-      // обертка для отображения любой формы по параметрам
-      // {
-      //   path: 'form-loader/:moduleKey/:configPath',
-      //   component: FormLoaderComponent
-      // },
-      { //вот тут менюшка
+      {
         path: '',
-        loadChildren: () => import('./containers/form-loader/form-loader.module').then(m => m.FormLoaderModule)
+        redirectTo: 'home',
+        pathMatch: 'full'
       },
       {
-        path: 'datatable',
-        loadChildren: () => import('./views/datatable/datatable.module').then(m => m.DatatableModule)
-      },
-      {
-        path: 'input-grid',
-        loadChildren: () => import('./views/input-grid/input-grid.module').then(m => m.InputGridModule)
-      },
-      {
-        path: 'ag-grid',
-        loadChildren: () => import('./views/ag-grid/grid.module').then(m => m.GridModule)
-      },
-      {
-        path: 'formly',
-        loadChildren: () => import('./views/formly/formly.module').then(m => m.FormlyModule)
-      },
-      {
-        path: 'dynamic-form',
-        loadChildren: () => import('./views/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule)
-      },
-      {
-        path: 'base',
-        loadChildren: () => import('./views/base/base.module').then(m => m.BaseModule)
-      },
-      {
-        path: 'buttons',
-        loadChildren: () => import('./views/buttons/buttons.module').then(m => m.ButtonsModule)
-      },
-      {
-        path: 'charts',
-        loadChildren: () => import('./views/chartjs/chartjs.module').then(m => m.ChartJSModule)
-      },
-      {
-        path: 'dashboard',
+        path: 'home',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
-        path: 'icons',
-        loadChildren: () => import('./views/icons/icons.module').then(m => m.IconsModule)
+        path: 'module/:moduleKey',
+        component: ModuleHomePageComponent
       },
       {
-        path: 'notifications',
-        loadChildren: () => import('./views/notifications/notifications.module').then(m => m.NotificationsModule)
+        path: ':module/:moduleKey/:configPath',
+        component: FormLoaderComponent
       },
-      {
-        path: 'theme',
-        loadChildren: () => import('./views/theme/theme.module').then(m => m.ThemeModule)
-      },
-      {
-        path: 'widgets',
-        loadChildren: () => import('./views/widgets/widgets.module').then(m => m.WidgetsModule)
-      }
     ]
   },
-  { path: '**', component: P404Component }
+  {path: '**', component: P404Component}
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

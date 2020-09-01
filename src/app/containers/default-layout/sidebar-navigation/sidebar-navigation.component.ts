@@ -1,12 +1,12 @@
 import {
+  AfterContentChecked,
   ChangeDetectorRef,
-  Component,
+  Component, EventEmitter,
   HostBinding,
-  Input,
+  Input, Output,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import {Router} from "@angular/router";
 import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
 
 @Component({
@@ -15,22 +15,48 @@ import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
   styleUrls: ['./sidebar-navigation.component.scss', './scrollbar-styles.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SidebarNavigationComponent {
+export class SidebarNavigationComponent implements AfterContentChecked {
   private _navData: NzTreeNodeOptions[] = [];
+  private isNavLoaded: boolean = false;
+
+  @Input('activePage') activePage: string;
 
   @Input('navData') set navData(value: NzTreeNodeOptions[]) {
     this._navData = value;
+    if (this.navData.length) this.isNavLoaded = false;
     this.cd.detectChanges();
   };
-
-  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
-  @ViewChild('tree') nzTree: NzTreeComponent;
 
   get navData(): NzTreeNodeOptions[] {
     return this._navData;
   }
 
-  constructor(private router?: Router, private cd?: ChangeDetectorRef) {
+  @Output() onNavItemClicked = new EventEmitter<NzTreeNode[]>();
+  @Output() onNavigationLoaded = new EventEmitter<NzTreeNode[]>();
+
+  @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
+  @ViewChild('tree') nzTree: NzTreeComponent;
+
+  ngAfterContentChecked(): void {
+    if (!this.isNavLoaded && this.navData && this.navData.length) {
+      this.isNavLoaded = true;
+
+      let activePage: NzTreeNode = null;
+      this.nzTree.getTreeNodes().forEach(rootNode => {
+        if (!activePage) activePage = this.getNodeWithChildren(rootNode)
+          .filter(node => node.key)
+          .find(node => node.key.includes(this.activePage))
+      });
+
+      if (activePage) {
+        activePage.isChecked = true;
+        [...this.getNodeParents(activePage)].forEach((node: NzTreeNode) => node.isExpanded = true);
+        this.onNavigationLoaded.emit([...this.getNodeParents(activePage), activePage]);
+      }
+    }
+  }
+
+  constructor(private cd?: ChangeDetectorRef) {
   }
 
   nzNavItemClicked(e): void {
@@ -38,24 +64,25 @@ export class SidebarNavigationComponent {
       e.node.isExpanded = !e.node.isExpanded;
     } else {
       this.nzTree.getTreeNodes().forEach(node => this.switchOffCheckedNodes(node));
-      [e.node, ...this.getNodeParents(e.node)].forEach((node: NzTreeNode) => {
+      let nodeWithParents = [...this.getNodeParents(e.node), e.node];
+
+      nodeWithParents.forEach((node: NzTreeNode) => {
         node.isChecked = true;
       });
 
-      let route = e.node.key.split("/").filter(r => r !== "");
-      this.router.navigate(route);
+      this.onNavItemClicked.emit(nodeWithParents);
     }
   }
 
-  getNodeParents(node: NzTreeNode) {
+  getNodeParents(node: NzTreeNode): NzTreeNode[] {
     return node.parentNode
-      ? [node.parentNode, ...this.getNodeParents(node.parentNode)]
+      ? [...this.getNodeParents(node.parentNode), node.parentNode]
       : [];
   }
 
   getNodeWithChildren(node: NzTreeNode): NzTreeNode[] {
     let array = [node];
-    node.children.forEach(childNode => array.push(...this.getNodeWithChildren(childNode)));
+    if (node.children) node.children.forEach(childNode => array.push(...this.getNodeWithChildren(childNode)));
     return array;
   }
 

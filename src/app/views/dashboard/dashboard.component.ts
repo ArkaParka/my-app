@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import {RoutingService} from "../../services/routing.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
+
+  constructor(private rs:RoutingService,
+              private route:ActivatedRoute) {
+    this.route.params.subscribe(params=>{
+      this.rs.emit(params)
+    })
+  }
 
   radioModel: string = 'Month';
 

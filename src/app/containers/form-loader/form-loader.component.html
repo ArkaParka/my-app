@@ -1,11 +1,9 @@
 <div class="text-center">
-    <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
+  <div *ngIf="isFormLoading" class="spinner-border" role="status"></div>
 </div>
 <div *ngIf="!isFormLoading">
-    <div *ngIf="viewType == 'BaseTableVew'">
-        <app-base-table-view [dataForComponent]="dataForComponent"></app-base-table-view>
-    </div>
-    <div *ngIf="viewType == 'BaseDynamicView'">
-        <p> Тут динамический компонет должен быть, а в этой ветке его нет :( </p>
-    </div>
+  <div [ngSwitch]="viewType">
+    <app-base-table-view *ngSwitchCase="'BaseTableVew'" [dataForComponent]="dataForComponent"></app-base-table-view>
+    <app-dynamic-page-mock *ngSwitchCase="'DynamicPageViewConfig'"></app-dynamic-page-mock>
+  </div>
 </div>
