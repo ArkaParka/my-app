@@ -3,8 +3,8 @@ import {IModulePageConfiguration} from "../../models/IModulePageConfiguration";
 
 @Component({
   selector: 'app-dynamic-page-view',
-  template: `<p>dynamic-page component</p>
-  <app-grid-container [gridTemplate]="pageConfig.viewConfig.config"></app-grid-container>`
+  template: `<app-grid-container [gridTemplate]="pageConfig.viewConfig.config"></app-grid-container>`,
+  styles: [`:host {display: block; height: 100%}`]
 })
 export class DynamicPageComponent {
   private moduleKey: string = null;

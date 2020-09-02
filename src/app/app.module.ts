@@ -59,7 +59,7 @@ import {HttpModule} from '@angular/http';
 
 import {NzNotificationModule, NzTreeModule} from "ng-zorro-antd";
 import {SidebarNavigationComponent} from "./containers/default-layout/sidebar-navigation/sidebar-navigation.component";
-import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/breadcurmbs-component";
+import {BreadcrumbsComponent} from "./containers/default-layout/breadcrumbs/breadcurmbs.component";
 import {DynamicMenuServiceInterceptor} from "./services/dynamic-menu-service-interceptor";
 import {FormLoaderComponent} from "./containers/form-loader/form-loader.component";
 import {NzTableModule} from "ng-zorro-antd/table";
