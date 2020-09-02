@@ -5,7 +5,7 @@ import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
 import {tap, catchError} from 'rxjs/operators';
-import {ModulePageConfiguration} from '../models/ModulePageConfiguration.interface';
+import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 
@@ -30,7 +30,7 @@ export class DynamicMenuService {
     return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
-  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration> {
+  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<IModulePageConfiguration> {
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 
