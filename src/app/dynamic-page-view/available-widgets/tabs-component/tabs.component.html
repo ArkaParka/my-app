@@ -1,0 +1,9 @@
+<tabset>
+  <tab *ngFor="let tab of tabs" [heading]="tab.title">
+    <ng-container [ngSwitch]="tab.config.widgetConfig.type">
+      <app-dynamic-tree-list
+        *ngSwitchCase="'TREE_LIST_VIEW'"
+        [treeListConfig]="tab.config.widgetConfig"></app-dynamic-tree-list>
+    </ng-container>
+  </tab>
+</tabset>

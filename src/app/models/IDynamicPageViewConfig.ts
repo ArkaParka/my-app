@@ -1,4 +1,4 @@
-import {IAreasConfig} from "./IAreasConfig";
+import {IAreasConfig} from "../dynamic-page-view/interfaces/IAreasConfig";
 
 export interface IDynamicPageViewConfig {
   areasConfig: IAreasConfig[],

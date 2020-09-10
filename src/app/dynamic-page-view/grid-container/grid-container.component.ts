@@ -2,6 +2,7 @@ import {Component, HostBinding, Input} from "@angular/core";
 import cloneDeep from 'lodash/cloneDeep'
 import {DomSanitizer} from "@angular/platform-browser";
 import {IDynamicPageViewConfig} from "../../models/IDynamicPageViewConfig";
+import {IWidgetOptions} from "../interfaces/IWidgetOptions";
 
 @Component({
   selector: 'app-grid-container',
@@ -9,14 +10,17 @@ import {IDynamicPageViewConfig} from "../../models/IDynamicPageViewConfig";
   styleUrls: ['./grid-container.component.scss']
 })
 export class GridContainerComponent {
-  private _gridTemplate: IDynamicPageViewConfig = null;
-  get gridTemplate() {
-    return this._gridTemplate;
+  private _widgetOptions: IDynamicPageViewConfig = null;
+
+  @Input('widgetOptions') set widgetOptions(gridTemplate) {
+    this._widgetOptions = (gridTemplate as IWidgetOptions).innerGridConfig && (gridTemplate as IWidgetOptions).innerGridConfig.value
+      ? cloneDeep((gridTemplate as IWidgetOptions).innerGridConfig.value)
+      : cloneDeep(gridTemplate);
+    this.setGridTemplate();
   };
 
-  @Input('gridTemplate') set gridTemplate(gridTemplate) {
-    this._gridTemplate = cloneDeep(gridTemplate);
-    this.setGridTemplate();
+  get widgetOptions() {
+    return this._widgetOptions;
   };
 
   @HostBinding('style.grid-auto-rows') gridAutoRows;
@@ -29,12 +33,12 @@ export class GridContainerComponent {
   }
 
   setGridTemplate(): void {
-    this.gridTemplate.gridTemplate.forEach((gtpl, i, array) => {
+    this.widgetOptions.gridTemplate.forEach((gtpl, i, array) => {
       array[i] = `\"${gtpl}\"`;
     });
 
-    this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.gridTemplate.join(' ')}`);
-    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.columnSize}`);
-    this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.gridTemplate.rowSize}`);
+    this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.gridTemplate.join(' ')}`);
+    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.columnSize}`);
+    this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.rowSize}`);
   }
 }
