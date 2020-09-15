@@ -10,12 +10,14 @@ import {TabTreeComponent} from "./available-widgets/tabs-component/tabs.componen
 import {TabsModule} from "ngx-bootstrap/tabs";
 import {NzIconModule, NzTreeModule} from "ng-zorro-antd";
 import {TreeListComponent} from "./available-widgets/tree-list-component/tree-list.component";
+import {LabelComponent} from "./available-widgets/label/label.component";
 
 const AvailableWidgets = [
   BlankComponent,
   TabTreeComponent,
   TreeListComponent,
   GridContainerComponent,
+  LabelComponent
 ];
 
 @NgModule({
@@ -28,11 +30,16 @@ const AvailableWidgets = [
   declarations: [
     DynamicPageMockComponent,
     GridItemComponent,
-    DynamicPageComponent
+    DynamicPageComponent,
+    DynamicWidgetDirective,
+    ...AvailableWidgets
   ],
   exports: [
     DynamicPageMockComponent,
     DynamicPageComponent
+  ],
+  entryComponents: [
+    ...AvailableWidgets
   ]
 })
 export class DynamicPageViewModule {

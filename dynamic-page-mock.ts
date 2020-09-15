@@ -34,17 +34,18 @@ export const mock = {
       "areasConfig": [
         {
           "areaName": "header_area",
+          "widgetFlow": null,
           "widgetConfig": {
             "type": "BLANK",
-            "dataType": null,
-            "options": null
+            "options": null,
+            "dataType": null
           }
         },
         {
           "areaName": "tab_tree",
+          "widgetFlow": null,
           "widgetConfig": {
             "type": "TABS",
-            "dataType": null,
             "options": {
               "tabs": {
                 "value": [
@@ -53,7 +54,6 @@ export const mock = {
                     "config": {
                       "widgetConfig": {
                         "type": "TREE_LIST_VIEW",
-                        "dataType": null,
                         "options": {
                           "get_data_path": {
                             "value": "get_requirement_data"
@@ -70,12 +70,12 @@ export const mock = {
                                       "targetArea": "data_area",
                                       "widgetConfig": {
                                         "type": "PAGE_VIEW",
-                                        "dataType": null,
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.staff.pages.requriment.TestDynamicRequirementDataPage"
                                           }
-                                        }
+                                        },
+                                        "dataType": null
                                       }
                                     }
                                   },
@@ -85,12 +85,12 @@ export const mock = {
                                       "targetArea": "header_area",
                                       "widgetConfig": {
                                         "type": "PAGE_VIEW",
-                                        "dataType": null,
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.staff.pages.requriment.DynamicReqHeaderForm"
                                           }
-                                        }
+                                        },
+                                        "dataType": null
                                       }
                                     }
                                   }
@@ -98,7 +98,8 @@ export const mock = {
                               }
                             ]
                           }
-                        }
+                        },
+                        "dataType": null
                       }
                     }
                   },
@@ -107,7 +108,6 @@ export const mock = {
                     "config": {
                       "widgetConfig": {
                         "type": "TREE_LIST_VIEW",
-                        "dataType": null,
                         "options": {
                           "get_data_path": {
                             "value": "get_task_data"
@@ -124,12 +124,12 @@ export const mock = {
                                       "targetArea": "header_area",
                                       "widgetConfig": {
                                         "type": "PAGE_VIEW",
-                                        "dataType": null,
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm"
                                           }
-                                        }
+                                        },
+                                        "dataType": null
                                       }
                                     }
                                   },
@@ -139,12 +139,12 @@ export const mock = {
                                       "targetArea": "data_area",
                                       "widgetConfig": {
                                         "type": "PAGE_VIEW",
-                                        "dataType": null,
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage"
                                           }
-                                        }
+                                        },
+                                        "dataType": null
                                       }
                                     }
                                   }
@@ -152,21 +152,24 @@ export const mock = {
                               }
                             ]
                           }
-                        }
+                        },
+                        "dataType": null
                       }
                     }
                   }
                 ]
               }
-            }
+            },
+            "dataType": null
           }
         },
         {
           "areaName": "data_area",
+          "widgetFlow": null,
           "widgetConfig": {
             "type": "BLANK",
-            "dataType": null,
-            "options": null
+            "options": null,
+            "dataType": null
           }
         }
       ],
@@ -176,11 +179,88 @@ export const mock = {
   "dataTypes": [],
   "typePageViewConfigs": [
     {
+      "pageUID": "0BE73EDDD8F6ED003D1D3A8F36AC8CC4",
+      "key": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage",
+      "viewConfig": {
+        "type": "TestReqData",
+        "idFieldName": "",
+        "columnSize": "auto",
+        "columnsFlow": "left",
+        "rowSize": "max-content max-content max-content",
+        "gridTemplate": [
+          "main_1",
+          "main_2",
+          "main_3"
+        ],
+        "areasConfig": [
+          {
+            "areaName": "main_1",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": null,
+              "options": {
+                "width": {
+                  "value": "max-content"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "max-content"
+                }
+              },
+              "type": "LABEL"
+            }
+          },
+          {
+            "areaName": "main_2",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": null,
+              "options": {
+                "width": {
+                  "value": "max-content"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "max-content"
+                }
+              },
+              "type": "LABEL"
+            }
+          },
+          {
+            "areaName": "main_3",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": null,
+              "options": {
+                "width": {
+                  "value": "max-content"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "max-content"
+                }
+              },
+              "type": "LABEL"
+            }
+          }
+        ],
+        "viewType": "DYNAMIC_PAGE"
+      }
+    },
+    {
+      "pageUID": "4CBDBD8DE0F94600132C2A5CCB16EDB6",
       "key": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm",
       "viewConfig": {
         "type": "TestHeader",
         "idFieldName": "",
-        "columnSize": "20% 80%",
+        "columnSize": "40% 60%",
         "columnsFlow": "left right",
         "rowSize": "max-content",
         "gridTemplate": [
@@ -189,6 +269,7 @@ export const mock = {
         "areasConfig": [
           {
             "areaName": "header1",
+            "widgetFlow": "left",
             "widgetConfig": {
               "dataType": null,
               "options": {
@@ -207,6 +288,7 @@ export const mock = {
           },
           {
             "areaName": "header2",
+            "widgetFlow": "null",
             "widgetConfig": {
               "options": {
                 "innerGridConfig": {
@@ -222,6 +304,7 @@ export const mock = {
                     "areasConfig": [
                       {
                         "areaName": "test_inner_area_1",
+                        "widgetFlow": "auto",
                         "widgetConfig": {
                           "dataType": null,
                           "options": {
@@ -240,6 +323,7 @@ export const mock = {
                       },
                       {
                         "areaName": "test_inner_area_2",
+                        "widgetFlow": "auto",
                         "widgetConfig": {
                           "dataType": null,
                           "options": {
@@ -273,78 +357,7 @@ export const mock = {
       }
     },
     {
-      "key": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage",
-      "viewConfig": {
-        "type": "TestReqData",
-        "idFieldName": "",
-        "columnSize": "auto",
-        "columnsFlow": "left",
-        "rowSize": "max-content max-content max-content",
-        "gridTemplate": [
-          "main_1",
-          "main_2",
-          "main_3"
-        ],
-        "areasConfig": [
-          {
-            "areaName": "main_1",
-            "widgetConfig": {
-              "dataType": null,
-              "options": {
-                "width": {
-                  "value": "max-content"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "max-content"
-                }
-              },
-              "type": "LABEL"
-            }
-          },
-          {
-            "areaName": "main_2",
-            "widgetConfig": {
-              "dataType": null,
-              "options": {
-                "width": {
-                  "value": "max-content"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "max-content"
-                }
-              },
-              "type": "LABEL"
-            }
-          },
-          {
-            "areaName": "main_3",
-            "widgetConfig": {
-              "dataType": null,
-              "options": {
-                "width": {
-                  "value": "max-content"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "max-content"
-                }
-              },
-              "type": "LABEL"
-            }
-          }
-        ],
-        "viewType": "DYNAMIC_PAGE"
-      }
-    },
-    {
+      "pageUID": "C423E087E3E0B97F92449CCC584B83E7",
       "key": "ru.pbs.module.staff.pages.requriment.TestDynamicRequirementDataPage",
       "viewConfig": {
         "type": "TestReqData",
@@ -360,6 +373,7 @@ export const mock = {
         "areasConfig": [
           {
             "areaName": "main_1",
+            "widgetFlow": "auto",
             "widgetConfig": {
               "dataType": null,
               "options": {
@@ -378,6 +392,7 @@ export const mock = {
           },
           {
             "areaName": "main_2",
+            "widgetFlow": "auto",
             "widgetConfig": {
               "dataType": null,
               "options": {
@@ -396,6 +411,7 @@ export const mock = {
           },
           {
             "areaName": "main_3",
+            "widgetFlow": "auto",
             "widgetConfig": {
               "dataType": null,
               "options": {
@@ -417,11 +433,12 @@ export const mock = {
       }
     },
     {
+      "pageUID": "85C5DB540DA3D4ADA9F187B45E1147FC",
       "key": "ru.pbs.module.staff.pages.requriment.DynamicReqHeaderForm",
       "viewConfig": {
         "type": "TestHeader",
         "idFieldName": "",
-        "columnSize": "40% 60%",
+        "columnSize": "20% 80%",
         "columnsFlow": "left right",
         "rowSize": "max-content",
         "gridTemplate": [
@@ -430,6 +447,7 @@ export const mock = {
         "areasConfig": [
           {
             "areaName": "header1",
+            "widgetFlow": "left",
             "widgetConfig": {
               "dataType": null,
               "options": {
@@ -448,6 +466,7 @@ export const mock = {
           },
           {
             "areaName": "header2",
+            "widgetFlow": null,
             "widgetConfig": {
               "options": {
                 "innerGridConfig": {
@@ -463,6 +482,7 @@ export const mock = {
                     "areasConfig": [
                       {
                         "areaName": "test_inner_area_1",
+                        "widgetFlow": "auto",
                         "widgetConfig": {
                           "dataType": null,
                           "options": {
@@ -481,6 +501,7 @@ export const mock = {
                       },
                       {
                         "areaName": "test_inner_area_2",
+                        "widgetFlow": "auto",
                         "widgetConfig": {
                           "dataType": null,
                           "options": {

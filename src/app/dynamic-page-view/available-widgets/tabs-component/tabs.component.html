@@ -1,4 +1,4 @@
-<tabset>
+<tabset border-styling>
   <tab *ngFor="let tab of tabs" [heading]="tab.title">
     <ng-container [ngSwitch]="tab.config.widgetConfig.type">
       <app-dynamic-tree-list

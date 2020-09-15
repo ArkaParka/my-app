@@ -1,5 +1,9 @@
 :host {
   height: 100%;
   display: grid;
-  gap: 0;
+  grid-gap: 1px;
+}
+
+:host ::ng-deep app-grid-container {
+  grid-gap: 0;
 }

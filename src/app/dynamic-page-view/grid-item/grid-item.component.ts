@@ -7,6 +7,8 @@ import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {DynamicPageStoreService} from "../available-widgets/dynamic-page-services/dynamic-page-store.service";
 import {EActionTypes} from "../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual'
+import cloneDeep from 'lodash/cloneDeep'
+import {IAreasConfig} from "../interfaces/IAreasConfig";
 
 @Component({
   selector: 'app-grid-item',
@@ -14,21 +16,47 @@ import isEqual from 'lodash/isEqual'
   styleUrls: ['./grid-item.component.scss']
 })
 export class GridItemComponent {
-  componentsArray: any[];
 
-  @Input('areaName') areaName: string;
-  @Input('gridAreaName') gridAreaName: string;
+  private _widgetConfig: IWidgetConfig = null;
+  private _gridAreaName: string = null;
+  private _columnFlow: string = null;
+  private currentDisplayEvent: IWidgetEventAction = null;
+  private displayEventViewConfig: ITypePageViewConfig = null;
+
   @HostBinding('style.grid-area') gridArea;
   @HostBinding('style.display') display;
   @HostBinding('style.grid-template-areas') areaGridTemplate;
   @HostBinding('style.grid-template-columns') gridTemplateColumns;
   @HostBinding('style.grid-template-rows') gridTemplateRows;
+  @HostBinding('style.justify-items') justifyItems;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer,
+              private dpStore: DynamicPageStoreService) {
+  }
+
+  @Input('areaConfig') set areaConfig(value: IAreasConfig) {
+    this._widgetConfig = cloneDeep(value.widgetConfig);
+    this._gridAreaName = cloneDeep(value.areaName);
+    this._columnFlow = cloneDeep(value.widgetFlow);
+  }
+
+  get gridAreaName() {
+    return this._gridAreaName;
+  }
+
+  get columnFlow() {
+    return this._columnFlow;
+  }
+
+  get widgetConfig() {
+    return this._widgetConfig;
   }
 
   ngOnInit(): void {
     this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
+
+    let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;
+    this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(`${columnFlow}`);
 
     this.dpStore.select("widgetAction").pipe(
       mergeMap((events: IWidgetEventAction[]) => {

@@ -1,6 +1,6 @@
 import {IWidgetConfig} from "./IWidgetConfig";
 
-export interface ITabTree {
+export interface ITabTreeWidgetOptions {
   tabs: {
     value: [
       {

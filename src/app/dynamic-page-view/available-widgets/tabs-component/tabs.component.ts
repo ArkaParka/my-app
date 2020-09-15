@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {ITabTree} from "../../interfaces/ITabTree";
+import {ITabTreeWidgetOptions} from "../../interfaces/ITabTreeWidgetOptions";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 
 @Component({
@@ -7,7 +7,7 @@ import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
   styleUrls: ['./tabs.component.scss']
 })
 export class TabTreeComponent implements OnInit {
-  @Input() widgetOptions: ITabTree;
+  @Input() widgetOptions: ITabTreeWidgetOptions;
 
   private tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 

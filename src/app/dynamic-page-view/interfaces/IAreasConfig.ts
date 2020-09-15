@@ -1,6 +1,7 @@
 import {IWidgetConfig} from "./IWidgetConfig";
 
 export interface IAreasConfig {
-  areaName: string,
-  widgetConfig: IWidgetConfig
+  areaName: string;
+  widgetFlow: string;
+  widgetConfig: IWidgetConfig;
 }
