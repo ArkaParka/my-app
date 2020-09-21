@@ -4,7 +4,7 @@ import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IWidgetEventAction} from "../interfaces/IWidgetEventAction";
 import {mergeMap, tap} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
-import {DynamicPageStoreService} from "../available-widgets/dynamic-page-services/dynamic-page-store.service";
+import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionTypes} from "../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'

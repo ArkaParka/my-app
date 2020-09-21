@@ -3,7 +3,7 @@
     <ng-container [ngSwitch]="tab.config.widgetConfig.type">
       <app-dynamic-tree-list
         *ngSwitchCase="'TREE_LIST_VIEW'"
-        [treeListConfig]="tab.config.widgetConfig"></app-dynamic-tree-list>
+        [treeListConfig]="{widgetConfig: tab.config.widgetConfig, widgetData: getWidgetData(tab.config.widgetConfig.options.get_data_path.value)}"></app-dynamic-tree-list>
     </ng-container>
   </tab>
 </tabset>

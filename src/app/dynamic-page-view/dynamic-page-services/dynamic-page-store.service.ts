@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
-import {IDynamicPageStore} from "../../interfaces/IDynamicPageStore";
+import {IDynamicPageStore} from "../interfaces/IDynamicPageStore";
 import {distinctUntilChanged, map} from "rxjs/operators";
 
 @Injectable({
@@ -9,7 +9,9 @@ import {distinctUntilChanged, map} from "rxjs/operators";
 export class DynamicPageStoreService {
   private stateSubject: BehaviorSubject<IDynamicPageStore> = new BehaviorSubject<IDynamicPageStore>({
     widgetAction: [],
-    typePageViewConfigs: []
+    typePageViewConfigs: [],
+    initialWidgetData: [],
+    isInitialDataLoaded: false
   });
 
   public getState = (): Observable<IDynamicPageStore> => this.stateSubject.pipe(distinctUntilChanged());

@@ -2,9 +2,10 @@ export interface IActions {
   actionName: string,
   actionTitle: string,
   type: Type,
-  configType: string,
+  configType: EActionConfigType,
   execConfig: {
-    formActionType?: FormActionTypes,
+    pageUID?: string,
+    formActionType?: EFormActionType,
     formKey?: string,
     confirmMessage?: string
   }
@@ -16,8 +17,13 @@ enum Type {
   REQ_MULTY
 }
 
-export enum FormActionTypes {
-  CREATE='CREATE',
-  UPDATE='UPDATE',
-  DELETE='DELETE'
+export enum EFormActionType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE'
+}
+
+export enum EActionConfigType {
+  GET_DATA_REQUEST = 'GET_DATA_REQUEST',
+  FORM_ACTION = 'FormAction',
 }

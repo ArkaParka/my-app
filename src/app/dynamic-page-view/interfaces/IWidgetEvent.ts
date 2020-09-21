@@ -5,3 +5,7 @@ export interface IWidgetEvent {
   dataType: string;
   actions: IWidgetEventAction[]
 }
+
+export enum EEventTypes {
+  ON_SELECT='ON_SELECT'
+}

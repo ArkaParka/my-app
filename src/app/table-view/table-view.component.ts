@@ -3,7 +3,7 @@ import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {IActions, FormActionTypes} from '../models/IActions';
+import {IActions, EFormActionType} from '../models/IActions';
 import {IDataTypes} from '../models/IDataTypes';
 import {
   NzTableQueryParams,
@@ -158,10 +158,10 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
               });
             });
 
-            if (e.target.value !== FormActionTypes.DELETE) {
+            if (e.target.value !== EFormActionType.DELETE) {
               this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
             }
-            if (e.target.value === FormActionTypes.UPDATE) {
+            if (e.target.value === EFormActionType.UPDATE) {
               this.getFormDataInstance(this.typeForm);
             }
             this.largeModal.show();
@@ -341,7 +341,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
   }
 
   public done(): void {
-    if ((this.putFormData as any).indicator === FormActionTypes.DELETE) {
+    if ((this.putFormData as any).indicator === EFormActionType.DELETE) {
       this.deleteFormDataInstance(this.typeForm);
     } else {
       this.putFormDataInstance();

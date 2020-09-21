@@ -8,6 +8,9 @@ export interface IWidgetOptions {
       value: string
     }
   };
+  get_data_path?: {
+    value: string;
+  };
   url?: string;
   innerGridConfig?: {
     value: IDynamicPageViewConfig

@@ -1,14 +1,8 @@
 import {IWidgetConfig} from "./IWidgetConfig";
+import {ITabWidget} from "./ITabWidget";
 
 export interface ITabTreeWidgetOptions {
   tabs: {
-    value: [
-      {
-        title: string;
-        config: {
-          widgetConfig: IWidgetConfig
-        }
-      }
-    ]
+    value: ITabWidget[]
   }
 }
