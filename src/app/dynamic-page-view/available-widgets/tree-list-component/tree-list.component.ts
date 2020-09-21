@@ -16,8 +16,9 @@ export class TreeListComponent {
   private _treeListConfig: IWidgetConfig = null;
   private _treeListData: NzTreeNodeOptions[] = [];
   private events: IWidgetEvent[];
+  private treeDataTypes: { id: string, dataType: string }[] = [];
 
-  @Input('treeListConfig') set treeListConfiguration(value: { widgetConfig: IWidgetConfig, widgetData: ITreeListDataResponse}) {
+  @Input('treeListConfig') set treeListConfiguration(value: { widgetConfig: IWidgetConfig, widgetData: ITreeListDataResponse }) {
     this._treeListConfig = value.widgetConfig;
     this.events = this.treeListConfig.options.events.value;
 
@@ -26,7 +27,8 @@ export class TreeListComponent {
         title: treeNode.title,
         key: treeNode.id.toString(),
         children: this.getTreeNodeChildren(treeNode.children)
-      })
+      });
+      this.treeDataTypes.push({id: treeNode.id.toString(), dataType: treeNode.dataType});
     });
 
     console.log(value.widgetData)
@@ -42,23 +44,24 @@ export class TreeListComponent {
 
   private getTreeNodeChildren(treeNode: ITreeListDataValue[]): NzTreeNodeOptions[] {
     let result: NzTreeNodeOptions[] = [];
-    treeNode.forEach(node => result.push(
-      {
+    treeNode.forEach(node => {
+      result.push({
         title: node.title,
         key: node.id.toString(),
         children: this.getTreeNodeChildren(node.children)
-      }
-    ));
+      });
+      this.treeDataTypes.push({id: node.id.toString(), dataType: node.dataType});
+    });
     return result;
   }
 
   treeNodeClicked($event: NzFormatEmitEvent) {
-    if (!$event.node.children.length) {
-      this.events.filter(event => event.eventType == EEventTypes.ON_SELECT).forEach(event => {
+    this.events.filter(event => event.eventType === EEventTypes.ON_SELECT)
+      .filter(event => event.dataType === this.treeDataTypes.find(dataType => dataType.id === $event.node.key).dataType)
+      .forEach(event => {
         let storeData: IWidgetEventAction[] = [];
         event.actions.forEach(action => storeData.push(action));
         this.dpStore.setState({widgetAction: storeData});
       })
-    }
   }
 }

@@ -68,6 +68,7 @@ export class GridItemComponent {
       }),
       tap((typePageConfigs: ITypePageViewConfig[]) => {
         if (this.currentDisplayEvent) {
+          //TODO: как только бэк изменит значения, поменять config.key на config.pageUID
           this.displayEventViewConfig = typePageConfigs.find(config => config.key === this.currentDisplayEvent.options.widgetConfig.options.page_key.value);
           if (this.displayEventViewConfig) {
             this._widgetConfig = {

@@ -33,83 +33,16 @@ export const mock = {
             "tabs": {
               "value": [
                 {
-                "title": "Требования",
-                "config": {
-                  "widgetConfig": {
-                    "type": "TREE_LIST_VIEW",
-                    "options": {
-                      "get_data_path": {"value": "get_requirement_data"},
-                      "events": {
-                        "value": [{
-                          "eventType": "ON_SELECT",
-                          "dataType": "ru.pbs.module.staff.pages.model.PersonDataRow",
-                          "actions": [
-                            {
-                            "actionType": "DISPLAY_WIDGET",
-                            "options": {
-                              "targetArea": "header_area",
-                              "widgetConfig": {
-                                "type": "PAGE_VIEW",
-                                "options": {"page_key": {"value": "ru.pbs.module.staff.pages.requrimenDynamicReqHeaderFormt."}},
-                                "dataType": null
-                              }
-                            }
-                          }, {
-                            "actionType": "DISPLAY_WIDGET",
-                            "options": {
-                              "targetArea": "data_area",
-                              "widgetConfig": {
-                                "type": "PAGE_VIEW",
-                                "options": {"page_key": {"value": "ru.pbs.module.staff.pages.requriment.TestDynamicRequirementDataPage"}},
-                                "dataType": null
-                              }
-                            }
-                          }]
-                        }]
-                      }
-                    },
-                    "dataType": null
-                  }
-                }
-              },
-                {
-                "title": "Задачи",
-                "config": {
-                  "widgetConfig": {
-                    "type": "TREE_LIST_VIEW",
-                    "options": {
-                      "get_data_path": {"value": "get_task_data"},
-                      "events": {
-                        "value": [
-                          {
-                          "eventType": "ON_SELECT",
-                          "dataType": "ru.pbs.module.staff.pages.model.PersonDataRow",
-                          "actions": [
-                            {
-                            "actionType": "DISPLAY_WIDGET",
-                            "options": {
-                              "targetArea": "header_area",
-                              "widgetConfig": {
-                                "type": "PAGE_VIEW",
-                                "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm"}},
-                                "dataType": null
-                              }
-                            }
-                          }, {
-                            "actionType": "DISPLAY_WIDGET",
-                            "options": {
-                              "targetArea": "data_area",
-                              "widgetConfig": {
-                                "type": "PAGE_VIEW",
-                                "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage"}},
-                                "dataType": null
-                              }
-                            }
-                          }]
-                        },
-                          {
+                  "title": "Требования",
+                  "config": {
+                    "widgetConfig": {
+                      "type": "TREE_LIST_VIEW",
+                      "options": {
+                        "get_data_path": {"value": "get_requirement_data"},
+                        "events": {
+                          "value": [{
                             "eventType": "ON_SELECT",
-                            "dataType": "ru.pbs.module.staff.pages.model.jydhfdghfj",
+                            "dataType": "ru.pbs.module.staff.pages.model.PersonDataRow",
                             "actions": [
                               {
                                 "actionType": "DISPLAY_WIDGET",
@@ -117,7 +50,7 @@ export const mock = {
                                   "targetArea": "header_area",
                                   "widgetConfig": {
                                     "type": "PAGE_VIEW",
-                                    "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm"}},
+                                    "options": {"page_key": {"value": "ru.pbs.module.staff.pages.requrimenDynamicReqHeaderFormt."}},
                                     "dataType": null
                                   }
                                 }
@@ -127,19 +60,86 @@ export const mock = {
                                   "targetArea": "data_area",
                                   "widgetConfig": {
                                     "type": "PAGE_VIEW",
-                                    "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage"}},
+                                    "options": {"page_key": {"value": "ru.pbs.module.staff.pages.requriment.TestDynamicRequirementDataPage"}},
                                     "dataType": null
                                   }
                                 }
                               }]
-                          }
-                        ]
-                      }
-                    },
-                    "dataType": null
+                          }]
+                        }
+                      },
+                      "dataType": null
+                    }
                   }
-                }
-              }]
+                },
+                {
+                  "title": "Задачи",
+                  "config": {
+                    "widgetConfig": {
+                      "type": "TREE_LIST_VIEW",
+                      "options": {
+                        "get_data_path": {"value": "get_task_data"},
+                        "events": {
+                          "value": [
+                            {
+                              "eventType": "ON_SELECT",
+                              "dataType": "ru.pbs.module.staff.pages.model.PersonDataRow",
+                              "actions": [
+                                {
+                                  "actionType": "DISPLAY_WIDGET",
+                                  "options": {
+                                    "targetArea": "header_area",
+                                    "widgetConfig": {
+                                      "type": "PAGE_VIEW",
+                                      "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm"}},
+                                      "dataType": null
+                                    }
+                                  }
+                                }, {
+                                  "actionType": "DISPLAY_WIDGET",
+                                  "options": {
+                                    "targetArea": "data_area",
+                                    "widgetConfig": {
+                                      "type": "PAGE_VIEW",
+                                      "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage"}},
+                                      "dataType": null
+                                    }
+                                  }
+                                }]
+                            },
+                            {
+                              "eventType": "ON_SELECT",
+                              "dataType": "ru.pbs.module.staff.pages.model.jydhfdghfj",
+                              "actions": [
+                                {
+                                  "actionType": "DISPLAY_WIDGET",
+                                  "options": {
+                                    "targetArea": "header_area",
+                                    "widgetConfig": {
+                                      "type": "PAGE_VIEW",
+                                      "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.DynamicTaskHeaderForm"}},
+                                      "dataType": null
+                                    }
+                                  }
+                                }, {
+                                  "actionType": "DISPLAY_WIDGET",
+                                  "options": {
+                                    "targetArea": "data_area",
+                                    "widgetConfig": {
+                                      "type": "PAGE_VIEW",
+                                      "options": {"page_key": {"value": "ru.pbs.module.staff.pages.task.TestDynamicTaskDataPage"}},
+                                      "dataType": null
+                                    }
+                                  }
+                                }]
+                            }
+                          ]
+                        }
+                      },
+                      "dataType": null
+                    }
+                  }
+                }]
             }
           }, "dataType": null
         }
