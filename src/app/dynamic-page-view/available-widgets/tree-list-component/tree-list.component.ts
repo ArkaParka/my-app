@@ -30,8 +30,6 @@ export class TreeListComponent {
       });
       this.treeDataTypes.push({id: treeNode.id.toString(), dataType: treeNode.dataType});
     });
-
-    console.log(value.widgetData)
   };
 
 

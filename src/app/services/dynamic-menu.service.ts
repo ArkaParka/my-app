@@ -4,13 +4,10 @@ import {Observable, throwError, of} from 'rxjs';
 import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
-import {tap, catchError} from 'rxjs/operators';
 import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
-import {tabMock1} from "../../../tab1";
-import {tabMock2} from "../../../tab2";
 
 
 @Injectable({
@@ -60,9 +57,6 @@ export class DynamicMenuService {
   }
 
   public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
-    if (action === 'get_task_data') return of(tabMock1)
-    else if (action === 'get_requirement_data') return of(tabMock2)
-    else
       return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
   }
 }
