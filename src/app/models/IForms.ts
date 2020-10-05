@@ -1,4 +1,4 @@
-export interface Forms {
+export interface IForms {
     formKey: string,
     schema: object[]
 }

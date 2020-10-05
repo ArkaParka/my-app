@@ -3,8 +3,8 @@ import {DynamicMenuService} from '../services/dynamic-menu.service';
 import {FormGroup} from '@angular/forms';
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {FormlyFieldConfig, FormlyFormOptions} from '@ngx-formly/core';
-import {Actions, FormActionTypes} from '../models/Actions.interface';
-import {DataTypes} from '../models/DataTypes.interface';
+import {IActions, EFormActionType} from '../models/IActions';
+import {IDataTypes} from '../models/IDataTypes';
 import {
   NzTableQueryParams,
   NzTableFilterFn,
@@ -13,15 +13,15 @@ import {
   NzTableSortOrder
 } from 'ng-zorro-antd/table';
 import {switchMap, takeUntil} from "rxjs/operators";
-import {ModulePageConfiguration} from "../models/ModulePageConfiguration.interface";
+import {IModulePageConfiguration} from "../models/IModulePageConfiguration";
 import {ModuleData} from "../models/ModuleData.interface";
 import {Subject, zip} from "rxjs";
-import {Forms} from "../models/Forms.interface";
-import {FieldGroup} from "../models/FieldGroup.interface";
+import {IForms} from "../models/IForms";
+import {IFieldGroup} from "../models/IFieldGroup";
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {KeyValue} from '@angular/common';
-import {FieldGroupAdditionalProperties} from "../models/FieldGroupAdditionalProperties";
+import {IFieldGroupAdditionalProperties} from "../models/IFieldGroupAdditionalProperties";
 import {DocumentBaseComponent} from "../containers/document-base.component";
 
 interface ColumnItem {
@@ -49,8 +49,8 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
   isFormLoading: boolean = true;
   isModalDataLoading: boolean = false;
 
-  public actions: Actions[];
-  private dataTypes: DataTypes[];
+  public actions: IActions[];
+  private dataTypes: IDataTypes[];
   public fields: FormlyFieldConfig[];
   public form = new FormGroup({});
   public model: any = {};
@@ -82,7 +82,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
-  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: ModulePageConfiguration }) {
+  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
     this.pageConfigurationCb(data.pageConfiguration);
@@ -138,7 +138,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
   }
 
   actionButtonClicked(e): void {
-    let forms: Forms[];
+    let forms: IForms[];
     this.dataTypes.map(elem => forms = elem.forms);
     for (let item of this.actions) {
       if (e.target.value === item.execConfig.formActionType) {
@@ -158,10 +158,10 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
               });
             });
 
-            if (e.target.value !== FormActionTypes.DELETE) {
+            if (e.target.value !== EFormActionType.DELETE) {
               this.fields = this.generateFormlyFieldConfig([elem.schema], e.target.value);
             }
-            if (e.target.value === FormActionTypes.UPDATE) {
+            if (e.target.value === EFormActionType.UPDATE) {
               this.getFormDataInstance(this.typeForm);
             }
             this.largeModal.show();
@@ -171,7 +171,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
     }
   }
 
-  modifyFormlyField(field, additionalProperties: FieldGroupAdditionalProperties, actionType) {
+  modifyFormlyField(field, additionalProperties: IFieldGroupAdditionalProperties, actionType) {
     let newField = cloneDeep(field);
     if (additionalProperties) {
       if (additionalProperties.readOnly && additionalProperties.readOnly.length) {
@@ -183,7 +183,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
     return newField;
   }
 
-  getFieldGroupArray(fieldGroup: FieldGroup[], actionType: string) {
+  getFieldGroupArray(fieldGroup: IFieldGroup[], actionType: string) {
     return fieldGroup.map(fg => {
       let field = cloneDeep(fg.defaultProperties);
 
@@ -215,7 +215,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
 
   generateFormlyFieldConfig(schema, actionType: string) { //schema:FieldGroup
     let result = new Array<any>();
-    let fieldGroup: FieldGroup[] = get(schema, '[0].fieldGroup');
+    let fieldGroup: IFieldGroup[] = get(schema, '[0].fieldGroup');
 
     fieldGroup = this.getFieldGroupArray(fieldGroup, actionType);
 
@@ -248,7 +248,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
     }
   }
 
-  pageConfigurationCb = (resp: ModulePageConfiguration) => {
+  pageConfigurationCb = (resp: IModulePageConfiguration) => {
     if (resp && resp.viewConfig && resp.dataTypes && resp.actions) {
       this.viewConfig = resp.viewConfig;
       this.dataTypes = resp.dataTypes;
@@ -341,7 +341,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
   }
 
   public done(): void {
-    if ((this.putFormData as any).indicator === FormActionTypes.DELETE) {
+    if ((this.putFormData as any).indicator === EFormActionType.DELETE) {
       this.deleteFormDataInstance(this.typeForm);
     } else {
       this.putFormDataInstance();

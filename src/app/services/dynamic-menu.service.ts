@@ -4,10 +4,10 @@ import {Observable, throwError, of} from 'rxjs';
 import {SettingsService} from "./settings.service";
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
-import {tap, catchError} from 'rxjs/operators';
-import {ModulePageConfiguration} from '../models/ModulePageConfiguration.interface';
+import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
+import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 
 
 @Injectable({
@@ -30,7 +30,7 @@ export class DynamicMenuService {
     return this.http.get<Array<ModuleActionsResponse>>(`/pbs/modules/${nodeName}/base/v1/menuItems`);
   }
 
-  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<ModulePageConfiguration> {
+  public getModulePageConfiguration(nodeName: string, actionName: string): Observable<IModulePageConfiguration> {
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 
@@ -56,4 +56,7 @@ export class DynamicMenuService {
     return this.http.delete(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }
 
+  public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
+      return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
+  }
 }

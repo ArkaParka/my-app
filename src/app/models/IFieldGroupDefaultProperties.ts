@@ -1,12 +1,12 @@
-import {FieldGroup} from "./FieldGroup.interface";
+import {IFieldGroup} from "./IFieldGroup";
 
-export interface FieldGroupDefaultProperties {
+export interface IFieldGroupDefaultProperties {
   className?:	string,
   fieldArray?: {
     type: string,
-    fieldGroup: FieldGroup[]
+    fieldGroup: IFieldGroup[]
   },
-  fieldGroup?: FieldGroup[],
+  fieldGroup?: IFieldGroup[],
   key?: string,
   templateOptions?: {
     label?: string,

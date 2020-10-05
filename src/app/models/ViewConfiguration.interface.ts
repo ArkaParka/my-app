@@ -1,6 +1,7 @@
 import { GridOptions } from 'ag-grid-community';
+import {IDynamicPageViewConfig} from "./IDynamicPageViewConfig";
 
-export interface ViewConfiguration {
+export interface IViewConfig {
     type: string,
-    config: GridOptions
+    config: GridOptions | IDynamicPageViewConfig
 }

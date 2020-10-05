@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {ModulePageConfiguration} from '../../models/ModulePageConfiguration.interface';
-import {takeUntil} from 'rxjs/operators';
+import {ActivatedRoute, Params} from "@angular/router";
+import {IModulePageConfiguration} from '../../models/IModulePageConfiguration';
+import {mergeMap, takeUntil, tap} from 'rxjs/operators';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {RoutingService} from "../../services/routing.service";
 import {DocumentBaseComponent} from "../document-base.component";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-form-loader',
@@ -19,37 +20,36 @@ export class FormLoaderComponent extends DocumentBaseComponent {
   public dataForComponent: {
     moduleKey: string,
     configPath: string,
-    pageConfiguration: ModulePageConfiguration
+    pageConfiguration: IModulePageConfiguration
   };
   public isFormLoading: boolean = true;
-
-
-  loadForm() {
-    this.isFormLoading = false;
-    this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(resp => {
-      this.dataForComponent = {
-        moduleKey: this.moduleKey,
-        configPath: this.configPath,
-        pageConfiguration: resp
-      };
-      this.viewType = resp.viewConfig.type;
-      this.isFormLoading = false;
-    })
-  }
-
 
   constructor(private dynamicMenuService: DynamicMenuService,
               private rs: RoutingService,
               private route: ActivatedRoute) {
     super();
 
-    this.route.params.subscribe(params => {
-      this.moduleKey = params['moduleKey'];
-      this.configPath = params['configPath'];
-      this.rs.emit(params);
-      this.loadForm();
-    })
+    this.route.params.pipe(
+      mergeMap(params => this.setupRouteParams(params)),
+      tap(resp => this.loadForm(resp))
+    ).subscribe();
+  }
+
+  setupRouteParams(params: Params): Observable<any> {
+    this.moduleKey = params['moduleKey'];
+    this.configPath = params['configPath'];
+    this.rs.emit(params);
+    this.isFormLoading = true;
+    return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath)
+  }
+
+  loadForm(resp) {
+    this.dataForComponent = {
+      moduleKey: this.moduleKey,
+      configPath: this.configPath,
+      pageConfiguration: resp
+    };
+    this.viewType = resp.viewConfig.type;
+    this.isFormLoading = false;
   }
 }
