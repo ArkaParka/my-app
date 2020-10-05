@@ -23,7 +23,12 @@ const widgetList:
   {
     widgetName: 'LABEL',
     component: LabelComponent
-  }
+  },
+  // {
+  //   //TODO: разбираться с PAGE_VIEW
+  //   widgetName: 'PAGE_VIEW',
+  //   component: GridContainerComponent
+  // }
 ];
 
 

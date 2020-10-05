@@ -19,7 +19,7 @@ import {IPageActionResponse} from "../interfaces/IPageActionResponse";
 export class DynamicPageComponent {
   private moduleKey: string = null;
   private configPath: string = null;
-  private pageConfig: IModulePageConfiguration = null;
+  private pageConfig: any = null;
 
   constructor(private dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService) {
@@ -28,6 +28,7 @@ export class DynamicPageComponent {
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
+    // this.pageConfig = mock;
     this.pageConfig = data.pageConfiguration;
 
     let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);

@@ -27,7 +27,6 @@ export class DynamicWidgetDirective implements OnInit {
     this.loadComponent();
   }
 
-
   loadComponent() {
     const component = getDynamicWidget(this.widgetConfig.type);
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component['component']);

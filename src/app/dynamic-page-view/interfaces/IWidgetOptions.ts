@@ -15,4 +15,10 @@ export interface IWidgetOptions {
   innerGridConfig?: {
     value: IDynamicPageViewConfig
   };
+  width?: {
+    value?: string;
+  }
+  height?: {
+    value?: string;
+  };
 }

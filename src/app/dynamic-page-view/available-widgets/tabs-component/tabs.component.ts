@@ -12,6 +12,7 @@ import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
 export class TabTreeComponent {
   private _widgetOptions: ITabTreeWidgetOptions;
   public widgetData: { dataPath: string, data: any }[] = [];
+  private tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 
   @Input() set widgetOptions(value: ITabTreeWidgetOptions) {
     this._widgetOptions = value;
@@ -32,8 +33,6 @@ export class TabTreeComponent {
   get widgetOptions() {
     return this._widgetOptions;
   }
-
-  private tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 
   constructor(private dpStore: DynamicPageStoreService) {
   }
