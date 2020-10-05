@@ -14,9 +14,9 @@ import {ITreeListDataValue} from "../../interfaces/ITreeListDataValue";
 })
 export class TreeListComponent {
   private _treeListConfig: IWidgetConfig = null;
-  private _treeListData: NzTreeNodeOptions[] = [];
   private events: IWidgetEvent[];
   private treeDataTypes: { id: string, dataType: string }[] = [];
+  public _treeListData: NzTreeNodeOptions[] = [];
 
   @Input('treeListConfig') set treeListConfiguration(value: { widgetConfig: IWidgetConfig, widgetData: ITreeListDataResponse }) {
     this._treeListConfig = value.widgetConfig;

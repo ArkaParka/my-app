@@ -21,7 +21,7 @@ export class DynamicPageComponent {
   private configPath: string = null;
   private pageConfig: any = null;
 
-  constructor(private dpStore: DynamicPageStoreService,
+  constructor(public dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService) {
   }
 

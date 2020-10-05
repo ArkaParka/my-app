@@ -12,7 +12,7 @@ import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
 export class TabTreeComponent {
   private _widgetOptions: ITabTreeWidgetOptions;
   public widgetData: { dataPath: string, data: any }[] = [];
-  private tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
+  public tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 
   @Input() set widgetOptions(value: ITabTreeWidgetOptions) {
     this._widgetOptions = value;
