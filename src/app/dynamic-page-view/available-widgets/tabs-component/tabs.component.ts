@@ -11,7 +11,7 @@ import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
 })
 export class TabTreeComponent {
   private _widgetOptions: ITabTreeWidgetOptions;
-  public widgetData: { dataPath: string, data: any }[] = [];
+  public tabData: { dataPath: string, data: any }[] = [];
   public tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 
   @Input() set widgetOptions(value: ITabTreeWidgetOptions) {
@@ -24,7 +24,7 @@ export class TabTreeComponent {
       }),
       tap((initialData: IInitWidgetData[]) => {
         if (initialData) {
-          this.widgetData = initialData;
+          this.tabData = initialData;
         }
       })
     ).subscribe();
@@ -38,6 +38,6 @@ export class TabTreeComponent {
   }
 
   public getWidgetData(dataPath: string) {
-    return this.widgetData.find(data => data.dataPath === dataPath);
+    return this.tabData.find(data => data.dataPath === dataPath);
   }
 }

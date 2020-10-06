@@ -2,6 +2,8 @@ import {BlankComponent} from "./blank-component/blank-component";
 import {TabTreeComponent} from "./tabs-component/tabs.component";
 import {GridContainerComponent} from "../grid-container/grid-container.component";
 import {LabelComponent} from "./label/label.component";
+import {InputComponent} from "./input-component/input.component";
+import {TextareaComponent} from "./textarea-component/textarea.component";
 
 const widgetList:
   {
@@ -23,6 +25,14 @@ const widgetList:
   {
     widgetName: 'LABEL',
     component: LabelComponent
+  },
+  {
+    widgetName: 'INPUT',
+    component: InputComponent
+  },
+  {
+    widgetName: 'TEXTAREA',
+    component: TextareaComponent
   },
   // {
   //   //TODO: разбираться с PAGE_VIEW

@@ -54,12 +54,14 @@ export class TreeListComponent {
   }
 
   treeNodeClicked($event: NzFormatEmitEvent) {
+    let dataType = this.treeDataTypes.find(dataType => dataType.id === $event.node.key);
     this.events.filter(event => event.eventType === EEventTypes.ON_SELECT)
-      .filter(event => event.dataType === this.treeDataTypes.find(dataType => dataType.id === $event.node.key).dataType)
+      .filter(event => event.dataType === dataType.dataType)
       .forEach(event => {
         let storeData: IWidgetEventAction[] = [];
         event.actions.forEach(action => storeData.push(action));
         this.dpStore.setState({widgetAction: storeData});
-      })
+      });
+    this.dpStore.setState({widgetDataRequest: {id: dataType.id, type: dataType.dataType, key: null}});
   }
 }

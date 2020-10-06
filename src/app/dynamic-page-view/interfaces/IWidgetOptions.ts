@@ -21,4 +21,7 @@ export interface IWidgetOptions {
   height?: {
     value?: string;
   };
+  fieldName?: {
+    value: string;
+  }
 }

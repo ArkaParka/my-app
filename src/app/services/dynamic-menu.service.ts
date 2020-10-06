@@ -8,6 +8,7 @@ import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
+import {widgetDataMock} from "../../../widgetDataMock";
 
 
 @Injectable({
@@ -49,7 +50,9 @@ export class DynamicMenuService {
   }
 
   public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: string): Observable<any> {
-    return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
+    if (fromKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock)
+    else
+      return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
   }
 
   public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: string): Observable<any> {
@@ -57,6 +60,6 @@ export class DynamicMenuService {
   }
 
   public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
-      return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
+    return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
   }
 }

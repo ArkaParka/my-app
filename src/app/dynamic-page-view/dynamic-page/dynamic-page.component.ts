@@ -5,6 +5,10 @@ import {EActionConfigType} from "../../models/IActions";
 import {DynamicMenuService} from "../../services/dynamic-menu.service";
 import {zip} from "rxjs";
 import {IPageActionResponse} from "../interfaces/IPageActionResponse";
+import {filter, switchMap, tap} from "rxjs/operators";
+import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
+import {promptGlobalAnalytics} from "@angular/cli/models/analytics";
+import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -44,5 +48,26 @@ export class DynamicPageComponent {
       this.dpStore.setState({isInitialDataLoaded: true})
     }
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
+
+    this.getWidgetsData();
+  }
+
+  private getWidgetsData() {
+    let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
+    this.dpStore.select('widgetDataRequest').pipe(
+      filter(data => !!data),
+      switchMap((wdr: IWidgetDataRequest) => {
+        widgetsDataRequest.id = wdr.id;
+        widgetsDataRequest.type = wdr.type;
+        return this.dpStore.select('typePageViewConfigs')
+      }),
+      filter(data => !!data),
+      switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
+        widgetsDataRequest.key = typePageViewConfigs.find(config => config.key === widgetsDataRequest.type).pageUID;
+        return this.dynamicMenuService.getFormDataInstance(this.moduleKey, widgetsDataRequest.key, widgetsDataRequest.type, widgetsDataRequest.id);
+      })
+    ).subscribe(widgetData => {
+      this.dpStore.setState({widgetData: widgetData});
+    });
   }
 }

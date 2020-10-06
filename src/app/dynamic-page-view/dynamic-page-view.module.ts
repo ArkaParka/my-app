@@ -11,13 +11,18 @@ import {TabsModule} from "ngx-bootstrap/tabs";
 import {NzIconModule, NzTreeModule} from "ng-zorro-antd";
 import {TreeListComponent} from "./available-widgets/tree-list-component/tree-list.component";
 import {LabelComponent} from "./available-widgets/label/label.component";
+import {InputComponent} from "./available-widgets/input-component/input.component";
+import {SharedModule} from "../shared/shared.module";
+import {TextareaComponent} from "./available-widgets/textarea-component/textarea.component";
 
 const AvailableWidgets = [
   BlankComponent,
   TabTreeComponent,
   TreeListComponent,
   GridContainerComponent,
-  LabelComponent
+  LabelComponent,
+  InputComponent,
+  TextareaComponent
 ];
 
 @NgModule({
@@ -25,7 +30,8 @@ const AvailableWidgets = [
     CommonModule,
     TabsModule,
     NzTreeModule,
-    NzIconModule
+    NzIconModule,
+    SharedModule
   ],
   declarations: [
     DynamicPageMockComponent,

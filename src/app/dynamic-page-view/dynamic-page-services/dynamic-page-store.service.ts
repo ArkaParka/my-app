@@ -11,7 +11,9 @@ export class DynamicPageStoreService {
     widgetAction: [],
     typePageViewConfigs: [],
     initialWidgetData: [],
-    isInitialDataLoaded: false
+    isInitialDataLoaded: false,
+    widgetDataRequest: null,
+    widgetData: null
   });
 
   public getState = (): Observable<IDynamicPageStore> => this.stateSubject.pipe(distinctUntilChanged());
