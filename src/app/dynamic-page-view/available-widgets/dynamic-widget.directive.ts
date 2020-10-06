@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, Directive, Input, OnInit, ViewContainerRef} from "@angular/core";
+import {ComponentFactoryResolver, Directive, ElementRef, Input, OnInit, ViewContainerRef} from "@angular/core";
 import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IDynamicComponent} from "../interfaces/IDynamicComponent";
 import {getDynamicWidget} from "./widget-list";
@@ -16,7 +16,8 @@ export class DynamicWidgetDirective implements OnInit {
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private viewContainerRef: ViewContainerRef,
-              private dpStore: DynamicPageStoreService) {
+              private dpStore: DynamicPageStoreService,
+              private el:ElementRef) {
   }
 
   @Input('widgetConfig') set widgetConfig(value: IWidgetConfig) {
@@ -30,6 +31,8 @@ export class DynamicWidgetDirective implements OnInit {
 
   ngOnInit(): void {
     this.loadComponent();
+    this.el.nativeElement.nextSibling.style.width=this.widgetConfig?.options?.width?.value;
+    this.el.nativeElement.nextSibling.style.height=this.widgetConfig?.options?.height?.value;
   }
 
   loadComponent() {
