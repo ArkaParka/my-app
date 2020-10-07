@@ -4,6 +4,7 @@ import {GridContainerComponent} from "../grid-container/grid-container.component
 import {LabelComponent} from "./label/label.component";
 import {InputComponent} from "./input-component/input.component";
 import {TextareaComponent} from "./textarea-component/textarea.component";
+import {PageViewComponent} from "./page-view-component/page-view.component";
 
 const widgetList:
   {
@@ -34,11 +35,11 @@ const widgetList:
     widgetName: 'TEXTAREA',
     component: TextareaComponent
   },
-  // {
-  //   //TODO: разбираться с PAGE_VIEW
-  //   widgetName: 'PAGE_VIEW',
-  //   component: GridContainerComponent
-  // }
+  {
+    //TODO: разбираться с PAGE_VIEW
+    widgetName: 'PAGE_VIEW',
+    component: PageViewComponent
+  }
 ];
 
 

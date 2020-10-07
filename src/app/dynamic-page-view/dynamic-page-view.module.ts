@@ -14,6 +14,7 @@ import {LabelComponent} from "./available-widgets/label/label.component";
 import {InputComponent} from "./available-widgets/input-component/input.component";
 import {SharedModule} from "../shared/shared.module";
 import {TextareaComponent} from "./available-widgets/textarea-component/textarea.component";
+import {PageViewComponent} from "./available-widgets/page-view-component/page-view.component";
 
 const AvailableWidgets = [
   BlankComponent,
@@ -22,7 +23,8 @@ const AvailableWidgets = [
   GridContainerComponent,
   LabelComponent,
   InputComponent,
-  TextareaComponent
+  TextareaComponent,
+  PageViewComponent
 ];
 
 @NgModule({
