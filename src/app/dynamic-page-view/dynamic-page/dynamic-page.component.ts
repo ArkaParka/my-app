@@ -9,6 +9,7 @@ import {filter, switchMap, tap} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {promptGlobalAnalytics} from "@angular/cli/models/analytics";
 import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
+import {mock} from "../../../../dynamic-page-mock";
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -32,8 +33,8 @@ export class DynamicPageComponent {
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
-    // this.pageConfig = mock;
-    this.pageConfig = data.pageConfiguration;
+    this.pageConfig = mock;
+    // this.pageConfig = data.pageConfiguration;
 
     let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
     if (initialDataActions && initialDataActions.length) {
