@@ -1,15 +1,6 @@
 export const mock = {
   "actions": [
     {
-      "actionName": "get_requirement_data",
-      "actionTitle": null,
-      "type": "NO_REQ",
-      "configType": "GET_DATA_REQUEST",
-      "execConfig": {
-        "pageUID": "68738E069046DED4929404C54EBA7724"
-      }
-    },
-    {
       "actionName": "get_task_data",
       "actionTitle": null,
       "type": "NO_REQ",
@@ -20,6 +11,15 @@ export const mock = {
     },
     {
       "actionName": "get_product_data",
+      "actionTitle": null,
+      "type": "NO_REQ",
+      "configType": "GET_DATA_REQUEST",
+      "execConfig": {
+        "pageUID": "68738E069046DED4929404C54EBA7724"
+      }
+    },
+    {
+      "actionName": "get_requirement_data",
       "actionTitle": null,
       "type": "NO_REQ",
       "configType": "GET_DATA_REQUEST",
@@ -48,6 +48,9 @@ export const mock = {
             "options": {
               "page_key": {
                 "value": "ru.pbs.module.management.pages.dynamic.ProjectHeaderView"
+              },
+              "needsDataPreload": {
+                "value": true
               }
             },
             "dataType": null
@@ -128,6 +131,9 @@ export const mock = {
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.management.pages.dynamic.ComponentPageView"
+                                          },
+                                          "needsDataPreload": {
+                                            "value": false
                                           }
                                         },
                                         "dataType": null
@@ -149,6 +155,9 @@ export const mock = {
                                         "options": {
                                           "page_key": {
                                             "value": "ru.pbs.module.management.pages.dynamic.BuildPageView"
+                                          },
+                                          "needsDataPreload": {
+                                            "value": false
                                           }
                                         },
                                         "dataType": null
@@ -176,88 +185,6 @@ export const mock = {
   },
   "dataTypes": [],
   "typePageViewConfigs": [
-    {
-      "pageUID": "2FBCF3B6CEEB359B639C7EBA13B5E6ED",
-      "key": "ru.pbs.module.management.pages.dynamic.ProjectHeaderView",
-      "viewConfig": {
-        "type": "ProjectHeaderViewData",
-        "idFieldName": "",
-        "columnSize": "20% 65% 15%",
-        "rowSize": "100%",
-        "gridTemplate": [
-          "project_name create_list status"
-        ],
-        "areasConfig": [
-          {
-            "areaName": "project_name",
-            "widgetFlow": "auto",
-            "widgetConfig": {
-              "dataType": "String",
-              "options": {
-                "fieldName": {
-                  "value": "projectName"
-                },
-                "width": {
-                  "value": "100%"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "100%"
-                }
-              },
-              "type": "LABEL"
-            }
-          },
-          {
-            "areaName": "create_list",
-            "widgetFlow": "auto",
-            "widgetConfig": {
-              "dataType": "String",
-              "options": {
-                "fieldName": {
-                  "value": "tempString"
-                },
-                "width": {
-                  "value": "100%"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "100%"
-                }
-              },
-              "type": "LABEL"
-            }
-          },
-          {
-            "areaName": "status",
-            "widgetFlow": "auto",
-            "widgetConfig": {
-              "dataType": "String",
-              "options": {
-                "fieldName": {
-                  "value": "status"
-                },
-                "width": {
-                  "value": "100%"
-                },
-                "additionalProperties": {
-                  "value": {}
-                },
-                "height": {
-                  "value": "100%"
-                }
-              },
-              "type": "LABEL"
-            }
-          }
-        ],
-        "viewType": "DYNAMIC_PAGE"
-      }
-    },
     {
       "pageUID": "497B26BB8FEC8576D1CF389467AF6F97",
       "key": "ru.pbs.module.management.pages.dynamic.ComponentPageView",
@@ -868,6 +795,88 @@ export const mock = {
               },
               "type": "INNER_GRID",
               "dataType": null
+            }
+          }
+        ],
+        "viewType": "DYNAMIC_PAGE"
+      }
+    },
+    {
+      "pageUID": "2FBCF3B6CEEB359B639C7EBA13B5E6ED",
+      "key": "ru.pbs.module.management.pages.dynamic.ProjectHeaderView",
+      "viewConfig": {
+        "type": "ProjectHeaderViewData",
+        "idFieldName": "",
+        "columnSize": "20% 65% 15%",
+        "rowSize": "100%",
+        "gridTemplate": [
+          "project_name create_list status"
+        ],
+        "areasConfig": [
+          {
+            "areaName": "project_name",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": "String",
+              "options": {
+                "fieldName": {
+                  "value": "projectName"
+                },
+                "width": {
+                  "value": "100%"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "100%"
+                }
+              },
+              "type": "LABEL"
+            }
+          },
+          {
+            "areaName": "create_list",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": "String",
+              "options": {
+                "fieldName": {
+                  "value": "tempString"
+                },
+                "width": {
+                  "value": "100%"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "100%"
+                }
+              },
+              "type": "LABEL"
+            }
+          },
+          {
+            "areaName": "status",
+            "widgetFlow": "auto",
+            "widgetConfig": {
+              "dataType": "String",
+              "options": {
+                "fieldName": {
+                  "value": "status"
+                },
+                "width": {
+                  "value": "100%"
+                },
+                "additionalProperties": {
+                  "value": {}
+                },
+                "height": {
+                  "value": "100%"
+                }
+              },
+              "type": "LABEL"
             }
           }
         ],

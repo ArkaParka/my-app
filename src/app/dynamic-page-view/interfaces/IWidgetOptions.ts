@@ -23,5 +23,9 @@ export interface IWidgetOptions {
   };
   fieldName?: {
     value: string;
-  }
+  };
+  page_key?: {
+    value: string;
+  };
+  needsDataPreload?: boolean;
 }

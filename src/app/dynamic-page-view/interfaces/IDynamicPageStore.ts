@@ -9,6 +9,6 @@ export interface IDynamicPageStore {
   typePageViewConfigs: ITypePageViewConfig[];
   initialWidgetData: IInitWidgetData[];
   isInitialDataLoaded: boolean;
-  widgetData: IWidgetData;
+  widgetData: IWidgetData[];
   widgetDataRequest: IWidgetDataRequest;
 }

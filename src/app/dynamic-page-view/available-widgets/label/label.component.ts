@@ -7,7 +7,7 @@ import {ILabelWidgetOptions} from "../../interfaces/ILabelWidgetOptions";
 })
 export class LabelComponent implements OnInit{
   @Input() widgetOptions: ILabelWidgetOptions;
-  @Input() widgetData: any;
+  @Input() widgetData: any = "Пустой Label";
 
   ngOnInit(): void {
     // console.log(this.widgetData)

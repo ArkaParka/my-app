@@ -9,6 +9,7 @@ import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 import {widgetDataMock} from "../../../widgetDataMock";
+import {headerMock} from "../../headerMock";
 
 
 @Injectable({
@@ -50,9 +51,9 @@ export class DynamicMenuService {
   }
 
   public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: string): Observable<any> {
-    if (fromKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock)
-    else
-      return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
+    if (fromKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock);
+    if (fromKey === '2FBCF3B6CEEB359B639C7EBA13B5E6ED') return of(headerMock);
+    return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
   }
 
   public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: string): Observable<any> {

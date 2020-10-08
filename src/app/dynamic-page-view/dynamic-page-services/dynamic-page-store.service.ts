@@ -13,7 +13,7 @@ export class DynamicPageStoreService {
     initialWidgetData: [],
     isInitialDataLoaded: false,
     widgetDataRequest: null,
-    widgetData: null
+    widgetData: []
   });
 
   public getState = (): Observable<IDynamicPageStore> => this.stateSubject.pipe(distinctUntilChanged());
