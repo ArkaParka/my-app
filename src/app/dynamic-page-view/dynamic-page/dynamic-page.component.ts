@@ -81,7 +81,7 @@ export class DynamicPageComponent {
       }),
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
-        widgetsDataRequest.key = typePageViewConfigs.find(config => config.key === widgetsDataRequest.type).pageUID;
+        widgetsDataRequest.key = typePageViewConfigs.find(config => config.key === widgetsDataRequest.type)?.pageUID;
         return this.dynamicMenuService.getFormDataInstance(this.moduleKey, widgetsDataRequest.key, widgetsDataRequest.type, widgetsDataRequest.id);
       })
     ).subscribe((widgetData: IWidgetData) => {
