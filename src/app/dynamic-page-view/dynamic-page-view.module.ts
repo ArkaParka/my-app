@@ -11,10 +11,13 @@ import {TabsModule} from "ngx-bootstrap/tabs";
 import {NzIconModule, NzTreeModule} from "ng-zorro-antd";
 import {TreeListComponent} from "./available-widgets/tree-list-component/tree-list.component";
 import {LabelComponent} from "./available-widgets/label/label.component";
-import {InputComponent} from "./available-widgets/input-component/input.component";
+import {InputTextComponent} from "./available-widgets/input-component/input-text.component";
 import {SharedModule} from "../shared/shared.module";
 import {TextareaComponent} from "./available-widgets/textarea-component/textarea.component";
 import {PageViewComponent} from "./available-widgets/page-view-component/page-view.component";
+import {InputNumberComponent} from "./available-widgets/input-component/input-number.component";
+import {NgxMaskModule} from "ngx-mask";
+import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 
 const AvailableWidgets = [
   BlankComponent,
@@ -22,7 +25,9 @@ const AvailableWidgets = [
   TreeListComponent,
   GridContainerComponent,
   LabelComponent,
-  InputComponent,
+  InputTextComponent,
+  InputNumberComponent,
+  InputCheckboxComponent,
   TextareaComponent,
   PageViewComponent
 ];
@@ -33,7 +38,8 @@ const AvailableWidgets = [
     TabsModule,
     NzTreeModule,
     NzIconModule,
-    SharedModule
+    SharedModule,
+    NgxMaskModule.forRoot()
   ],
   declarations: [
     DynamicPageMockComponent,

@@ -1,6 +1,8 @@
 export interface ITreeListDataValue {
-  id: number;
+  id: {
+    id: number;
+    type: string
+  };
   title: string;
-  dataType: string;
   children: ITreeListDataValue[];
 }

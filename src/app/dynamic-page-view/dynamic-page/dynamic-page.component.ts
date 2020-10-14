@@ -33,9 +33,9 @@ export class DynamicPageComponent {
 
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
-    this.configPath = data.configPath;
+    // this.configPath = data.configPath;
     this.pageConfig = mock;
-    // this.pageConfig = data.pageConfiguration;
+    this.pageConfig = data.pageConfiguration;
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
 
     this.dpStore.select('typePageViewConfigs').pipe(
@@ -81,6 +81,8 @@ export class DynamicPageComponent {
       }),
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
+        console.log(typePageViewConfigs)
+        console.log(widgetsDataRequest)
         widgetsDataRequest.key = typePageViewConfigs.find(config => config.key === widgetsDataRequest.type)?.pageUID;
         return this.dynamicMenuService.getFormDataInstance(this.moduleKey, widgetsDataRequest.key, widgetsDataRequest.type, widgetsDataRequest.id);
       })

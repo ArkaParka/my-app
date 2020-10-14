@@ -25,10 +25,10 @@ export class TreeListComponent {
     value.widgetData.data.forEach(treeNode => {
       this._treeListData.push({
         title: treeNode.title,
-        key: treeNode.id.toString(),
+        key: String(treeNode?.id?.id),
         children: this.getTreeNodeChildren(treeNode.children)
       });
-      this.treeDataTypes.push({id: treeNode.id.toString(), dataType: treeNode.dataType});
+      this.treeDataTypes.push({id: String(treeNode?.id?.id), dataType: treeNode?.id?.type});
     });
   };
 
@@ -45,10 +45,10 @@ export class TreeListComponent {
     treeNode.forEach(node => {
       result.push({
         title: node.title,
-        key: node.id.toString(),
+        key: String(node?.id?.id),
         children: this.getTreeNodeChildren(node.children)
       });
-      this.treeDataTypes.push({id: node.id.toString(), dataType: node.dataType});
+      this.treeDataTypes.push({id: String(node?.id?.id), dataType: node?.id?.type});
     });
     return result;
   }
@@ -62,6 +62,8 @@ export class TreeListComponent {
         event.actions.forEach(action => storeData.push(action));
         this.dpStore.setState({widgetAction: storeData});
       });
-    this.dpStore.setState({widgetDataRequest: {id: dataType.id, type: dataType.dataType, key: null}});
+
+    if (dataType.id)
+      this.dpStore.setState({widgetDataRequest: {id: dataType.id, type: dataType.dataType, key: null}});
   }
 }

@@ -144,7 +144,7 @@ export const mock = {
                               },
                               {
                                 "eventType": "ON_SELECT",
-                                "dataType": "ru.pbs.module.management.pages.dynamic.BuildPageView",
+                                "dataType": "BuildPageView",
                                 "actions": [
                                   {
                                     "actionType": "DISPLAY_WIDGET",
@@ -154,7 +154,7 @@ export const mock = {
                                         "type": "PAGE_VIEW",
                                         "options": {
                                           "page_key": {
-                                            "value": "ru.pbs.module.management.pages.dynamic.BuildPageView"
+                                            "value": "BuildPageView"
                                           },
                                           "needsDataPreload": {
                                             "value": false
@@ -481,7 +481,7 @@ export const mock = {
     },
     {
       "pageUID": "1EDF59AD507730DC1C22EA5BA9097C5C",
-      "key": "ru.pbs.module.management.pages.dynamic.BuildPageView",
+      "key": "BuildPageView",
       "viewConfig": {
         "type": "BuildPageViewData",
         "idFieldName": "",
@@ -630,8 +630,14 @@ export const mock = {
                         "widgetFlow": "left",
                         "widgetConfig": {
                           "options": {
+                            "minValue": {
+                              "value": 5e-324
+                            },
                             "fieldName": {
-                              "value": "releaseDate"
+                              "value": "field2"
+                            },
+                            "maxValue": {
+                              "value": 1.7976931348623157e+308
                             },
                             "width": {
                               "value": "40%"
@@ -639,15 +645,15 @@ export const mock = {
                             "additionalProperties": {
                               "value": {}
                             },
-                            "inputFormat": {
-                              "value": "String"
+                            "mask": {
+                              "value": ""
                             },
                             "height": {
                               "value": "80%"
                             }
                           },
-                          "dataType": "String",
-                          "type": "INPUT"
+                          "dataType": "Number",
+                          "type": "INPUT_NUMBER"
                         }
                       },
                       {
@@ -678,7 +684,10 @@ export const mock = {
                         "widgetConfig": {
                           "options": {
                             "fieldName": {
-                              "value": "planeDate"
+                              "value": "field1"
+                            },
+                            "length": {
+                              "value": 256
                             },
                             "width": {
                               "value": "40%"
@@ -686,15 +695,15 @@ export const mock = {
                             "additionalProperties": {
                               "value": {}
                             },
-                            "inputFormat": {
-                              "value": "String"
+                            "mask": {
+                              "value": ""
                             },
                             "height": {
                               "value": "80%"
                             }
                           },
                           "dataType": "String",
-                          "type": "INPUT"
+                          "type": "INPUT_STRING"
                         }
                       },
                       {
@@ -830,9 +839,12 @@ export const mock = {
                 },
                 "height": {
                   "value": "100%"
+                },
+                "mask": {
+                  "value": "(000)-000-00-00"
                 }
               },
-              "type": "LABEL"
+              "type": "INPUT"
             }
           },
           {

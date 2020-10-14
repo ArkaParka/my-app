@@ -2,9 +2,11 @@ import {BlankComponent} from "./blank-component/blank-component";
 import {TabTreeComponent} from "./tabs-component/tabs.component";
 import {GridContainerComponent} from "../grid-container/grid-container.component";
 import {LabelComponent} from "./label/label.component";
-import {InputComponent} from "./input-component/input.component";
+import {InputTextComponent} from "./input-component/input-text.component";
 import {TextareaComponent} from "./textarea-component/textarea.component";
 import {PageViewComponent} from "./page-view-component/page-view.component";
+import {InputNumberComponent} from "./input-component/input-number.component";
+import {InputCheckboxComponent} from "./input-component/input-checkbox.component";
 
 const widgetList:
   {
@@ -28,8 +30,16 @@ const widgetList:
     component: LabelComponent
   },
   {
-    widgetName: 'INPUT',
-    component: InputComponent
+    widgetName: 'INPUT_STRING',
+    component: InputTextComponent
+  },
+  {
+    widgetName: 'INPUT_NUMBER',
+    component: InputNumberComponent
+  },
+  {
+    widgetName: 'INPUT_BOOLEAN',
+    component: InputCheckboxComponent
   },
   {
     widgetName: 'TEXTAREA',

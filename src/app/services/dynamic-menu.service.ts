@@ -61,6 +61,9 @@ export class DynamicMenuService {
   }
 
   public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
+    // if (action === 'get_task_data') return of({actionType: null, value: [], message: null, success: true});
+    // if (action === 'get_product_data') return of({actionType: null, value: [], message: null, success: true});
+    // if (action === 'get_requirement_data') return of({actionType: null, value: [], message: null, success: true});
     return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
   }
 }
