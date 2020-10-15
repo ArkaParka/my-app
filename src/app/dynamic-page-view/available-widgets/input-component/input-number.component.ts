@@ -3,7 +3,7 @@ import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOpti
 import {FormControl, Validators} from "@angular/forms";
 
 @Component({
-  template: `<input type="number" [(ngModel)]="widgetData"
+  template: `<input type="number"
                     [max]="widgetOptions?.maxValue?.value"
                     [min]="widgetOptions?.minValue?.value"
                     [formControl]="formControl">`,
@@ -14,14 +14,16 @@ import {FormControl, Validators} from "@angular/forms";
 })
 export class InputNumberComponent implements OnInit {
   @Input() widgetOptions: IInputNumberWidgetOptions;
-  @Input() widgetData: any = 0;
-
-  public formControl: FormControl = new FormControl();
+  @Input() widgetData: number = 0;
 
   constructor(private cd: ChangeDetectorRef) {
   }
 
+  public formControl: FormControl;
+
   ngOnInit(): void {
+    this.formControl = new FormControl();
+    this.formControl.setValue(this.widgetData, {emitEvent: false});
     this.formControl.valueChanges.subscribe(value => {
       if (value < this.widgetOptions.minValue.value)
         this.formControl.setValue(this.widgetOptions.minValue.value, {emitEvent: false});
