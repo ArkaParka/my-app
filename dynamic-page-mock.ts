@@ -631,13 +631,13 @@ export const mock = {
                         "widgetConfig": {
                           "options": {
                             "minValue": {
-                              "value": 5e-324
+                              "value": 3
                             },
                             "fieldName": {
                               "value": "field2"
                             },
                             "maxValue": {
-                              "value": 1.7976931348623157e+308
+                              "value": 5
                             },
                             "width": {
                               "value": "40%"
@@ -687,7 +687,7 @@ export const mock = {
                               "value": "field1"
                             },
                             "length": {
-                              "value": 256
+                              "value": 10
                             },
                             "width": {
                               "value": "40%"
