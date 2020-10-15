@@ -25,7 +25,7 @@ export class TreeListComponent {
     value.widgetData.data.forEach(treeNode => {
       this._treeListData.push({
         title: treeNode.title,
-        key: String(treeNode?.id?.id),
+        key: String(treeNode?.id?.id) + '/' + treeNode?.id?.type,
         children: this.getTreeNodeChildren(treeNode.children)
       });
       this.treeDataTypes.push({id: String(treeNode?.id?.id), dataType: treeNode?.id?.type});
@@ -45,7 +45,7 @@ export class TreeListComponent {
     treeNode.forEach(node => {
       result.push({
         title: node.title,
-        key: String(node?.id?.id),
+        key: String(node?.id?.id) + '/' + node?.id?.type,
         children: this.getTreeNodeChildren(node.children)
       });
       this.treeDataTypes.push({id: String(node?.id?.id), dataType: node?.id?.type});
@@ -54,7 +54,7 @@ export class TreeListComponent {
   }
 
   treeNodeClicked($event: NzFormatEmitEvent) {
-    let dataType = this.treeDataTypes.find(dataType => dataType.id === $event.node.key);
+    let dataType = this.treeDataTypes.find(dataType => $event.node.key === dataType.id + '/' + dataType.dataType);
     this.events.filter(event => event.eventType === EEventTypes.ON_SELECT)
       .filter(event => event.dataType === dataType.dataType)
       .forEach(event => {
