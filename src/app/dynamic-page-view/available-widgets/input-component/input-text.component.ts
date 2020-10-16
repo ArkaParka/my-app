@@ -3,8 +3,7 @@ import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions"
 
 @Component({
   template: `<input [(ngModel)]="widgetData"
-                    [mask]=""
-                    [patterns]="pattern"
+                    [mask]="widgetOptions?.mask?.value"
                     [maxLength]="widgetOptions?.length?.value">`,
   styles: [`input {
     width: 100%;
@@ -18,9 +17,6 @@ export class InputTextComponent implements OnInit {
   public pattern;
 
   ngOnInit(): void {
-    this.pattern = {'0': {pattern: new RegExp(this.widgetOptions?.mask?.value)}};
-    console.log('config', this.widgetOptions?.mask?.value)
-    console.log('pattern', this.pattern)
-    console.log(this.widgetOptions)
+    // this.pattern = {'0': {pattern: new RegExp(this.widgetOptions?.mask?.value)}};
   }
 }
