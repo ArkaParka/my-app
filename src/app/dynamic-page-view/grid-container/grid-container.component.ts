@@ -14,8 +14,8 @@ export class GridContainerComponent {
 
   @Input('widgetOptions') set widgetOptions(gridTemplate) {
     this._widgetOptions = (gridTemplate as IWidgetOptions).innerGridConfig && (gridTemplate as IWidgetOptions).innerGridConfig.value
-      ? cloneDeep((gridTemplate as IWidgetOptions).innerGridConfig.value)
-      : cloneDeep(gridTemplate);
+      ? (gridTemplate as IWidgetOptions).innerGridConfig.value
+      : gridTemplate;
     this.setGridTemplate();
   };
 

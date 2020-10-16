@@ -100,7 +100,80 @@ export const mock = {
                             "value": "get_task_data"
                           },
                           "events": {
-                            "value": []
+                            "value": [
+                              {
+                                "eventType": "ON_SELECT",
+                                "dataType": "TestTaskPageView",
+                                "actions": [
+                                  {
+                                    "actionType": "DISPLAY_WIDGET",
+                                    "options": {
+                                      "targetArea": "data_area",
+                                      "widgetConfig": {
+                                        "type": "PAGE_VIEW",
+                                        "options": {
+                                          "page_key": {
+                                            "value": "TestTaskPageView"
+                                          },
+                                          "needsDataPreload": {
+                                            "value": false
+                                          }
+                                        },
+                                        "dataType": null
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "eventType": "ON_SELECT",
+                                "dataType": "CommunicationTaskPageView",
+                                "actions": [
+                                  {
+                                    "actionType": "DISPLAY_WIDGET",
+                                    "options": {
+                                      "targetArea": "data_area",
+                                      "widgetConfig": {
+                                        "type": "PAGE_VIEW",
+                                        "options": {
+                                          "page_key": {
+                                            "value": "CommunicationTaskPageView"
+                                          },
+                                          "needsDataPreload": {
+                                            "value": false
+                                          }
+                                        },
+                                        "dataType": null
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "eventType": "ON_SELECT",
+                                "dataType": "DevelopTaskPageView",
+                                "actions": [
+                                  {
+                                    "actionType": "DISPLAY_WIDGET",
+                                    "options": {
+                                      "targetArea": "data_area",
+                                      "widgetConfig": {
+                                        "type": "PAGE_VIEW",
+                                        "options": {
+                                          "page_key": {
+                                            "value": "DevelopTaskPageView"
+                                          },
+                                          "needsDataPreload": {
+                                            "value": false
+                                          }
+                                        },
+                                        "dataType": null
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
                           }
                         },
                         "dataType": null
@@ -892,6 +965,706 @@ export const mock = {
                 }
               },
               "type": "LABEL"
+            }
+          }
+        ],
+        "viewType": "DYNAMIC_PAGE"
+      }
+    },
+    {
+      "pageUID": "39EA090C70C667F7505DF72DB7DA5223",
+      "key": "TestTaskPageView",
+      "viewConfig": {
+        "type": "TestTaskPageViewData",
+        "idFieldName": "",
+        "columnSize": "auto",
+        "rowSize": "10% auto",
+        "gridTemplate": [
+          "task-header",
+          "task-main"
+        ],
+        "areasConfig": [
+          {
+            "areaName": "task-header",
+            "widgetFlow": null,
+            "widgetConfig": {
+              "options": {
+                "innerGridConfig": {
+                  "value": {
+                    "type": "TaskHeader",
+                    "idFieldName": "",
+                    "columnSize": "55% 20% auto",
+                    "rowSize": "auto",
+                    "gridTemplate": [
+                      "task-name status actions"
+                    ],
+                    "areasConfig": [
+                      {
+                        "areaName": "task-name",
+                        "widgetFlow": "left",
+                        "widgetConfig": {
+                          "dataType": "String",
+                          "options": {
+                            "fieldName": {
+                              "value": "taskName"
+                            },
+                            "width": {
+                              "value": "100%"
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            },
+                            "height": {
+                              "value": "100%"
+                            }
+                          },
+                          "type": "LABEL"
+                        }
+                      },
+                      {
+                        "areaName": "status",
+                        "widgetFlow": "left",
+                        "widgetConfig": {
+                          "dataType": "String",
+                          "options": {
+                            "fieldName": {
+                              "value": "taskStatus"
+                            },
+                            "width": {
+                              "value": "100%"
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            },
+                            "height": {
+                              "value": "100%"
+                            }
+                          },
+                          "type": "LABEL"
+                        }
+                      },
+                      {
+                        "areaName": "actions",
+                        "widgetFlow": "right",
+                        "widgetConfig": {
+                          "dataType": "String",
+                          "options": {
+                            "fieldName": {
+                              "value": "actions"
+                            },
+                            "width": {
+                              "value": "100%"
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            },
+                            "height": {
+                              "value": "100%"
+                            }
+                          },
+                          "type": "LABEL"
+                        }
+                      }
+                    ],
+                    "viewType": "DYNAMIC_PAGE"
+                  }
+                },
+                "additionalProperties": {
+                  "value": {}
+                }
+              },
+              "type": "INNER_GRID",
+              "dataType": null
+            }
+          },
+          {
+            "areaName": "task-main",
+            "widgetFlow": null,
+            "widgetConfig": {
+              "options": {
+                "innerGridConfig": {
+                  "value": {
+                    "type": "TaskMain",
+                    "idFieldName": "",
+                    "columnSize": "auto",
+                    "rowSize": "6% 55% auto",
+                    "gridTemplate": [
+                      "submain1",
+                      "submain2",
+                      "submain3"
+                    ],
+                    "areasConfig": [
+                      {
+                        "areaName": "submain1",
+                        "widgetFlow": null,
+                        "widgetConfig": {
+                          "options": {
+                            "innerGridConfig": {
+                              "value": {
+                                "type": "SubMain1",
+                                "idFieldName": "",
+                                "columnSize": "10% 10% 10% auto",
+                                "rowSize": "auto",
+                                "gridTemplate": [
+                                  "submain1-1 submain1-2 submain1-3 submain1-4"
+                                ],
+                                "areasConfig": [
+                                  {
+                                    "areaName": "submain1-1",
+                                    "widgetFlow": "left",
+                                    "widgetConfig": {
+                                      "options": {
+                                        "width": {
+                                          "value": "max-content"
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        },
+                                        "height": {
+                                          "value": "max-content"
+                                        }
+                                      },
+                                      "type": "BUTTON",
+                                      "dataType": null
+                                    }
+                                  },
+                                  {
+                                    "areaName": "submain1-2",
+                                    "widgetFlow": "left",
+                                    "widgetConfig": {
+                                      "options": {
+                                        "width": {
+                                          "value": "max-content"
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        },
+                                        "height": {
+                                          "value": "max-content"
+                                        }
+                                      },
+                                      "type": "BUTTON",
+                                      "dataType": null
+                                    }
+                                  },
+                                  {
+                                    "areaName": "submain1-3",
+                                    "widgetFlow": "left",
+                                    "widgetConfig": {
+                                      "options": {
+                                        "width": {
+                                          "value": "max-content"
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        },
+                                        "height": {
+                                          "value": "max-content"
+                                        }
+                                      },
+                                      "type": "BUTTON",
+                                      "dataType": null
+                                    }
+                                  },
+                                  {
+                                    "areaName": "submain1-4",
+                                    "widgetFlow": "left",
+                                    "widgetConfig": {
+                                      "options": {
+                                        "width": {
+                                          "value": "max-content"
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        },
+                                        "height": {
+                                          "value": "max-content"
+                                        }
+                                      },
+                                      "type": "BUTTON",
+                                      "dataType": null
+                                    }
+                                  }
+                                ],
+                                "viewType": "DYNAMIC_PAGE"
+                              }
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            }
+                          },
+                          "type": "INNER_GRID",
+                          "dataType": null
+                        }
+                      },
+                      {
+                        "areaName": "submain2",
+                        "widgetFlow": null,
+                        "widgetConfig": {
+                          "options": {
+                            "innerGridConfig": {
+                              "value": {
+                                "type": "SubMain2",
+                                "idFieldName": "",
+                                "columnSize": "60% auto",
+                                "rowSize": "auto",
+                                "gridTemplate": [
+                                  "submain2-1 submain2-2"
+                                ],
+                                "areasConfig": [
+                                  {
+                                    "areaName": "submain2-1",
+                                    "widgetFlow": null,
+                                    "widgetConfig": {
+                                      "options": {
+                                        "innerGridConfig": {
+                                          "value": {
+                                            "type": "SubMain21",
+                                            "idFieldName": "",
+                                            "columnSize": "20% auto",
+                                            "rowSize": "max-content 20% max-content max-content max-content max-content",
+                                            "gridTemplate": [
+                                              "responsible-label responsible-select",
+                                              "description-label description-text-area",
+                                              "use-case-label use-case-link",
+                                              "build-label build-link",
+                                              "connected-label connected",
+                                              "attachments-label attachments"
+                                            ],
+                                            "areasConfig": [
+                                              {
+                                                "areaName": "responsible-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "respLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "responsible-select",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "responsible"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "description-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "descriptionLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "description-text-area",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "description"
+                                                    },
+                                                    "width": {
+                                                      "value": "70%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "70%"
+                                                    }
+                                                  },
+                                                  "dataType": "String",
+                                                  "type": "TEXTAREA"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "use-case-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "useCaseLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "use-case-link",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": null,
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "useCaseLink"
+                                                    },
+                                                    "label": {
+                                                      "value": "Сценарий использования"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    }
+                                                  },
+                                                  "type": "LINK"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "build-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "buildLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "build-link",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": null,
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "buildLink"
+                                                    },
+                                                    "label": {
+                                                      "value": "Сценарий использования"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    }
+                                                  },
+                                                  "type": "LINK"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "connected-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "connectedLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "attachments-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "attachmentsLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              }
+                                            ],
+                                            "viewType": "DYNAMIC_PAGE"
+                                          }
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        }
+                                      },
+                                      "type": "INNER_GRID",
+                                      "dataType": null
+                                    }
+                                  },
+                                  {
+                                    "areaName": "submain2-2",
+                                    "widgetFlow": null,
+                                    "widgetConfig": {
+                                      "options": {
+                                        "innerGridConfig": {
+                                          "value": {
+                                            "type": "SubMain22",
+                                            "idFieldName": "",
+                                            "columnSize": "30% auto",
+                                            "rowSize": "max-content max-content max-content",
+                                            "gridTemplate": [
+                                              "create-label create-date-input",
+                                              "deadline-label deadline-input",
+                                              "workload-label workload-input"
+                                            ],
+                                            "areasConfig": [
+                                              {
+                                                "areaName": "create-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "createLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "create-date-input",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "createDate"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    }
+                                                  },
+                                                  "dataType": "LocalDate",
+                                                  "type": "INPUT_DATE"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "deadline-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "deadlineLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "deadline-input",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "deadlineDate"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    }
+                                                  },
+                                                  "dataType": "LocalDate",
+                                                  "type": "INPUT_DATE"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "workload-label",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "dataType": "String",
+                                                  "options": {
+                                                    "fieldName": {
+                                                      "value": "workloadLabel"
+                                                    },
+                                                    "width": {
+                                                      "value": "100%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "height": {
+                                                      "value": "100%"
+                                                    }
+                                                  },
+                                                  "type": "LABEL"
+                                                }
+                                              },
+                                              {
+                                                "areaName": "workload-input",
+                                                "widgetFlow": "left",
+                                                "widgetConfig": {
+                                                  "options": {
+                                                    "minValue": {
+                                                      "value": 5e-324
+                                                    },
+                                                    "fieldName": {
+                                                      "value": "workload"
+                                                    },
+                                                    "maxValue": {
+                                                      "value": 1.7976931348623157e+308
+                                                    },
+                                                    "width": {
+                                                      "value": "40%"
+                                                    },
+                                                    "additionalProperties": {
+                                                      "value": {}
+                                                    },
+                                                    "mask": {
+                                                      "value": ""
+                                                    },
+                                                    "height": {
+                                                      "value": "80%"
+                                                    }
+                                                  },
+                                                  "dataType": "Number",
+                                                  "type": "INPUT_NUMBER"
+                                                }
+                                              }
+                                            ],
+                                            "viewType": "DYNAMIC_PAGE"
+                                          }
+                                        },
+                                        "additionalProperties": {
+                                          "value": {}
+                                        }
+                                      },
+                                      "type": "INNER_GRID",
+                                      "dataType": null
+                                    }
+                                  }
+                                ],
+                                "viewType": "DYNAMIC_PAGE"
+                              }
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            }
+                          },
+                          "type": "INNER_GRID",
+                          "dataType": null
+                        }
+                      },
+                      {
+                        "areaName": "submain2",
+                        "widgetFlow": null,
+                        "widgetConfig": {
+                          "options": {
+                            "innerGridConfig": {
+                              "value": {
+                                "type": "SubMain3",
+                                "idFieldName": "",
+                                "columnSize": "auto",
+                                "rowSize": "auto 10%",
+                                "gridTemplate": [
+                                  "submain3-1",
+                                  "submain3-2"
+                                ],
+                                "areasConfig": [],
+                                "viewType": "DYNAMIC_PAGE"
+                              }
+                            },
+                            "additionalProperties": {
+                              "value": {}
+                            }
+                          },
+                          "type": "INNER_GRID",
+                          "dataType": null
+                        }
+                      }
+                    ],
+                    "viewType": "DYNAMIC_PAGE"
+                  }
+                },
+                "additionalProperties": {
+                  "value": {}
+                }
+              },
+              "type": "INNER_GRID",
+              "dataType": null
             }
           }
         ],

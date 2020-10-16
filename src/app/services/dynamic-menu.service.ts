@@ -53,6 +53,7 @@ export class DynamicMenuService {
   public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: string): Observable<any> {
     if (fromKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock);
     if (fromKey === '2FBCF3B6CEEB359B639C7EBA13B5E6ED') return of(headerMock);
+    if (fromKey === '39EA090C70C667F7505DF72DB7DA5223') return of(headerMock);
     return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
   }
 

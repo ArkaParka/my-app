@@ -4,25 +4,27 @@ import {IDynamicComponent} from "../interfaces/IDynamicComponent";
 import {getDynamicWidget} from "./widget-list";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import findValueDeep from "deepdash/findValueDeep";
-import {filter} from "rxjs/operators";
+import {filter, takeUntil} from "rxjs/operators";
+import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Directive({
   selector: '[dynamic-widget]'
 })
-export class DynamicWidgetDirective implements OnInit {
+export class DynamicWidgetDirective extends DocumentBaseComponent implements OnInit {
   private _widgetConfig: IWidgetConfig = null;
-  private wasLoaded: boolean = true;
   private _widgetData: any = null;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver,
               private viewContainerRef: ViewContainerRef,
               private dpStore: DynamicPageStoreService,
               private el: ElementRef) {
+    super();
   }
 
   @Input('widgetConfig') set widgetConfig(value: IWidgetConfig) {
+    console.log(value)
     this._widgetConfig = value;
-    if (this.wasLoaded) this.loadComponent();
+    this.loadComponent();
   };
 
   get widgetConfig() {
@@ -30,7 +32,6 @@ export class DynamicWidgetDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadComponent();
     this.el.nativeElement.nextSibling.style.width = this.widgetConfig?.options?.width?.value;
     this.el.nativeElement.nextSibling.style.height = this.widgetConfig?.options?.height?.value;
   }
@@ -41,15 +42,19 @@ export class DynamicWidgetDirective implements OnInit {
     this.viewContainerRef.clear();
     const componentRef = this.viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as IDynamicComponent).widgetOptions = this.widgetConfig.options;
-    this.wasLoaded = true;
 
-    this.dpStore.select('widgetData').pipe(filter(data => !!data)).subscribe(widgetData => {
-      this._widgetData = findValueDeep(widgetData, ((value, key) => key === this.widgetConfig.options?.fieldName?.value));
-      if (this._widgetData)
-        (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
+    this.dpStore.select('widgetData')
+      .pipe(
+        filter(data => !!data),
+        takeUntil(this.destroy$))
+      .subscribe(widgetData => {
+        this._widgetData = findValueDeep(widgetData, ((value, key) => key === this.widgetConfig.options?.fieldName?.value));
+        if (this._widgetData)
+          (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
 
-      // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
-    });
+        // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
+      });
+    console.log(`widget ${this.widgetConfig.type} created`)
   }
 
 }

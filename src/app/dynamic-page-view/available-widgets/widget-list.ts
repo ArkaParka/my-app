@@ -46,7 +46,6 @@ const widgetList:
     component: TextareaComponent
   },
   {
-    //TODO: разбираться с PAGE_VIEW
     widgetName: 'PAGE_VIEW',
     component: PageViewComponent
   }
@@ -54,6 +53,8 @@ const widgetList:
 
 
 export function getDynamicWidget(widgetName: string) {
-  return widgetList.find(widget => widget.widgetName === widgetName)
-    || widgetList.find(widget => widget.widgetName === 'BLANK');
+  // if (widgetName === 'TABS' || widgetName === 'PAGE_VIEW' || widgetName === 'INNER_GRID')
+    return widgetList.find(widget => widget.widgetName === widgetName)
+      || widgetList.find(widget => widget.widgetName === 'BLANK');
+  // else return widgetList.find(widget => widget.widgetName === 'BLANK');
 }

@@ -2,20 +2,21 @@ import {Component, HostBinding, Input} from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IWidgetEventAction} from "../interfaces/IWidgetEventAction";
-import {mergeMap, tap} from "rxjs/operators";
+import {mergeMap, switchMap, takeUntil, tap} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionTypes} from "../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
 import {IAreasConfig} from "../interfaces/IAreasConfig";
+import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Component({
   selector: 'app-grid-item',
   templateUrl: './grid-item.component.html',
   styleUrls: ['./grid-item.component.scss']
 })
-export class GridItemComponent {
+export class GridItemComponent extends DocumentBaseComponent {
 
   private _widgetConfig: IWidgetConfig = null;
   private _gridAreaName: string = null;
@@ -32,12 +33,13 @@ export class GridItemComponent {
 
   constructor(private sanitizer: DomSanitizer,
               private dpStore: DynamicPageStoreService) {
+    super();
   }
 
   @Input('areaConfig') set areaConfig(value: IAreasConfig) {
-    this._widgetConfig = cloneDeep(value.widgetConfig);
-    this._gridAreaName = cloneDeep(value.areaName);
-    this._columnFlow = cloneDeep(value.widgetFlow);
+    this._widgetConfig = value.widgetConfig;
+    this._gridAreaName = value.areaName;
+    this._columnFlow = value.widgetFlow;
   }
 
   get gridAreaName() {
@@ -59,7 +61,7 @@ export class GridItemComponent {
     this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(`${columnFlow}`);
 
     this.dpStore.select("widgetAction").pipe(
-      mergeMap((events: IWidgetEventAction[]) => {
+      switchMap((events: IWidgetEventAction[]) => {
         let displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.gridAreaName)
           .find(event => event.actionType === EActionTypes.DISPLAY_WIDGET);
@@ -77,7 +79,8 @@ export class GridItemComponent {
             };
           }
         }
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe();
 
   }

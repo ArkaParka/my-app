@@ -5,12 +5,13 @@ import {EActionConfigType} from "../../models/IActions";
 import {DynamicMenuService} from "../../services/dynamic-menu.service";
 import {combineLatest, zip} from "rxjs";
 import {IPageActionResponse} from "../interfaces/IPageActionResponse";
-import {filter, switchMap, tap} from "rxjs/operators";
+import {filter, switchMap, takeUntil, tap} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
 import {mock} from "../../../../dynamic-page-mock";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {IWidgetData} from "../interfaces/IWidgetData";
+import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -22,13 +23,14 @@ import {IWidgetData} from "../interfaces/IWidgetData";
     height: 100%
   }`]
 })
-export class DynamicPageComponent {
+export class DynamicPageComponent extends DocumentBaseComponent {
   private moduleKey: string = null;
   private configPath: string = null;
   private pageConfig: any = null;
 
   constructor(public dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService) {
+    super();
   }
 
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
@@ -49,7 +51,8 @@ export class DynamicPageComponent {
             initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, null));
           });
         return combineLatest(initialWidgetDataRequests);
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe((initWidgetData: IWidgetData[]) => {
       this.dpStore.setState({widgetData: initWidgetData});
     });
@@ -81,11 +84,10 @@ export class DynamicPageComponent {
       }),
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
-        console.log(typePageViewConfigs)
-        console.log(widgetsDataRequest)
         widgetsDataRequest.key = typePageViewConfigs.find(config => config.key === widgetsDataRequest.type)?.pageUID;
         return this.dynamicMenuService.getFormDataInstance(this.moduleKey, widgetsDataRequest.key, widgetsDataRequest.type, widgetsDataRequest.id);
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe((widgetData: IWidgetData) => {
       this.dpStore.setState({widgetData: [widgetData]});
     });

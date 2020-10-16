@@ -2,14 +2,15 @@ import {Component, Input, OnInit} from "@angular/core";
 import {ITabTreeWidgetOptions} from "../../interfaces/ITabTreeWidgetOptions";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
-import {switchMap, tap} from "rxjs/operators";
+import {switchMap, takeUntil, tap} from "rxjs/operators";
 import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
+import {DocumentBaseComponent} from "../../../containers/document-base.component";
 
 @Component({
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })
-export class TabTreeComponent {
+export class TabTreeComponent extends DocumentBaseComponent{
   private _widgetOptions: ITabTreeWidgetOptions;
   public tabData: { dataPath: string, data: any }[] = [];
   public tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
@@ -26,7 +27,8 @@ export class TabTreeComponent {
         if (initialData) {
           this.tabData = initialData;
         }
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe();
   };
 
@@ -35,6 +37,7 @@ export class TabTreeComponent {
   }
 
   constructor(private dpStore: DynamicPageStoreService) {
+    super();
   }
 
   public getWidgetData(dataPath: string) {
