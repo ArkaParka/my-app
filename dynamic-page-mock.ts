@@ -696,7 +696,7 @@ export const mock = {
                               "value": {}
                             },
                             "mask": {
-                              "value": "^\\d$"
+                              "value": "0000-00-00"
                             },
                             "height": {
                               "value": "80%"
