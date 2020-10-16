@@ -696,7 +696,7 @@ export const mock = {
                               "value": {}
                             },
                             "mask": {
-                              "value": ""
+                              "value": "^\\d$"
                             },
                             "height": {
                               "value": "80%"
@@ -776,22 +776,25 @@ export const mock = {
                         "areaName": "product-name",
                         "widgetFlow": "left",
                         "widgetConfig": {
-                          "dataType": "String",
                           "options": {
                             "fieldName": {
-                              "value": "productName"
+                              "value": "field5"
                             },
                             "width": {
                               "value": "40%"
+                            },
+                            "description": {
+                              "value": "input boolean description"
                             },
                             "additionalProperties": {
                               "value": {}
                             },
                             "height": {
-                              "value": "40%"
+                              "value": "80%"
                             }
                           },
-                          "type": "LABEL"
+                          "dataType": "Boolean",
+                          "type": "INPUT_BOOLEAN"
                         }
                       }
                     ],
