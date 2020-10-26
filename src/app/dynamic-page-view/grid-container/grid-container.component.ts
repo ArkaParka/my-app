@@ -1,5 +1,4 @@
-import {Component, HostBinding, Input} from "@angular/core";
-import cloneDeep from 'lodash/cloneDeep'
+import {ChangeDetectionStrategy, Component, HostBinding, Input} from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IDynamicPageViewConfig} from "../../models/IDynamicPageViewConfig";
 import {IWidgetOptions} from "../interfaces/IWidgetOptions";
@@ -7,7 +6,8 @@ import {IWidgetOptions} from "../interfaces/IWidgetOptions";
 @Component({
   selector: 'app-grid-container',
   templateUrl: './grid-container.component.html',
-  styleUrls: ['./grid-container.component.scss']
+  styleUrls: ['./grid-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridContainerComponent {
   private _widgetOptions: IDynamicPageViewConfig = null;

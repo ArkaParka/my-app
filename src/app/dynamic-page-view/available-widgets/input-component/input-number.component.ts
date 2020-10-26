@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from "@angular/core";
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
-import {FormControl, Validators} from "@angular/forms";
+import {FormControl} from "@angular/forms";
 
 @Component({
   template: `<input type="number"
@@ -10,7 +10,8 @@ import {FormControl, Validators} from "@angular/forms";
   styles: [`input {
     width: 100%;
     height: 100%
-  }`]
+  }`],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputNumberComponent implements OnInit {
   @Input() widgetOptions: IInputNumberWidgetOptions;

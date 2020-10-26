@@ -12,7 +12,7 @@ import {IModuleInfo} from "../../../models/IModuleInfo";
   templateUrl: 'module-buttons.component.html',
   styleUrls: ['module-buttons.component.scss'],
 })
-export class ModuleButtonsComponent implements AfterContentChecked {
+export class ModuleButtonsComponent {
   @Input('modules') availableModules: IModuleInfo[];
   @ViewChild('widgetsContent') public widgetsContent: ElementRef<any>;
   @Output() onModuleClick = new EventEmitter<IModuleInfo>();
@@ -20,12 +20,12 @@ export class ModuleButtonsComponent implements AfterContentChecked {
   public hideOverflowButtons$ = new BehaviorSubject<boolean>(true);
 
   ngAfterContentChecked() {
-    if (this.widgetsContent && this.widgetsContent.nativeElement) {
-      if (this.widgetsContent.nativeElement.offsetHeight < this.widgetsContent.nativeElement.scrollHeight ||
-        this.widgetsContent.nativeElement.offsetWidth < this.widgetsContent.nativeElement.scrollWidth)
-        this.hideOverflowButtons$.next(false);
-      else this.hideOverflowButtons$.next(true);
-    }
+    // if (this.widgetsContent && this.widgetsContent.nativeElement) {
+    //   if (this.widgetsContent.nativeElement.offsetHeight < this.widgetsContent.nativeElement.scrollHeight ||
+    //     this.widgetsContent.nativeElement.offsetWidth < this.widgetsContent.nativeElement.scrollWidth)
+    //     this.hideOverflowButtons$.next(false);
+    //   else this.hideOverflowButtons$.next(true);
+    // }
   }
 
   public scrollRight(): void {

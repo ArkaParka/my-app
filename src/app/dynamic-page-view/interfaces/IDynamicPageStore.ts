@@ -11,4 +11,5 @@ export interface IDynamicPageStore {
   isInitialDataLoaded: boolean;
   widgetData: IWidgetData[];
   widgetDataRequest: IWidgetDataRequest;
+  needsDetectChanges: boolean;
 }

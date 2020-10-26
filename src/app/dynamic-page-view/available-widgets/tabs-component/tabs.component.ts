@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import {ITabTreeWidgetOptions} from "../../interfaces/ITabTreeWidgetOptions";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
@@ -8,7 +8,8 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
 
 @Component({
   templateUrl: './tabs.component.html',
-  styleUrls: ['./tabs.component.scss']
+  styleUrls: ['./tabs.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabTreeComponent extends DocumentBaseComponent{
   private _widgetOptions: ITabTreeWidgetOptions;

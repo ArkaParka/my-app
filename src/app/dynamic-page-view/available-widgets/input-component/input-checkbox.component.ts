@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
 import {IInputCheckboxWidgetOptions} from "../../interfaces/IInputCheckboxWidgetOptions";
 
 @Component({
-  template: `<input type="checkbox"><label>{{widgetOptions?.description?.value}}</label>`
+  template: `<input type="checkbox"><label>{{widgetOptions?.description?.value}}</label>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputCheckboxComponent implements OnInit {
   @Input() widgetOptions: IInputCheckboxWidgetOptions;

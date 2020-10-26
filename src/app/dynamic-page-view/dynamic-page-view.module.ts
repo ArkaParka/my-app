@@ -18,6 +18,7 @@ import {PageViewComponent} from "./available-widgets/page-view-component/page-vi
 import {InputNumberComponent} from "./available-widgets/input-component/input-number.component";
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
+import {DynamicIoModule, DynamicModule} from "ng-dynamic-component";
 
 const AvailableWidgets = [
   BlankComponent,
@@ -39,7 +40,9 @@ const AvailableWidgets = [
     NzTreeModule,
     NzIconModule,
     SharedModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    DynamicModule,
+    DynamicIoModule
   ],
   declarations: [
     DynamicPageMockComponent,

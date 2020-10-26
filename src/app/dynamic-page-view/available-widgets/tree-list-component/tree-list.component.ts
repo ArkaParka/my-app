@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {EEventTypes, IWidgetEvent} from "../../interfaces/IWidgetEvent";
 import {NzFormatEmitEvent, NzTreeNodeOptions} from "ng-zorro-antd";
@@ -10,7 +10,8 @@ import {ITreeListDataValue} from "../../interfaces/ITreeListDataValue";
 @Component({
   selector: 'app-dynamic-tree-list',
   templateUrl: './tree-list.component.html',
-  styleUrls: ['./tree-list.component.scss']
+  styleUrls: ['./tree-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TreeListComponent {
   private _treeListConfig: IWidgetConfig = null;

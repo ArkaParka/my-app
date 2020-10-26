@@ -8,7 +8,7 @@ import {filter, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Directive({
-  selector: '[dynamic-widget]'
+  selector: '[dynamic-widget]',
 })
 export class DynamicWidgetDirective extends DocumentBaseComponent implements OnInit {
   private _widgetConfig: IWidgetConfig = null;
@@ -22,7 +22,6 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
   }
 
   @Input('widgetConfig') set widgetConfig(value: IWidgetConfig) {
-    console.log(value)
     this._widgetConfig = value;
     this.loadComponent();
   };
@@ -32,8 +31,8 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.el.nativeElement.nextSibling.style.width = this.widgetConfig?.options?.width?.value;
-    this.el.nativeElement.nextSibling.style.height = this.widgetConfig?.options?.height?.value;
+    // this.el.nativeElement.nextSibling.style.width = this.widgetConfig?.options?.width?.value;
+    // this.el.nativeElement.nextSibling.style.height = this.widgetConfig?.options?.height?.value;
   }
 
   loadComponent() {

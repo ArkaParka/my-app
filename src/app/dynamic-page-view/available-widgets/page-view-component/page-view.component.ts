@@ -1,13 +1,14 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
 import {IDynamicPageViewConfig} from "../../../models/IDynamicPageViewConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {ITypePageViewConfig} from "../../interfaces/ITypePageViewConfig";
-import {filter, find, takeUntil} from "rxjs/operators";
+import {filter, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 
 @Component({
   template: `
-    <app-grid-container [widgetOptions]="innerPageViewConfig"></app-grid-container>`
+    <app-grid-container [widgetOptions]="innerPageViewConfig"></app-grid-container>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageViewComponent extends DocumentBaseComponent implements OnInit {
   @Input() widgetOptions: { page_key: { value: string } };

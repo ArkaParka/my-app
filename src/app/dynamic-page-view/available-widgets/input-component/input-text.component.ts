@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
 import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions";
 
 @Component({
@@ -8,7 +8,8 @@ import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions"
   styles: [`input {
     width: 100%;
     height: 100%
-  }`]
+  }`],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputTextComponent implements OnInit {
   @Input() widgetOptions: IInputTextWidgetOptions;

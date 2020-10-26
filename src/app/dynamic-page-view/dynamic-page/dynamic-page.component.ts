@@ -1,11 +1,11 @@
-import {Component, Input} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import {IModulePageConfiguration} from "../../models/IModulePageConfiguration";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionConfigType} from "../../models/IActions";
 import {DynamicMenuService} from "../../services/dynamic-menu.service";
 import {combineLatest, zip} from "rxjs";
 import {IPageActionResponse} from "../interfaces/IPageActionResponse";
-import {filter, switchMap, takeUntil, tap} from "rxjs/operators";
+import {filter, switchMap, takeUntil} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
 import {mock} from "../../../../dynamic-page-mock";
@@ -21,7 +21,8 @@ import {DocumentBaseComponent} from "../../containers/document-base.component";
   styles: [`:host {
     display: block;
     height: 100%
-  }`]
+  }`],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicPageComponent extends DocumentBaseComponent {
   private moduleKey: string = null;

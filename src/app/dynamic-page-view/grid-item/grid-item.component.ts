@@ -1,20 +1,20 @@
-import {Component, HostBinding, Input} from "@angular/core";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input} from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IWidgetEventAction} from "../interfaces/IWidgetEventAction";
-import {mergeMap, switchMap, takeUntil, tap} from "rxjs/operators";
+import {switchMap, takeUntil, tap} from "rxjs/operators";
 import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionTypes} from "../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual'
-import cloneDeep from 'lodash/cloneDeep'
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Component({
   selector: 'app-grid-item',
   templateUrl: './grid-item.component.html',
-  styleUrls: ['./grid-item.component.scss']
+  styleUrls: ['./grid-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridItemComponent extends DocumentBaseComponent {
 
@@ -32,7 +32,8 @@ export class GridItemComponent extends DocumentBaseComponent {
   @HostBinding('style.justify-items') justifyItems;
 
   constructor(private sanitizer: DomSanitizer,
-              private dpStore: DynamicPageStoreService) {
+              private dpStore: DynamicPageStoreService,
+              private cd: ChangeDetectorRef) {
     super();
   }
 
@@ -60,7 +61,7 @@ export class GridItemComponent extends DocumentBaseComponent {
     let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;
     this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(`${columnFlow}`);
 
-    this.dpStore.select("widgetAction").pipe(
+     this.dpStore.select("widgetAction").pipe(
       switchMap((events: IWidgetEventAction[]) => {
         let displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.gridAreaName)
@@ -81,7 +82,9 @@ export class GridItemComponent extends DocumentBaseComponent {
         }
       }),
       takeUntil(this.destroy$)
-    ).subscribe();
-
+    ).subscribe(()=>{
+       console.log("gird-item event subscription");
+       this.cd.detectChanges();
+     });
   }
 }
