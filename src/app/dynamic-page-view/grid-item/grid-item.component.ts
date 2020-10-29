@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input} from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  Renderer2
+} from "@angular/core";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IWidgetEventAction} from "../interfaces/IWidgetEventAction";
@@ -33,7 +41,9 @@ export class GridItemComponent extends DocumentBaseComponent {
 
   constructor(private sanitizer: DomSanitizer,
               private dpStore: DynamicPageStoreService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private readonly renderer: Renderer2,
+              private readonly el: ElementRef) {
     super();
   }
 
@@ -56,12 +66,14 @@ export class GridItemComponent extends DocumentBaseComponent {
   }
 
   ngOnInit(): void {
-    this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
+    //TODO: узкое место - установка grid-area
+    // this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
 
-    let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;
-    this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(`${columnFlow}`);
+    // this.renderer.setStyle(this.el.nativeElement, "grid-area", this.gridAreaName)
+    // let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;
+    // this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(`${columnFlow}`);
 
-     this.dpStore.select("widgetAction").pipe(
+    this.dpStore.select("widgetAction").pipe(
       switchMap((events: IWidgetEventAction[]) => {
         let displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.gridAreaName)
@@ -82,9 +94,9 @@ export class GridItemComponent extends DocumentBaseComponent {
         }
       }),
       takeUntil(this.destroy$)
-    ).subscribe(()=>{
-       console.log("gird-item event subscription");
-       this.cd.detectChanges();
-     });
+    ).subscribe(() => {
+      console.log("gird-item event subscription");
+      this.cd.detectChanges();
+    });
   }
 }
