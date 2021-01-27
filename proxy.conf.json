@@ -1,17 +1,17 @@
 {
   "/": {
-    "target": "http://pbs.ec-t.space",
+    "target": "http://192.168.101.120",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
     "cookieDomainRewrite": ""
-    },
+  },
   "/pbs/*": {
-    "target": "http://pbs.ec-t.space",
+    "target": "http://192.168.101.120",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
-    "pathRewrite": {"^/pbs" : "http://pbs.ec-t.space/pbs/"},
+    "pathRewrite": {"^/pbs" : "http://192.168.101.120/pbs/"},
     "cookieDomainRewrite": ""
   }
 }
