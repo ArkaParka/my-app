@@ -66,8 +66,10 @@ export class GridItemComponent extends DocumentBaseComponent {
   }
 
   ngOnInit(): void {
+
+    console.log(this._gridAreaName)
     //TODO: узкое место - установка grid-area
-    // this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
+    this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
 
     // this.renderer.setStyle(this.el.nativeElement, "grid-area", this.gridAreaName)
     // let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;
@@ -95,7 +97,7 @@ export class GridItemComponent extends DocumentBaseComponent {
       }),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      console.log("gird-item event subscription");
+      // console.log("gird-item event subscription");
       this.cd.detectChanges();
     });
   }

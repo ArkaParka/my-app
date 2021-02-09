@@ -50,11 +50,12 @@ export class DynamicMenuService {
     return this.http.put(`/pbs/modules/${nodeName}/base/v1/data/${body['formKey']}`, JSON.stringify(body), {headers});
   }
 
-  public getFormDataInstance(moduleKey: string, fromKey: string, type: string, id: string): Observable<any> {
-    if (fromKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock);
-    if (fromKey === '2FBCF3B6CEEB359B639C7EBA13B5E6ED') return of(headerMock);
-    if (fromKey === '39EA090C70C667F7505DF72DB7DA5223') return of(headerMock);
-    return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${fromKey}/${type}/${id}`);
+  public getFormDataInstance(moduleKey: string, formKey: string, type: string, id: string): Observable<any> {
+    // if (formKey === '1EDF59AD507730DC1C22EA5BA9097C5C') return of(widgetDataMock);
+    if (formKey === '2FBCF3B6CEEB359B639C7EBA13B5E6ED') return of(headerMock);
+    if (formKey === '39EA090C70C667F7505DF72DB7DA5223') return of(headerMock);
+    if (formKey === '876DC327A9A4AD4BB7DB84237E91947D') return of(headerMock);
+    return this.http.get(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }
 
   public deleteFormDataInstance(moduleKey: string, formKey: string, type: string, id: string): Observable<any> {

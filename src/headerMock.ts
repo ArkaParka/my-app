@@ -6,9 +6,9 @@ export const headerMock = {
   "data": {
     "id": 1,
     "type": null,
-    "projectName": "",
-    "tempString": "Создать",
-    "status": null
+    "projectName": "Имя проекта",
+    "tempString": "Вторая строка для теста",
+    "status": "Какой-то статус"
   },
   "new": false
 };

@@ -53,7 +53,7 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
 
         // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
       });
-    console.log(`widget ${this.widgetConfig.type} created`)
+    // console.log(`widget ${this.widgetConfig.type} created`)
   }
 
 }

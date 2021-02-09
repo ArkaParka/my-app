@@ -37,9 +37,11 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
-    this.pageConfig = mock;
-    // this.pageConfig = data.pageConfiguration;
+    // this.pageConfig = mock;
+    this.pageConfig = data.pageConfiguration;
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
+
+    console.log(data)
 
     this.dpStore.select('typePageViewConfigs').pipe(
       filter(data => !!data),
