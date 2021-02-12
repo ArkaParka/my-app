@@ -8,11 +8,12 @@ import {PageViewComponent} from "./page-view-component/page-view.component";
 import {InputNumberComponent} from "./input-component/input-number.component";
 import {InputCheckboxComponent} from "./input-component/input-checkbox.component";
 
-const widgetList:
-  {
-    widgetName: string;
-    component: any
-  } [] = [
+interface IDynamicWidget {
+  widgetName: string;
+  component: any;
+}
+
+const widgetList: IDynamicWidget[] = [
   {
     widgetName: 'BLANK',
     component: BlankComponent
@@ -53,8 +54,6 @@ const widgetList:
 
 
 export function getDynamicWidget(widgetName: string) {
-  // if (widgetName === 'TABS' || widgetName === 'PAGE_VIEW' || widgetName === 'INNER_GRID')
     return widgetList.find(widget => widget.widgetName === widgetName)
       || widgetList.find(widget => widget.widgetName === 'BLANK');
-  // else return widgetList.find(widget => widget.widgetName === 'BLANK');
 }
