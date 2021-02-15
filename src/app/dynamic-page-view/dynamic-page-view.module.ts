@@ -19,6 +19,7 @@ import {InputNumberComponent} from "./available-widgets/input-component/input-nu
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 import {DynamicIoModule, DynamicModule} from "ng-dynamic-component";
+import {TableComponent} from './available-widgets/table-component/table.component';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -30,7 +31,8 @@ const AvailableWidgets = [
   InputNumberComponent,
   InputCheckboxComponent,
   TextareaComponent,
-  PageViewComponent
+  PageViewComponent,
+  TableComponent
 ];
 
 @NgModule({

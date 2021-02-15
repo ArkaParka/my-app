@@ -3,7 +3,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {IModulePageConfiguration} from '../../models/IModulePageConfiguration';
 import {mergeMap, takeUntil, tap} from 'rxjs/operators';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
-import {RoutingService} from "../../services/routing.service";
+import {RoutingService} from '../../services/routing.service';
 import {DocumentBaseComponent} from "../document-base.component";
 import {Observable} from "rxjs";
 
