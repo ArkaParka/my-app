@@ -69,7 +69,7 @@ export class GridItemComponent extends DocumentBaseComponent {
 
     console.log(this._gridAreaName)
     //TODO: узкое место - установка grid-area
-    this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
+    // this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
 
     // this.renderer.setStyle(this.el.nativeElement, "grid-area", this.gridAreaName)
     // let columnFlow = this.columnFlow === 'left' ? 'start' : this.columnFlow === 'right' ? 'end' : this.columnFlow === 'auto' ? 'center' : null;

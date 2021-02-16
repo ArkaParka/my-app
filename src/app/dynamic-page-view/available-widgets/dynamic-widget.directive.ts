@@ -31,8 +31,8 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.el.nativeElement.nextSibling.style.width = this.widgetConfig?.options?.width?.value;
-    this.el.nativeElement.nextSibling.style.height = this.widgetConfig?.options?.height?.value;
+    // this.el.nativeElement.nextSibling.style.width = this.widgetConfig?.options?.width?.value;
+    // this.el.nativeElement.nextSibling.style.height = this.widgetConfig?.options?.height?.value;
   }
 
   loadComponent() {

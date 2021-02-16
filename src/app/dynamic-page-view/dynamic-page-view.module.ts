@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {Compiler, NgModule} from "@angular/core";
 import {DynamicPageMockComponent} from "./dynamic-page-mock/dynamic-page-mock.component";
 import {GridContainerComponent} from "./grid-container/grid-container.component";
 import {GridItemComponent} from "./grid-item/grid-item.component";
@@ -19,6 +19,7 @@ import {InputNumberComponent} from "./available-widgets/input-component/input-nu
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 import {DynamicIoModule, DynamicModule} from "ng-dynamic-component";
+import {JitCompilerFactory} from "@angular/platform-browser-dynamic";
 
 const AvailableWidgets = [
   BlankComponent,
