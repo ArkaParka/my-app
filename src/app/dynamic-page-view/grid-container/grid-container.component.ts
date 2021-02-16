@@ -37,8 +37,8 @@ export class GridContainerComponent {
       array[i] = `\"${gtpl}\"`;
     });
 
-    this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.gridTemplate.join(' ')}`);
-    this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.columnSize}`);
-    this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.rowSize}`);
+    // this.gridTA = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.gridTemplate.join(' ')}`);
+    // this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.columnSize}`);
+    // this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.widgetOptions.rowSize}`);
   }
 }

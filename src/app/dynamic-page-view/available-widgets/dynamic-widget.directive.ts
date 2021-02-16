@@ -43,13 +43,11 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
     (componentRef.instance as IDynamicComponent).widgetOptions = this.widgetConfig.options;
 
     this.dpStore.select('widgetData')
-      .pipe(
-        filter(data => !!data),
-        takeUntil(this.destroy$))
+      .pipe(filter(data => !!data))
       .subscribe(widgetData => {
         this._widgetData = findValueDeep(widgetData, ((value, key) => key === this.widgetConfig.options?.fieldName?.value));
-        if (this._widgetData)
-          (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
+        // if (this._widgetData)
+        //   (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
 
         // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
       });

@@ -55,7 +55,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
           });
         return combineLatest(initialWidgetDataRequests);
       }),
-      takeUntil(this.destroy$)
+
     ).subscribe((initWidgetData: IWidgetData[]) => {
       this.dpStore.setState({widgetData: initWidgetData});
     });

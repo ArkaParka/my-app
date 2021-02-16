@@ -28,8 +28,7 @@ export class TabTreeComponent extends DocumentBaseComponent{
         if (initialData) {
           this.tabData = initialData;
         }
-      }),
-      takeUntil(this.destroy$)
+      })
     ).subscribe();
   };
 

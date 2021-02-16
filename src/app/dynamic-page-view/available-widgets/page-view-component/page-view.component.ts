@@ -20,9 +20,7 @@ export class PageViewComponent extends DocumentBaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.dpStore.select('typePageViewConfigs')
-      .pipe(
-        filter(data => !!data),
-        takeUntil(this.destroy$))
+      .pipe(filter(data => !!data))
       .subscribe((configs: ITypePageViewConfig[]) => {
         this.innerPageViewConfig = configs.find(config => config.key === this.widgetOptions.page_key?.value)?.viewConfig;
       })
