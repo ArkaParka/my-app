@@ -50,10 +50,7 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
         this._widgetData = findValueDeep(widgetData, ((value, key) => key === this.widgetConfig.options?.fieldName?.value));
         if (this._widgetData)
           (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
-
-        // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
       });
-    // console.log(`widget ${this.widgetConfig.type} created`)
   }
 
 }
