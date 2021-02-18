@@ -43,6 +43,27 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
     console.log(data)
 
+    this.executeInitialDataActions();
+    this.getInitialWidgetsData();
+    this.getWidgetsData();
+  }
+
+  private executeInitialDataActions(): void {
+    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
+    if (initialDataActions && initialDataActions.length) {
+      let requests = [];
+      initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
+      zip(...requests).subscribe((result: IPageActionResponse[]) => {
+        let initialData: { dataPath: string, data: any }[] = [];
+        result.forEach(res => initialData.push({dataPath: res.actionType, data: res.value}));
+        this.dpStore.setState({initialWidgetData: initialData, isInitialDataLoaded: true});
+      })
+    } else {
+      this.dpStore.setState({isInitialDataLoaded: true})
+    }
+  }
+
+  private getInitialWidgetsData(): void {
     this.dpStore.select('typePageViewConfigs').pipe(
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
@@ -59,24 +80,9 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     ).subscribe((initWidgetData: IWidgetData[]) => {
       this.dpStore.setState({widgetData: initWidgetData});
     });
-
-    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
-    if (initialDataActions && initialDataActions.length) {
-      let requests = [];
-      initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
-      zip(...requests).subscribe((result: IPageActionResponse[]) => {
-        let initialData: { dataPath: string, data: any }[] = [];
-        result.forEach(res => initialData.push({dataPath: res.actionType, data: res.value}));
-        this.dpStore.setState({initialWidgetData: initialData, isInitialDataLoaded: true});
-      })
-    } else {
-      this.dpStore.setState({isInitialDataLoaded: true})
-    }
-
-    this.getWidgetsData();
   }
 
-  private getWidgetsData() {
+  private getWidgetsData(): void {
     let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
     this.dpStore.select('widgetDataRequest').pipe(
       filter(data => !!data),
