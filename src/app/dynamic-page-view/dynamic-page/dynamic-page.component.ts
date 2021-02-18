@@ -43,23 +43,12 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
     console.log(data)
 
-    this.dpStore.select('typePageViewConfigs').pipe(
-      filter(data => !!data),
-      switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
-        let initialWidgetDataRequests = [];
-        this.pageConfig.viewConfig.config.areasConfig
-          .filter((area: IAreasConfig) => area.widgetConfig?.options?.needsDataPreload)
-          .forEach((area: IAreasConfig) => {
-            let typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
-            initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, null));
-          });
-        return combineLatest(initialWidgetDataRequests);
-      }),
+    this.executeInitialDataActions();
+    this.getInitialWidgetsData();
+    this.getWidgetsData();
+  }
 
-    ).subscribe((initWidgetData: IWidgetData[]) => {
-      this.dpStore.setState({widgetData: initWidgetData});
-    });
-
+  private executeInitialDataActions(): void {
     let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
     if (initialDataActions && initialDataActions.length) {
       let requests = [];
@@ -72,11 +61,28 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     } else {
       this.dpStore.setState({isInitialDataLoaded: true})
     }
-
-    this.getWidgetsData();
   }
 
-  private getWidgetsData() {
+  private getInitialWidgetsData(): void {
+    this.dpStore.select('typePageViewConfigs').pipe(
+      filter(data => !!data),
+      switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
+        let initialWidgetDataRequests = [];
+        this.pageConfig.viewConfig.config.areasConfig
+          .filter((area: IAreasConfig) => area.widgetConfig?.options?.needsDataPreload)
+          .forEach((area: IAreasConfig) => {
+            let typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
+            initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, null));
+          });
+        return combineLatest(initialWidgetDataRequests);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((initWidgetData: IWidgetData[]) => {
+      this.dpStore.setState({widgetData: initWidgetData});
+    });
+  }
+
+  private getWidgetsData(): void {
     let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
     this.dpStore.select('widgetDataRequest').pipe(
       filter(data => !!data),
