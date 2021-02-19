@@ -97,7 +97,6 @@ export class GridItemComponent extends DocumentBaseComponent {
       }),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      // console.log("gird-item event subscription");
       this.cd.detectChanges();
     });
   }

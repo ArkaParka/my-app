@@ -1,0 +1,16 @@
+<table class="ant-table ant-table-bordered ant-table-small">
+  <thead class="ant-table-thead">
+  <tr class="ant-table-row">
+    <th class="ant-table-cell" *ngFor="let column of widgetOptions.columns.value" width="{{column.width}}">
+      {{column.title}}
+    </th>
+  </tr>
+  </thead>
+  <tbody class="ant-table-tbody">
+  <tr *ngFor="let row of data|async" class="ant-table-row">
+    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">{{row[column.fieldName]}}</td>
+  </tr>
+  </tbody>
+</table>
+
+

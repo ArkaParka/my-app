@@ -3,7 +3,6 @@ import {IWidgetConfig} from "../interfaces/IWidgetConfig";
 import {IDynamicComponent} from "../interfaces/IDynamicComponent";
 import {getDynamicWidget} from "./widget-list";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
-import findValueDeep from "deepdash/findValueDeep";
 import {filter, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
 
@@ -47,14 +46,27 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
         filter(data => !!data),
         takeUntil(this.destroy$))
       .subscribe(widgetData => {
-        this._widgetData = findValueDeep(widgetData, ((value, key) => key === this.widgetConfig.options?.fieldName?.value));
+        this._widgetData = this.getDeepValue(widgetData, this.widgetConfig.options?.fieldName?.value);
         if (this._widgetData)
           (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
-
-        // console.log(this.widgetConfig.options?.fieldName?.value, this._widgetData);
       });
-    // console.log(`widget ${this.widgetConfig.type} created`)
   }
+
+  private getDeepValue = (obj, findKey) => {
+    for (let key in obj) {
+      if (key === findKey) {
+        return obj[key];
+      }
+
+      if (typeof obj[key] === 'object') {
+        const deepFind = this.getDeepValue(obj[key], findKey);
+        if (deepFind) {
+          return deepFind;
+        }
+      }
+    }
+    return undefined;
+  };
 
 }
 

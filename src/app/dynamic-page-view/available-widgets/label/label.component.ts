@@ -11,6 +11,5 @@ export class LabelComponent implements OnInit{
   @Input() widgetData: any = "Пустой Label";
 
   ngOnInit(): void {
-    // console.log(this.widgetData)
   }
 }
