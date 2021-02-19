@@ -34,7 +34,7 @@ export class DynamicMenuService {
   }
 
   public getModulePageConfiguration(nodeName: string, actionName: string): Observable<IModulePageConfiguration> {
-    if(actionName==='product_management.MainDynamicPage') return of(mock);
+    // if(actionName==='product_management.MainDynamicPage') return of(mock);
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 

@@ -7,21 +7,10 @@
   </tr>
   </thead>
   <tbody class="ant-table-tbody">
-  <tr class="ant-table-row ng-star-inserted">
-    <td class="ant-table-cell" *ngFor="let column of widgetOptions.columns.value">{{column.width}}</td>
+  <tr *ngFor="let row of data|async" class="ant-table-row">
+    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">{{row[column.fieldName]}}</td>
   </tr>
   </tbody>
 </table>
 
-<!--<table class="pbs-table">-->
-<!--  <thead class="pbs-table-thead">-->
-<!--  <tr class="pbs-table-row">-->
-<!--    <th class="pbs-table-cell" *ngFor="let column of widgetOptions.columns.value" width="{{column.width}}">{{column.title}}</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-<!--  <tbody class="pbs-table-tbody">-->
-<!--  <tr class="pbs-table-row ng-star-inserted">-->
-<!--    <td class="pbs-table-cell" *ngFor="let column of widgetOptions.columns.value" width="{{column.width}}">{{column.width}}</td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
-<!--</table>-->
+
