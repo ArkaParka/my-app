@@ -1,10 +1,10 @@
-import {ComponentFactoryResolver, Directive, ElementRef, Input, OnInit, ViewContainerRef} from '@angular/core';
-import {IWidgetConfig} from '../interfaces/IWidgetConfig';
-import {IDynamicComponent} from '../interfaces/IDynamicComponent';
-import {getDynamicWidget} from './widget-list';
-import {DynamicPageStoreService} from '../dynamic-page-services/dynamic-page-store.service';
-import {filter, takeUntil} from 'rxjs/operators';
-import {DocumentBaseComponent} from '../../containers/document-base.component';
+import {ComponentFactoryResolver, Directive, ElementRef, Input, OnInit, ViewContainerRef} from "@angular/core";
+import {IWidgetConfig} from "../interfaces/IWidgetConfig";
+import {IDynamicComponent} from "../interfaces/IDynamicComponent";
+import {getDynamicWidget} from "./widget-list";
+import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
+import {filter, takeUntil} from "rxjs/operators";
+import {DocumentBaseComponent} from "../../containers/document-base.component";
 
 @Directive({
   selector: '[dynamic-widget]',
@@ -46,10 +46,9 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
         filter(data => !!data),
         takeUntil(this.destroy$))
       .subscribe(widgetData => {
-        console.log(this._widgetData);
-        if (this._widgetData) {
+        this._widgetData = this.getDeepValue(widgetData, this.widgetConfig.options?.fieldName?.value);
+        if (this._widgetData)
           (componentRef.instance as IDynamicComponent).widgetData = this._widgetData;
-        }
       });
   }
 
