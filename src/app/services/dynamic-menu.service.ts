@@ -10,7 +10,6 @@ import {ISelectableParent} from "../models/ISelectableParent";
 import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 import {widgetDataMock} from "../../../widgetDataMock";
 import {headerMock} from "../../headerMock";
-import {mock} from '../../../table-widget-mock';
 
 
 @Injectable({
@@ -34,7 +33,6 @@ export class DynamicMenuService {
   }
 
   public getModulePageConfiguration(nodeName: string, actionName: string): Observable<IModulePageConfiguration> {
-    // if(actionName==='product_management.MainDynamicPage') return of(mock);
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 
