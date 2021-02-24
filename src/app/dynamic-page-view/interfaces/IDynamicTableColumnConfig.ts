@@ -3,4 +3,5 @@ export interface IDynamicTableColumnConfig {
   width?: string;
   fieldName?: string;
   actionExecutable?: boolean;
+  mask?: string;
 }

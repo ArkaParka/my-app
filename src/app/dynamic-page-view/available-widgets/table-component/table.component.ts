@@ -13,11 +13,7 @@ import {IWidgetTableConfig} from '../../interfaces/IWidgetTableConfig';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent implements OnInit {
-  private _widgetOptions: {
-    fieldName: {value: string},
-    columns: { value: IDynamicTableColumnConfig[] },
-    additionalProperties: { value: any }
-  };
+  private _widgetOptions: IWidgetTableConfig;
 
   public data: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
