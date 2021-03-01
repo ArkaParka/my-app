@@ -8,7 +8,9 @@
   </thead>
   <tbody class="ant-table-tbody">
   <tr *ngFor="let row of data|async" class="ant-table-row">
-    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">{{row[column.fieldName]}}</td>
+    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
+      {{row[column.fieldName] | format: column.mask}}
+    </td>
   </tr>
   </tbody>
 </table>

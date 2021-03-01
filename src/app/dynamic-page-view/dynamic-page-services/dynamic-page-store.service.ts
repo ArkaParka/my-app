@@ -1,7 +1,9 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 import {IDynamicPageStore} from "../interfaces/IDynamicPageStore";
-import {distinctUntilChanged, map} from "rxjs/operators";
+import {distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {IInitWidgetData} from '../interfaces/IInitWidgetData';
+import {log} from 'ng-zorro-antd';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +11,7 @@ import {distinctUntilChanged, map} from "rxjs/operators";
 export class DynamicPageStoreService {
   private stateSubject: BehaviorSubject<IDynamicPageStore> = new BehaviorSubject<IDynamicPageStore>({
     widgetAction: [],
+    activeWidgetAction: [], // <<
     typePageViewConfigs: [],
     initialWidgetData: [],
     isInitialDataLoaded: false,
@@ -18,10 +21,10 @@ export class DynamicPageStoreService {
   });
 
   constructor() {
-    this.select("needsDetectChanges").subscribe(ndc => {
+    this.select('needsDetectChanges').subscribe(ndc => {
       if (ndc)
-        this.setState({needsDetectChanges: false})
-    })
+        this.setState({needsDetectChanges: false});
+    });
   }
 
 
@@ -38,4 +41,5 @@ export class DynamicPageStoreService {
       distinctUntilChanged()
     );
   }
+
 }

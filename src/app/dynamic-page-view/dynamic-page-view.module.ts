@@ -19,6 +19,9 @@ import {InputNumberComponent} from "./available-widgets/input-component/input-nu
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 import {TableComponent} from './available-widgets/table-component/table.component';
+import {ButtonComponent} from './available-widgets/button/button.component';
+import { ButtonsModule } from 'ngx-bootstrap/buttons'; // <<
+import {MaskPipe} from './available-widgets/table-component/MaskPipe';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -31,7 +34,8 @@ const AvailableWidgets = [
   InputCheckboxComponent,
   TextareaComponent,
   PageViewComponent,
-  TableComponent
+  TableComponent,
+  ButtonComponent
 ];
 
 @NgModule({
@@ -41,14 +45,16 @@ const AvailableWidgets = [
     NzTreeModule,
     NzIconModule,
     SharedModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   declarations: [
     DynamicPageMockComponent,
     GridItemComponent,
     DynamicPageComponent,
     DynamicWidgetDirective,
-    ...AvailableWidgets
+    ...AvailableWidgets,
+    MaskPipe
   ],
   exports: [
     DynamicPageMockComponent,

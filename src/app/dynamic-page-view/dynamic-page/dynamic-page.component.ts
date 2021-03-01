@@ -12,6 +12,9 @@ import {mock} from "../../../../dynamic-page-mock";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {IWidgetData} from "../interfaces/IWidgetData";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
+import {IActiveWidgetAction} from '../interfaces/IActiveWidgetAction';
+import {EActionTypes} from '../interfaces/EActionTypes';
+import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -32,6 +35,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   constructor(public dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService) {
     super();
+    this.addEventListener();
   }
 
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
@@ -39,13 +43,28 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.configPath = data.configPath;
     // this.pageConfig = mock;
     this.pageConfig = data.pageConfiguration;
+    this.getPageUID(this.pageConfig.typePageViewConfigs);
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
 
-    console.log(data)
+    console.log(data);
 
     this.executeInitialDataActions();
     this.getInitialWidgetsData();
     this.getWidgetsData();
+  }
+
+  private getPageUID(typePageViewConfigs: any) {
+    for (const pageConf of typePageViewConfigs) {
+      pageConf.viewConfig.areasConfig.forEach(areaConf => {
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'BUTTON') {
+          areaConf.widgetConfig.options.events.value.forEach(val => {
+            val.actions.forEach(action => {
+              action.options.pageUID = pageConf.pageUID;
+            });
+          });
+        }
+      });
+    }
   }
 
   private executeInitialDataActions(): void {
@@ -99,6 +118,21 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       takeUntil(this.destroy$)
     ).subscribe((widgetData: IWidgetData) => {
       this.dpStore.setState({widgetData: [widgetData]});
+    });
+  }
+
+  private addEventListener() {
+    this.dpStore.select('activeWidgetAction').subscribe((actions) => {
+      console.log('dynamic page component ', actions);
+      const actionRequests = [];
+      actions.forEach(action => {
+        const actionRequest = this.dynamicMenuService
+          .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID);
+        actionRequests.push(actionRequest);
+      });
+      combineLatest(actionRequests).subscribe(request => {
+        console.log('combineLatest request', request);
+      });
     });
   }
 }
