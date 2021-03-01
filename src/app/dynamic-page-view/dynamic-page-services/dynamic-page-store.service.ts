@@ -25,18 +25,6 @@ export class DynamicPageStoreService {
       if (ndc)
         this.setState({needsDetectChanges: false});
     });
-    // this.select('activeWidgetAction').pipe(
-    //   map(w => w = [ // <<
-    //     {
-    //       actionType: '1',
-    //       options: {
-    //         formKey: '2',
-    //         pageUID: '3',
-    //         actionKey: '4'
-    //       }
-    //     }
-    //   ])
-    // ).subscribe(w => console.log(w));
   }
 
 
