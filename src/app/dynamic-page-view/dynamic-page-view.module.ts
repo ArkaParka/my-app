@@ -1,4 +1,4 @@
-import {Compiler, NgModule} from "@angular/core";
+import {NgModule} from "@angular/core";
 import {DynamicPageMockComponent} from "./dynamic-page-mock/dynamic-page-mock.component";
 import {GridContainerComponent} from "./grid-container/grid-container.component";
 import {GridItemComponent} from "./grid-item/grid-item.component";
@@ -18,8 +18,8 @@ import {PageViewComponent} from "./available-widgets/page-view-component/page-vi
 import {InputNumberComponent} from "./available-widgets/input-component/input-number.component";
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
-import {DynamicIoModule, DynamicModule} from "ng-dynamic-component";
-import {JitCompilerFactory} from "@angular/platform-browser-dynamic";
+import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
+import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 
 const AvailableWidgets = [
   BlankComponent,
@@ -31,7 +31,9 @@ const AvailableWidgets = [
   InputNumberComponent,
   InputCheckboxComponent,
   TextareaComponent,
-  PageViewComponent
+  PageViewComponent,
+  WidgetListComponent,
+  WidgetWrapperComponent
 ];
 
 @NgModule({
@@ -42,15 +44,13 @@ const AvailableWidgets = [
     NzIconModule,
     SharedModule,
     NgxMaskModule.forRoot(),
-    DynamicModule,
-    DynamicIoModule
   ],
   declarations: [
     DynamicPageMockComponent,
     GridItemComponent,
     DynamicPageComponent,
     DynamicWidgetDirective,
-    ...AvailableWidgets
+    ...AvailableWidgets,
   ],
   exports: [
     DynamicPageMockComponent,

@@ -1,28 +1,35 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Optional} from "@angular/core";
 import {IDynamicPageViewConfig} from "../../../models/IDynamicPageViewConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {ITypePageViewConfig} from "../../interfaces/ITypePageViewConfig";
-import {filter, takeUntil} from "rxjs/operators";
+import {filter, takeUntil, tap} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {DP_STORE, WIDGET_DATA, WidgetData} from "../../dynamic-page-services/widgets-factory.service";
+import {combineLatest} from "rxjs";
+import {IWidgetOptions} from "../../interfaces/IWidgetOptions";
 
 @Component({
   template: `
-    <app-grid-container [widgetOptions]="innerPageViewConfig"></app-grid-container>`,
+    <app-widget-list [pageConfig]="innerPageViewConfig"></app-widget-list>`,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PageViewComponent extends DocumentBaseComponent implements OnInit {
-  @Input() widgetOptions: { page_key: { value: string } };
+export class PageViewComponent extends DocumentBaseComponent {
   public innerPageViewConfig: IDynamicPageViewConfig;
 
-  constructor(private dpStore: DynamicPageStoreService) {
+  constructor(@Optional() @Inject(WIDGET_DATA) readonly widgetData: WidgetData<any>,
+              @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
     super();
-  }
 
-  ngOnInit(): void {
-    this.dpStore.select('typePageViewConfigs')
-      .pipe(filter(data => !!data))
-      .subscribe((configs: ITypePageViewConfig[]) => {
-        this.innerPageViewConfig = configs.find(config => config.key === this.widgetOptions.page_key?.value)?.viewConfig;
+    combineLatest(this.widgetData.getData(), this.dpStore.select('typePageViewConfigs'))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        if ((data[0] as IWidgetOptions)?.page_key?.value) {
+          this.innerPageViewConfig = (data[1] as ITypePageViewConfig[])
+            .find(config => config.key === (data[0] as IWidgetOptions)?.page_key?.value)?.viewConfig;
+          console.log((data[0] as IWidgetOptions)?.page_key?.value)
+          // console.log((data[0] as IWidgetOptions)?.page_key?.value, (data[1] as ITypePageViewConfig[])
+          //   .find(config => config.key === (data[0] as IWidgetOptions)?.page_key?.value)?.viewConfig)
+        } else this.innerPageViewConfig = (data[0] as IWidgetOptions)?.innerGridConfig?.value;
       })
   }
 }
