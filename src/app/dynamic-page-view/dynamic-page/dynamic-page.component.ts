@@ -15,6 +15,8 @@ import {DocumentBaseComponent} from "../../containers/document-base.component";
 import {IActiveWidgetAction} from '../interfaces/IActiveWidgetAction';
 import {EActionTypes} from '../interfaces/EActionTypes';
 import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
+import {ILinkWidgetOptions} from '../interfaces/ILinkWidgetOptions';
+import {IWidgetEventAction} from '../interfaces/IWidgetEventAction';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -53,15 +55,20 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.getWidgetsData();
   }
 
+
   private getPageUID(typePageViewConfigs: any) {
     for (const pageConf of typePageViewConfigs) {
       pageConf.viewConfig.areasConfig.forEach(areaConf => {
+        console.log(areaConf);
         if ((areaConf.widgetConfig.type).toUpperCase() === 'BUTTON') {
           areaConf.widgetConfig.options.events.value.forEach(val => {
             val.actions.forEach(action => {
               action.options.pageUID = pageConf.pageUID;
             });
           });
+        }
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'SIMPLE_LINK') {
+          areaConf.widgetConfig.options.pageUID = {value: pageConf.pageUID};
         }
       });
     }
@@ -106,6 +113,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.dpStore.select('widgetDataRequest').pipe(
       filter(data => !!data),
       switchMap((wdr: IWidgetDataRequest) => {
+        console.log(wdr);
         widgetsDataRequest.id = wdr.id;
         widgetsDataRequest.type = wdr.type;
         return this.dpStore.select('typePageViewConfigs')

@@ -9,7 +9,7 @@ export interface IWidgetEventAction {
           value: string;
         };
       };
-      dataType: string
-    }
-  }
+      dataType: string;
+    };
+  };
 }
