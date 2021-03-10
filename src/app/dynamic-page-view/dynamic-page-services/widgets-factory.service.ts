@@ -1,35 +1,34 @@
 import {Injectable, InjectionToken} from "@angular/core";
 import {Type} from "@angular/core";
-import {BehaviorSubject, combineLatest, forkJoin, Observable, of} from "rxjs";
+import {Observable, of} from "rxjs";
 import {BlankComponent} from "../available-widgets/blank-component/blank-component";
-import {Widget} from "ngx-schema-form";
 import {TabTreeComponent} from "../available-widgets/tabs-component/tabs.component";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {TextareaComponent} from "../available-widgets/textarea-component/textarea.component";
 import {PageViewComponent} from "../available-widgets/page-view-component/page-view.component";
-import {GridContainerComponent} from "../grid-container/grid-container.component";
 import {LabelComponent} from "../available-widgets/label/label.component";
 import {InputTextComponent} from "../available-widgets/input-component/input-text.component";
 import {InputNumberComponent} from "../available-widgets/input-component/input-number.component";
 import {InputCheckboxComponent} from "../available-widgets/input-component/input-checkbox.component";
-import {IDynamicWidget} from "../interfaces/IDynamicWidget";
+import {TableComponent} from "../available-widgets/table-component/table.component";
+import {ButtonComponent} from "../available-widgets/button/button.component";
 
 export interface WidgetData<T> {
   getData(): Observable<T>;
 }
 
-export const WIDGET_DATA: InjectionToken<WidgetData<any>> = new InjectionToken("WIDGET_DATA");
-export const DP_STORE: InjectionToken<WidgetData<any>> = new InjectionToken("DP_STORE");
+export const WIDGET_OPTIONS: InjectionToken<WidgetOptions<any>> = new InjectionToken("WIDGET_OPTIONS");
+export const DP_STORE: InjectionToken<WidgetOptions<any>> = new InjectionToken("DP_STORE");
 
-export interface WidgetData<T> {
-  getData(): Observable<T>;
+export interface WidgetOptions<T> {
+  getOptions(): Observable<T>;
 }
 
 
 export interface WidgetListItem {
   alias: string;
   widgetComponentType: Type<any>;
-  widgetData: WidgetData<any>;
+  widgetData: WidgetOptions<any>;
 }
 
 @Injectable({
@@ -46,7 +45,7 @@ export class WidgetsFactoryService {
       let widget = allWidgets.find(widget => widget.alias === area.widgetConfig.type)
         || allWidgets.find(widget => widget.alias === 'BLANK');
 
-      widget.widgetData.getData = () => {
+      widget.widgetData.getOptions = () => {
         return of(area.widgetConfig.options)
       };
 
@@ -67,7 +66,7 @@ export class WidgetsFactoryService {
         alias: 'INNER_GRID',
         widgetComponentType: PageViewComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -76,7 +75,7 @@ export class WidgetsFactoryService {
         alias: 'PAGE_VIEW',
         widgetComponentType: PageViewComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -85,7 +84,7 @@ export class WidgetsFactoryService {
         alias: 'BLANK',
         widgetComponentType: BlankComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null);
           }
         }
@@ -94,7 +93,7 @@ export class WidgetsFactoryService {
         alias: 'TABS',
         widgetComponentType: TabTreeComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null);
           }
         }
@@ -103,7 +102,7 @@ export class WidgetsFactoryService {
         alias: 'LABEL',
         widgetComponentType: LabelComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -112,7 +111,7 @@ export class WidgetsFactoryService {
         alias: 'INPUT_STRING',
         widgetComponentType: InputTextComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -121,7 +120,7 @@ export class WidgetsFactoryService {
         alias: 'INPUT_NUMBER',
         widgetComponentType: InputNumberComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -130,7 +129,7 @@ export class WidgetsFactoryService {
         alias: 'INPUT_BOOLEAN',
         widgetComponentType: InputCheckboxComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }
@@ -139,7 +138,25 @@ export class WidgetsFactoryService {
         alias: 'TEXTAREA',
         widgetComponentType: TextareaComponent,
         widgetData: {
-          getData(): Observable<any> {
+          getOptions(): Observable<any> {
+            return of(null)
+          }
+        }
+      },
+      {
+        alias: 'TABLE',
+        widgetComponentType: TableComponent,
+        widgetData: {
+          getOptions(): Observable<any> {
+            return of(null)
+          }
+        }
+      },
+      {
+        alias: 'BUTTON',
+        widgetComponentType: ButtonComponent,
+        widgetData: {
+          getOptions(): Observable<any> {
             return of(null)
           }
         }

@@ -11,9 +11,6 @@ import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {IWidgetData} from "../interfaces/IWidgetData";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
-import {IActiveWidgetAction} from '../interfaces/IActiveWidgetAction';
-import {EActionTypes} from '../interfaces/EActionTypes';
-import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -32,6 +29,10 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
   public get pageConfig() {
     return this._pageConfig;
+  }
+
+  public set pageConfig(value) {
+    this._pageConfig = value;
   }
 
   constructor(public dpStore: DynamicPageStoreService,
@@ -113,6 +114,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     } else {
       this.dpStore.setState({isInitialDataLoaded: true})
     }
+  }
 
   private getWidgetsData(): void {
     let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
@@ -135,8 +137,10 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   }
 
   private addEventListener() {
-    this.dpStore.select('activeWidgetAction').subscribe((actions) => {
-      console.log('dynamic page component ', actions);
+    this.dpStore.select('activeWidgetAction').pipe(
+      filter(data => !!data),
+      takeUntil(this.destroy$)
+    ).subscribe((actions) => {
       const actionRequests = [];
       actions.forEach(action => {
         const actionRequest = this.dynamicMenuService
@@ -144,7 +148,6 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         actionRequests.push(actionRequest);
       });
       combineLatest(actionRequests).subscribe(request => {
-        console.log('combineLatest request', request);
       });
     });
   }

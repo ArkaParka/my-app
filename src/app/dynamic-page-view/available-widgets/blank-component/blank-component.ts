@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
-import {WIDGET_DATA, WidgetData} from "../../dynamic-page-services/widgets-factory.service";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 
 @Component({
   template: `
@@ -8,6 +8,6 @@ import {WIDGET_DATA, WidgetData} from "../../dynamic-page-services/widgets-facto
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlankComponent {
-  constructor(@Optional() @Inject(WIDGET_DATA) private widgetData: WidgetData<any>) {
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) private widgetData: WidgetOptions<any>) {
   }
 }

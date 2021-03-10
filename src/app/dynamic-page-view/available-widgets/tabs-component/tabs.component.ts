@@ -5,7 +5,7 @@ import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-
 import {mergeMap, switchMap, takeUntil, tap} from "rxjs/operators";
 import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {DP_STORE, WIDGET_DATA, WidgetData} from "../../dynamic-page-services/widgets-factory.service";
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
 
 @Component({
@@ -17,11 +17,11 @@ export class TabTreeComponent extends DocumentBaseComponent {
   public tabData: { dataPath: string, data: any }[] = [];
   public tabs: { title: string, config: { widgetConfig: IWidgetConfig } }[] = [];
 
-  constructor(@Optional() @Inject(WIDGET_DATA) readonly widgetData: WidgetData<any>,
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<any>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
     super();
 
-    combineLatest(this.widgetData.getData(), this.dpStore.select('isInitialDataLoaded'))
+    combineLatest(this.widgetOptionsGetter.getOptions(), this.dpStore.select('isInitialDataLoaded'))
       .pipe(
         mergeMap(widgetData => {
           this.tabs = widgetData[0]?.tabs?.value;

@@ -4,7 +4,7 @@ import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-
 import {ITypePageViewConfig} from "../../interfaces/ITypePageViewConfig";
 import {filter, takeUntil, tap} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {DP_STORE, WIDGET_DATA, WidgetData} from "../../dynamic-page-services/widgets-factory.service";
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
 import {IWidgetOptions} from "../../interfaces/IWidgetOptions";
 
@@ -16,11 +16,11 @@ import {IWidgetOptions} from "../../interfaces/IWidgetOptions";
 export class PageViewComponent extends DocumentBaseComponent {
   public innerPageViewConfig: IDynamicPageViewConfig;
 
-  constructor(@Optional() @Inject(WIDGET_DATA) readonly widgetData: WidgetData<any>,
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetData: WidgetOptions<any>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
     super();
 
-    combineLatest(this.widgetData.getData(), this.dpStore.select('typePageViewConfigs'))
+    combineLatest(this.widgetData.getOptions(), this.dpStore.select('typePageViewConfigs'))
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         if ((data[0] as IWidgetOptions)?.page_key?.value) {
