@@ -1,6 +1,6 @@
 import {Injectable, InjectionToken} from "@angular/core";
 import {Type} from "@angular/core";
-import {BehaviorSubject, Observable, of} from "rxjs";
+import {BehaviorSubject, combineLatest, forkJoin, Observable, of} from "rxjs";
 import {BlankComponent} from "../available-widgets/blank-component/blank-component";
 import {Widget} from "ngx-schema-form";
 import {TabTreeComponent} from "../available-widgets/tabs-component/tabs.component";
@@ -39,17 +39,18 @@ export class WidgetsFactoryService {
   private readonly allWidgets: WidgetListItem[];
 
   public widgetList(areas: IAreasConfig[]): Observable<WidgetListItem[]> {
-    let allWidgets = this.initFullWidgetList();
 
     let arr: WidgetListItem[] = areas.reduce((acc: any, area) => {
+      let allWidgets = this.initFullWidgetList();
+
       let widget = allWidgets.find(widget => widget.alias === area.widgetConfig.type)
         || allWidgets.find(widget => widget.alias === 'BLANK');
-
-      console.log(`${area.areaName}: ${area.widgetConfig.options?.page_key?.value || area.widgetConfig.options.innerGridConfig?.value?.type}`, area?.widgetConfig?.options)
 
       widget.widgetData.getData = () => {
         return of(area.widgetConfig.options)
       };
+
+      console.log(area.widgetConfig.type)
       acc.push(widget);
       return acc;
     }, []);
@@ -62,15 +63,15 @@ export class WidgetsFactoryService {
 
   protected initFullWidgetList(): WidgetListItem[] {
     return [
-      // {
-      //   alias: 'INNER_GRID',
-      //   widgetComponentType: PageViewComponent,
-      //   widgetData: {
-      //     getData(): Observable<any> {
-      //       return of(null)
-      //     }
-      //   }
-      // },
+      {
+        alias: 'INNER_GRID',
+        widgetComponentType: PageViewComponent,
+        widgetData: {
+          getData(): Observable<any> {
+            return of(null)
+          }
+        }
+      },
       {
         alias: 'PAGE_VIEW',
         widgetComponentType: PageViewComponent,

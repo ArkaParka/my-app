@@ -5,6 +5,8 @@ import {IDynamicPageViewConfig} from "../../../models/IDynamicPageViewConfig";
 import {IViewConfig} from "../../../models/ViewConfiguration.interface";
 import {IModulePageConfiguration} from "../../../models/IModulePageConfiguration";
 import {IAreasConfig} from "../../interfaces/IAreasConfig";
+import {map, switchMap} from "rxjs/operators";
+import {combineLatest} from "rxjs";
 
 @Component({
   selector: "app-widget-list",
@@ -28,11 +30,20 @@ export class WidgetListComponent implements OnInit {
     if ((options as IModulePageConfiguration).viewConfig) {
       this._pageConfig = options as IModulePageConfiguration;
       this.widgetAreas = ((options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig).areasConfig;
-    }
-    else {
+    } else {
       this.widgetAreas = (options as IDynamicPageViewConfig).areasConfig;
       // console.log("попались", options)
     }
+
+    // this.widgetService.widgetList(this.widgetAreas).pipe(
+    //   switchMap(widgets => {
+    //     let arr = [];
+    //     widgets.forEach(widget => arr.push(widget.widgetData.getData()))
+    //     return combineLatest(arr);
+    //   })
+    // ).subscribe(data=>{
+    //   console.log('widget-data', data)
+    // })
     // console.log('widget-list areas', this.widgetAreas)
   };
 

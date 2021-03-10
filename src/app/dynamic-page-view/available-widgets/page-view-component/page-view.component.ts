@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Host, Inject, Input, OnInit, Optional, Self, SkipSelf} from "@angular/core";
 import {IDynamicPageViewConfig} from "../../../models/IDynamicPageViewConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {ITypePageViewConfig} from "../../interfaces/ITypePageViewConfig";
@@ -26,9 +26,6 @@ export class PageViewComponent extends DocumentBaseComponent {
         if ((data[0] as IWidgetOptions)?.page_key?.value) {
           this.innerPageViewConfig = (data[1] as ITypePageViewConfig[])
             .find(config => config.key === (data[0] as IWidgetOptions)?.page_key?.value)?.viewConfig;
-          console.log((data[0] as IWidgetOptions)?.page_key?.value)
-          // console.log((data[0] as IWidgetOptions)?.page_key?.value, (data[1] as ITypePageViewConfig[])
-          //   .find(config => config.key === (data[0] as IWidgetOptions)?.page_key?.value)?.viewConfig)
         } else this.innerPageViewConfig = (data[0] as IWidgetOptions)?.innerGridConfig?.value;
       })
   }
