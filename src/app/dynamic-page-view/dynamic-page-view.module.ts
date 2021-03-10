@@ -18,6 +18,10 @@ import {PageViewComponent} from "./available-widgets/page-view-component/page-vi
 import {InputNumberComponent} from "./available-widgets/input-component/input-number.component";
 import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
+import {TableComponent} from './available-widgets/table-component/table.component';
+import {ButtonComponent} from './available-widgets/button/button.component';
+import { ButtonsModule } from 'ngx-bootstrap/buttons'; // <<
+import {MaskPipe} from './available-widgets/table-component/MaskPipe';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 
@@ -32,8 +36,10 @@ const AvailableWidgets = [
   InputCheckboxComponent,
   TextareaComponent,
   PageViewComponent,
+  TableComponent,
+  ButtonComponent,
   WidgetListComponent,
-  WidgetWrapperComponent
+  WidgetWrapperComponent,
 ];
 
 @NgModule({
@@ -44,6 +50,7 @@ const AvailableWidgets = [
     NzIconModule,
     SharedModule,
     NgxMaskModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   declarations: [
     DynamicPageMockComponent,
@@ -51,6 +58,7 @@ const AvailableWidgets = [
     DynamicPageComponent,
     DynamicWidgetDirective,
     ...AvailableWidgets,
+    MaskPipe
   ],
   exports: [
     DynamicPageMockComponent,

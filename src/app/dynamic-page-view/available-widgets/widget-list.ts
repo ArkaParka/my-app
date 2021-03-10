@@ -7,6 +7,8 @@ import {TextareaComponent} from "./textarea-component/textarea.component";
 import {PageViewComponent} from "./page-view-component/page-view.component";
 import {InputNumberComponent} from "./input-component/input-number.component";
 import {InputCheckboxComponent} from "./input-component/input-checkbox.component";
+import {TableComponent} from "./table-component/table.component"; //<<
+import {ButtonComponent} from "./button/button.component";
 
 interface IDynamicWidget {
   widgetName: string;
@@ -49,6 +51,14 @@ const widgetList: IDynamicWidget[] = [
   {
     widgetName: 'PAGE_VIEW',
     component: PageViewComponent
+  },
+  {
+    widgetName: 'TABLE',
+    component: TableComponent
+  },
+  {
+    widgetName: 'BUTTON',
+    component: ButtonComponent
   }
 ];
 

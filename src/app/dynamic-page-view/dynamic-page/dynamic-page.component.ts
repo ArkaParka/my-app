@@ -11,6 +11,9 @@ import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {IWidgetData} from "../interfaces/IWidgetData";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
+import {IActiveWidgetAction} from '../interfaces/IActiveWidgetAction';
+import {EActionTypes} from '../interfaces/EActionTypes';
+import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -34,23 +37,39 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   constructor(public dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService) {
     super();
+    this.addEventListener();
   }
 
   @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
-    this._pageConfig = data.pageConfiguration;
-    this.dpStore.setState({typePageViewConfigs: this._pageConfig.typePageViewConfigs});
+    this.pageConfig = data.pageConfiguration;
+    this.getPageUID(this.pageConfig.typePageViewConfigs);
+    this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
 
-    console.log(data)
+    console.log(data);
 
     this.executeInitialDataActions();
     this.getInitialWidgetsData();
     this.getWidgetsData();
   }
 
+  private getPageUID(typePageViewConfigs: any) {
+    for (const pageConf of typePageViewConfigs) {
+      pageConf.viewConfig.areasConfig.forEach(areaConf => {
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'BUTTON') {
+          areaConf.widgetConfig.options.events.value.forEach(val => {
+            val.actions.forEach(action => {
+              action.options.pageUID = pageConf.pageUID;
+            });
+          });
+        }
+      });
+    }
+  }
+
   private executeInitialDataActions(): void {
-    let initialDataActions = this._pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
+    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
     if (initialDataActions && initialDataActions.length) {
       let requests = [];
       initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
@@ -69,7 +88,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
         let initialWidgetDataRequests = [];
-        this._pageConfig.viewConfig.config.areasConfig
+        this.pageConfig.viewConfig.config.areasConfig
           .filter((area: IAreasConfig) => area.widgetConfig?.options?.needsDataPreload)
           .forEach((area: IAreasConfig) => {
             let typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
@@ -81,7 +100,19 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     ).subscribe((initWidgetData: IWidgetData[]) => {
       this.dpStore.setState({widgetData: initWidgetData});
     });
-  }
+
+    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
+    if (initialDataActions && initialDataActions.length) {
+      let requests = [];
+      initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
+      zip(...requests).subscribe((result: IPageActionResponse[]) => {
+        let initialData: { dataPath: string, data: any }[] = [];
+        result.forEach(res => initialData.push({dataPath: res.actionType, data: res.value}));
+        this.dpStore.setState({initialWidgetData: initialData, isInitialDataLoaded: true});
+      })
+    } else {
+      this.dpStore.setState({isInitialDataLoaded: true})
+    }
 
   private getWidgetsData(): void {
     let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
@@ -100,6 +131,21 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       takeUntil(this.destroy$)
     ).subscribe((widgetData: IWidgetData) => {
       this.dpStore.setState({widgetData: [widgetData]});
+    });
+  }
+
+  private addEventListener() {
+    this.dpStore.select('activeWidgetAction').subscribe((actions) => {
+      console.log('dynamic page component ', actions);
+      const actionRequests = [];
+      actions.forEach(action => {
+        const actionRequest = this.dynamicMenuService
+          .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID);
+        actionRequests.push(actionRequest);
+      });
+      combineLatest(actionRequests).subscribe(request => {
+        console.log('combineLatest request', request);
+      });
     });
   }
 }

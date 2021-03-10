@@ -10,12 +10,7 @@ import {ISelectableParent} from "../models/ISelectableParent";
 import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 import {widgetDataMock} from "../../../widgetDataMock";
 import {headerMock} from "../../headerMock";
-import {configMock} from "../dynamic-page-view/dynamic-page-mock/config-mock";
-import {
-  get_product_data_mock,
-  get_requirement_data_mock,
-  get_task_data_mock
-} from "../dynamic-page-view/dynamic-page-mock/tab-tree-data-mock";
+import {mock} from '../../../dynamic-page-mock';
 
 
 @Injectable({
@@ -39,7 +34,6 @@ export class DynamicMenuService {
   }
 
   public getModulePageConfiguration(nodeName: string, actionName: string): Observable<IModulePageConfiguration> {
-    // return of(configMock);
     return this.http.get<any>(`/pbs/modules/${nodeName}/base/v1/menuItem/config/${actionName}`);
   }
 
@@ -70,9 +64,6 @@ export class DynamicMenuService {
   }
 
   public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
-    if (action === 'get_task_data') return of(get_task_data_mock);
-    if (action === 'get_product_data') return of(get_product_data_mock);
-    if (action === 'get_requirement_data') return of(get_requirement_data_mock);
     return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
   }
 }
