@@ -22,6 +22,7 @@ export const DP_STORE: InjectionToken<WidgetOptions<any>> = new InjectionToken("
 
 export interface WidgetOptions<T> {
   getOptions(): Observable<T>;
+  getAreaName?(): Observable<string>;
 }
 
 
@@ -35,10 +36,8 @@ export interface WidgetListItem {
   providedIn: "root"
 })
 export class WidgetsFactoryService {
-  private readonly allWidgets: WidgetListItem[];
 
   public widgetList(areas: IAreasConfig[]): Observable<WidgetListItem[]> {
-
     let arr: WidgetListItem[] = areas.reduce((acc: any, area) => {
       let allWidgets = this.initFullWidgetList();
 
@@ -48,8 +47,10 @@ export class WidgetsFactoryService {
       widget.widgetData.getOptions = () => {
         return of(area.widgetConfig.options)
       };
+      widget.widgetData.getAreaName = () => {
+        return of(area.areaName)
+      };
 
-      console.log(area.widgetConfig.type)
       acc.push(widget);
       return acc;
     }, []);
