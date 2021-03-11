@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from "@angular/core";
 import {IModulePageConfiguration} from "../../models/IModulePageConfiguration";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionConfigType} from "../../models/IActions";
