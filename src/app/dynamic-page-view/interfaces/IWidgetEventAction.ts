@@ -8,6 +8,9 @@ export interface IWidgetEventAction {
         page_key: {
           value: string;
         };
+        page_id: {
+          value: string;
+        };
       };
       dataType: string;
     };

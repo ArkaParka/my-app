@@ -1,14 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {IButtonWidgetOptions} from '../../interfaces/IButtonWidgetOptions';
 import {ILinkWidgetOptions} from '../../interfaces/ILinkWidgetOptions';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {IAreasConfig} from '../../interfaces/IAreasConfig';
-import {IWidgetConfig} from '../../interfaces/IWidgetConfig';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
 import {EActionTypes} from '../../interfaces/EActionTypes';
-import {ITypePageViewConfig} from '../../interfaces/ITypePageViewConfig';
-import {IWidgetOptions} from '../../interfaces/IWidgetOptions';
 
 @Component({
   selector: 'app-link',
@@ -49,6 +43,9 @@ export class LinkComponent implements OnInit {
           options: {
             page_key: {
               value: '',
+            },
+            page_id: {
+              value: '',
             }
           },
           dataType: '',
@@ -57,6 +54,7 @@ export class LinkComponent implements OnInit {
     };
     _widgetEventActions.options.targetArea = this.widgetOptions.targetArea.value;
     _widgetEventActions.options.widgetConfig.options.page_key.value = this.widgetOptions.page_key.value;
+    _widgetEventActions.options.widgetConfig.options.page_id.value = this.widgetData.id.value;
     this.dpStore.setState({widgetDataRequest: {id: this.widgetData.id.value, type: this.widgetOptions.page_key.value, key: this.widgetOptions.pageUID.value}, widgetAction: [_widgetEventActions]});
   }
 
