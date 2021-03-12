@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import {IModulePageConfiguration} from "../../models/IModulePageConfiguration";
 import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
 import {EActionConfigType} from "../../models/IActions";
@@ -15,7 +15,8 @@ import {DocumentBaseComponent} from "../../containers/document-base.component";
 @Component({
   selector: 'app-dynamic-page-view',
   template: `
-    <app-widget-list [pageConfig]="pageConfig"></app-widget-list>`,
+    <div *ngIf="!(dpStore.select('isInitialDataLoaded')|async)" class="spinner-border" role="status"></div>
+    <app-widget-list *ngIf="dpStore.select('isInitialDataLoaded')|async" [pageConfig]="pageConfig"></app-widget-list>`,
   styles: [`:host {
     display: block;
     height: 100%
@@ -101,19 +102,6 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     ).subscribe((initWidgetData: IWidgetData[]) => {
       this.dpStore.setState({widgetData: initWidgetData});
     });
-
-    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
-    if (initialDataActions && initialDataActions.length) {
-      let requests = [];
-      initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
-      zip(...requests).subscribe((result: IPageActionResponse[]) => {
-        let initialData: { dataPath: string, data: any }[] = [];
-        result.forEach(res => initialData.push({dataPath: res.actionType, data: res.value}));
-        this.dpStore.setState({initialWidgetData: initialData, isInitialDataLoaded: true});
-      })
-    } else {
-      this.dpStore.setState({isInitialDataLoaded: true})
-    }
   }
 
   private getWidgetsData(): void {

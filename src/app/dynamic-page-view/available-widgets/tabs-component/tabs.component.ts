@@ -1,9 +1,7 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, Optional} from "@angular/core";
-import {ITabTreeWidgetOptions} from "../../interfaces/ITabTreeWidgetOptions";
+import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
-import {mergeMap, switchMap, takeUntil, tap} from "rxjs/operators";
-import {IInitWidgetData} from "../../interfaces/IInitWidgetData";
+import {filter, switchMap} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
@@ -21,19 +19,13 @@ export class TabTreeComponent extends DocumentBaseComponent {
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
     super();
 
-    combineLatest(this.widgetOptionsGetter.getOptions(), this.dpStore.select('isInitialDataLoaded'))
-      .pipe(
-        mergeMap(widgetData => {
-          this.tabs = widgetData[0]?.tabs?.value;
-          return widgetData[1] ? this.dpStore.select('initialWidgetData') : null;
-        }),
-        tap((initialData: IInitWidgetData[]) => {
-          if (initialData)
-            this.tabData = initialData
-        }),
-        takeUntil(this.destroy$))
-      .subscribe();
-
+    this.dpStore.select('isInitialDataLoaded').pipe(
+      filter(data => !!data),
+      switchMap(() => combineLatest(this.widgetOptionsGetter.getOptions(), this.dpStore.select('initialWidgetData')))
+    ).subscribe(([widgetData, initialData]) => {
+      this.tabs = widgetData?.tabs?.value;
+      this.tabData = initialData;
+    });
   }
 
   public getWidgetData(dataPath: string) {

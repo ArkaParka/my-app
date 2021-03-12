@@ -6,7 +6,6 @@ import {switchMap, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
-import {IWidgetOptions} from "../../interfaces/IWidgetOptions";
 import {IWidgetEventAction} from "../../interfaces/IWidgetEventAction";
 import {EActionTypes} from "../../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual';
@@ -29,13 +28,13 @@ export class PageViewComponent extends DocumentBaseComponent {
 
     combineLatest(this.widgetData.getOptions(), this.dpStore.select('typePageViewConfigs'), this.widgetData.getAreaName())
       .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.widgetListAreaName = data[2];
+      .subscribe(([widgetOptions, typePageViewConfigs, areaName]) => {
+        this.widgetListAreaName = areaName;
 
-        if ((data[0] as IWidgetOptions)?.page_key?.value) {
-          this.innerPageViewConfig = (data[1] as ITypePageViewConfig[])
-            .find(config => config.key === (data[0] as IWidgetOptions)?.page_key?.value)?.viewConfig;
-        } else this.innerPageViewConfig = (data[0] as IWidgetOptions)?.innerGridConfig?.value;
+        if (widgetOptions.page_key?.value) {
+          this.innerPageViewConfig = typePageViewConfigs
+            .find(config => config.key === widgetOptions?.page_key?.value)?.viewConfig;
+        } else this.innerPageViewConfig = widgetOptions?.innerGridConfig?.value;
       });
 
     this.dpStore.select("widgetAction").pipe(
