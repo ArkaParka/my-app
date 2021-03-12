@@ -22,6 +22,7 @@ import {TableComponent} from './available-widgets/table-component/table.componen
 import {ButtonComponent} from './available-widgets/button/button.component';
 import { ButtonsModule } from 'ngx-bootstrap/buttons'; // <<
 import {MaskPipe} from './available-widgets/table-component/MaskPipe';
+import { LinkComponent } from './available-widgets/link/link.component';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -35,7 +36,8 @@ const AvailableWidgets = [
   TextareaComponent,
   PageViewComponent,
   TableComponent,
-  ButtonComponent
+  ButtonComponent,
+  LinkComponent
 ];
 
 @NgModule({
@@ -54,7 +56,7 @@ const AvailableWidgets = [
     DynamicPageComponent,
     DynamicWidgetDirective,
     ...AvailableWidgets,
-    MaskPipe
+    MaskPipe,
   ],
   exports: [
     DynamicPageMockComponent,

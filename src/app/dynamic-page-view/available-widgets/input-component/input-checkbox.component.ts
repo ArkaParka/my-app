@@ -10,6 +10,6 @@ export class InputCheckboxComponent implements OnInit {
   @Input() widgetData: any;
 
   ngOnInit(): void {
-    console.log(this.widgetOptions)
+    console.log(this.widgetOptions);
   }
 }

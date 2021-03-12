@@ -67,7 +67,7 @@ export class GridItemComponent extends DocumentBaseComponent {
 
   ngOnInit(): void {
 
-    console.log(this._gridAreaName)
+    // console.log(this._gridAreaName)
     //TODO: узкое место - установка grid-area
     this.gridArea = this.sanitizer.bypassSecurityTrustStyle(`${this.gridAreaName}`);
 
@@ -77,7 +77,7 @@ export class GridItemComponent extends DocumentBaseComponent {
 
     this.dpStore.select("widgetAction").pipe(
       switchMap((events: IWidgetEventAction[]) => {
-        let displayEvent: IWidgetEventAction = events
+        const displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.gridAreaName)
           .find(event => event.actionType === EActionTypes.DISPLAY_WIDGET);
         this.currentDisplayEvent = isEqual(this.currentDisplayEvent, displayEvent) ? undefined : displayEvent;

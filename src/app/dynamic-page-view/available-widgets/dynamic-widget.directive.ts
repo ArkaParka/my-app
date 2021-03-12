@@ -23,7 +23,7 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
   @Input('widgetConfig') set widgetConfig(value: IWidgetConfig) {
     this._widgetConfig = value;
     this.loadComponent();
-  };
+  }
 
   get widgetConfig() {
     return this._widgetConfig;
@@ -66,7 +66,7 @@ export class DynamicWidgetDirective extends DocumentBaseComponent implements OnI
       }
     }
     return undefined;
-  };
+  }
 
 }
 

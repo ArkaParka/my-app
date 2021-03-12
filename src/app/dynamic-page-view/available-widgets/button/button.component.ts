@@ -31,10 +31,9 @@ export class ButtonComponent implements OnInit {
   ngOnInit(): void {
     this.width = this.sanitizer.bypassSecurityTrustStyle(this.widgetOptions.width.value);
     this.height = this.sanitizer.bypassSecurityTrustStyle(this.widgetOptions.height.value);
-    console.log(this.widgetOptions);
   }
 
-  private addEventListener() {
+  public addEventListener() {
     const actions = this.widgetOptions.events.value
       .filter(event => event.eventType === EActionTypes.ON_CLICK)
       .map(event => event.actions[0]);

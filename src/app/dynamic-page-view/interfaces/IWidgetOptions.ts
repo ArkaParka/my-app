@@ -17,7 +17,7 @@ export interface IWidgetOptions {
   };
   width?: {
     value?: string;
-  }
+  };
   height?: {
     value?: string;
   };

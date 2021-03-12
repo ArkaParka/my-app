@@ -6,8 +6,8 @@ import {
   Input, Output,
   ViewChild,
   ViewEncapsulation
-} from "@angular/core";
-import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
+} from '@angular/core';
+import {NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-sidebar-nav-custom',
@@ -23,15 +23,16 @@ export class SidebarNavigationComponent implements AfterContentChecked {
 
   @Input('navData') set navData(value: NzTreeNodeOptions[]) {
     this._navData = value;
-    if (this.navData.length) this.isNavLoaded = false;
+    if (this.navData.length) { this.isNavLoaded = false; }
     this.cd.detectChanges();
-  };
+  }
 
   get navData(): NzTreeNodeOptions[] {
     return this._navData;
   }
 
   @Output() onNavItemClicked = new EventEmitter<NzTreeNode[]>();
+
   @Output() onNavigationLoaded = new EventEmitter<NzTreeNode[]>();
 
   @HostBinding('class.app-tree-node') public _nzTreeNodeClass = true;
@@ -43,9 +44,10 @@ export class SidebarNavigationComponent implements AfterContentChecked {
 
       let activePage: NzTreeNode = null;
       this.nzTree.getTreeNodes().forEach(rootNode => {
-        if (!activePage) activePage = this.getNodeWithChildren(rootNode)
+        if (!activePage) { activePage = this.getNodeWithChildren(rootNode)
           .filter(node => node.key)
-          .find(node => node.key.includes(this.activePage))
+          .find(node => node.key.includes(this.activePage));
+        }
       });
 
       if (activePage) {
@@ -64,7 +66,7 @@ export class SidebarNavigationComponent implements AfterContentChecked {
       e.node.isExpanded = !e.node.isExpanded;
     } else {
       this.nzTree.getTreeNodes().forEach(node => this.switchOffCheckedNodes(node));
-      let nodeWithParents = [...this.getNodeParents(e.node), e.node];
+      const nodeWithParents = [...this.getNodeParents(e.node), e.node];
 
       nodeWithParents.forEach((node: NzTreeNode) => {
         node.isChecked = true;
@@ -81,8 +83,8 @@ export class SidebarNavigationComponent implements AfterContentChecked {
   }
 
   getNodeWithChildren(node: NzTreeNode): NzTreeNode[] {
-    let array = [node];
-    if (node.children) node.children.forEach(childNode => array.push(...this.getNodeWithChildren(childNode)));
+    const array = [node];
+    if (node.children) { node.children.forEach(childNode => array.push(...this.getNodeWithChildren(childNode))); }
     return array;
   }
 

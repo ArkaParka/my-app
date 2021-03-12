@@ -12,9 +12,6 @@ import {mock} from "../../../../dynamic-page-mock";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {IWidgetData} from "../interfaces/IWidgetData";
 import {DocumentBaseComponent} from "../../containers/document-base.component";
-import {IActiveWidgetAction} from '../interfaces/IActiveWidgetAction';
-import {EActionTypes} from '../interfaces/EActionTypes';
-import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -46,12 +43,11 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.getPageUID(this.pageConfig.typePageViewConfigs);
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
 
-    console.log(data);
-
     this.executeInitialDataActions();
     this.getInitialWidgetsData();
     this.getWidgetsData();
   }
+
 
   private getPageUID(typePageViewConfigs: any) {
     for (const pageConf of typePageViewConfigs) {
@@ -63,22 +59,25 @@ export class DynamicPageComponent extends DocumentBaseComponent {
             });
           });
         }
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'SIMPLELINK') {
+          areaConf.widgetConfig.options.pageUID = {value: pageConf.pageUID};
+        }
       });
     }
   }
 
   private executeInitialDataActions(): void {
-    let initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
+    const initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
     if (initialDataActions && initialDataActions.length) {
-      let requests = [];
+      const requests = [];
       initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
       zip(...requests).subscribe((result: IPageActionResponse[]) => {
-        let initialData: { dataPath: string, data: any }[] = [];
+        const initialData: { dataPath: string, data: any }[] = [];
         result.forEach(res => initialData.push({dataPath: res.actionType, data: res.value}));
         this.dpStore.setState({initialWidgetData: initialData, isInitialDataLoaded: true});
-      })
+      });
     } else {
-      this.dpStore.setState({isInitialDataLoaded: true})
+      this.dpStore.setState({isInitialDataLoaded: true});
     }
   }
 
@@ -86,11 +85,11 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.dpStore.select('typePageViewConfigs').pipe(
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
-        let initialWidgetDataRequests = [];
+        const initialWidgetDataRequests = [];
         this.pageConfig.viewConfig.config.areasConfig
           .filter((area: IAreasConfig) => area.widgetConfig?.options?.needsDataPreload)
           .forEach((area: IAreasConfig) => {
-            let typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
+            const typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
             initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, null));
           });
         return combineLatest(initialWidgetDataRequests);
@@ -102,13 +101,13 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   }
 
   private getWidgetsData(): void {
-    let widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
+    const widgetsDataRequest: IWidgetDataRequest = {id: null, type: null, key: null};
     this.dpStore.select('widgetDataRequest').pipe(
       filter(data => !!data),
       switchMap((wdr: IWidgetDataRequest) => {
         widgetsDataRequest.id = wdr.id;
         widgetsDataRequest.type = wdr.type;
-        return this.dpStore.select('typePageViewConfigs')
+        return this.dpStore.select('typePageViewConfigs');
       }),
       filter(data => !!data),
       switchMap((typePageViewConfigs: ITypePageViewConfig[]) => {
@@ -123,16 +122,13 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
   private addEventListener() {
     this.dpStore.select('activeWidgetAction').subscribe((actions) => {
-      console.log('dynamic page component ', actions);
       const actionRequests = [];
       actions.forEach(action => {
         const actionRequest = this.dynamicMenuService
           .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID);
         actionRequests.push(actionRequest);
       });
-      combineLatest(actionRequests).subscribe(request => {
-        console.log('combineLatest request', request);
-      });
+      combineLatest(actionRequests).subscribe();
     });
   }
 }

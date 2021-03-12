@@ -9,6 +9,7 @@ import {InputNumberComponent} from "./input-component/input-number.component";
 import {InputCheckboxComponent} from "./input-component/input-checkbox.component";
 import {TableComponent} from "./table-component/table.component"; //<<
 import {ButtonComponent} from "./button/button.component";
+import {LinkComponent} from './link/link.component';
 
 interface IDynamicWidget {
   widgetName: string;
@@ -59,6 +60,10 @@ const widgetList: IDynamicWidget[] = [
   {
     widgetName: 'BUTTON',
     component: ButtonComponent
+  },
+  {
+    widgetName: 'SIMPLELINK',
+    component: LinkComponent
   }
 ];
 
