@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 import {IDynamicPageStore} from "../interfaces/IDynamicPageStore";
-import {distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {IInitWidgetData} from '../interfaces/IInitWidgetData';
-import {log} from 'ng-zorro-antd';
+import {distinctUntilChanged, map} from 'rxjs/operators';
+import {getDeepValue} from "../helpers/getDeepValueHelper";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,7 @@ import {log} from 'ng-zorro-antd';
 export class DynamicPageStoreService {
   private stateSubject: BehaviorSubject<IDynamicPageStore> = new BehaviorSubject<IDynamicPageStore>({
     widgetAction: [],
-    activeWidgetAction: [], // <<
+    activeWidgetAction: [],
     typePageViewConfigs: [],
     initialWidgetData: [],
     isInitialDataLoaded: false,
@@ -42,4 +41,11 @@ export class DynamicPageStoreService {
     );
   }
 
+  public selectDeepByFilter<K extends keyof IDynamicPageStore>(key: K, filter: string): Observable<IDynamicPageStore[K]> {
+    return this.stateSubject.pipe(
+      map((state: IDynamicPageStore) => state[key]),
+      map((data: any) => getDeepValue(data, filter)),
+      distinctUntilChanged()
+    )
+  }
 }

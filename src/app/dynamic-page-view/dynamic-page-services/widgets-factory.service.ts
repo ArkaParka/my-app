@@ -12,17 +12,18 @@ import {InputNumberComponent} from "../available-widgets/input-component/input-n
 import {InputCheckboxComponent} from "../available-widgets/input-component/input-checkbox.component";
 import {TableComponent} from "../available-widgets/table-component/table.component";
 import {ButtonComponent} from "../available-widgets/button/button.component";
+import {DynamicPageStoreService} from "./dynamic-page-store.service";
 
-export interface WidgetData<T> {
-  getData(): Observable<T>;
-}
 
 export const WIDGET_OPTIONS: InjectionToken<WidgetOptions<any>> = new InjectionToken("WIDGET_OPTIONS");
 export const DP_STORE: InjectionToken<WidgetOptions<any>> = new InjectionToken("DP_STORE");
 
 export interface WidgetOptions<T> {
   getOptions(): Observable<T>;
+
   getAreaName?(): Observable<string>;
+
+  getWidgetData?(): Observable<any>;
 }
 
 
@@ -50,6 +51,9 @@ export class WidgetsFactoryService {
       widget.widgetData.getAreaName = () => {
         return of(area.areaName)
       };
+      widget.widgetData.getWidgetData = () => {
+        return this.dpStore.selectDeepByFilter('widgetData', area.widgetConfig?.options?.fieldName?.value)
+      };
 
       acc.push(widget);
       return acc;
@@ -58,7 +62,7 @@ export class WidgetsFactoryService {
     return of(arr)
   }
 
-  constructor() {
+  constructor(private dpStore: DynamicPageStoreService) {
   }
 
   protected initFullWidgetList(): WidgetListItem[] {

@@ -1,10 +1,9 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ITabTreeWidgetOptions} from '../../interfaces/ITabTreeWidgetOptions';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
-import {IInitWidgetData} from '../../interfaces/IInitWidgetData';
-import {IDynamicTableColumnConfig} from '../../interfaces/IDynamicTableColumnConfig';
-import {BehaviorSubject} from 'rxjs';
+import {ChangeDetectionStrategy, Component, Inject, Optional} from '@angular/core';
+import {takeUntil} from 'rxjs/operators';
+import {BehaviorSubject, combineLatest} from 'rxjs';
 import {IWidgetTableConfig} from '../../interfaces/IWidgetTableConfig';
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
+import {DocumentBaseComponent} from "../../../containers/document-base.component";
 
 @Component({
   selector: 'app-table-component',
@@ -12,26 +11,22 @@ import {IWidgetTableConfig} from '../../interfaces/IWidgetTableConfig';
   styleUrls: ['./table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableComponent implements OnInit {
+export class TableComponent extends DocumentBaseComponent {
   private _widgetOptions: IWidgetTableConfig;
-
   public data: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-
-  @Input() set widgetOptions(value: IWidgetTableConfig) {
-    this._widgetOptions = value;
-    console.log('table headerConfig', value);
-  }
 
   get widgetOptions() {
     return this._widgetOptions;
   }
-  @Input() set widgetData(value) {
-    this.data.next(value);
+
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<any>) {
+    super();
+
+    combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: [IWidgetTableConfig, any]) => {
+        this._widgetOptions = data[0];
+        this.data.next(data[1]);
+      });
   }
-
-  ngOnInit() {
-  }
-
-  constructor() { }
-
 }
