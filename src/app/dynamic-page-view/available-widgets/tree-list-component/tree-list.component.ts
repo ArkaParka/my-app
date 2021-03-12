@@ -1,5 +1,4 @@
 import {
-  AfterContentChecked,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -24,7 +23,7 @@ import {of} from 'rxjs';
   styleUrls: ['./tree-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TreeListComponent implements AfterContentChecked {
+export class TreeListComponent  {
   private _treeListConfig: IWidgetConfig = null;
   private events: IWidgetEvent[];
   private treeDataTypes: { id: string, dataType: string }[] = [];
@@ -38,7 +37,6 @@ export class TreeListComponent implements AfterContentChecked {
 
   @ViewChild('tree') nzTree: NzTreeComponent;
 
-  ngAfterContentChecked() {}
 
   @Input('treeListConfig') set treeListConfiguration(value: { widgetConfig: IWidgetConfig, widgetData: ITreeListDataResponse }) {
     this._treeListConfig = value.widgetConfig;
@@ -78,7 +76,8 @@ export class TreeListComponent implements AfterContentChecked {
         let activePage: NzTreeNode = null;
         this.nzTree.getTreeNodes().forEach(rootNode => {
           activePage = this.getNodeWithChildren(rootNode).find(node => node.key === key);
-          this.getNodeWithChildren(rootNode).forEach(node => node.isSelected = false);
+          if (activePage !== null || activePage !== undefined)
+            this.getNodeWithChildren(rootNode).forEach(node => node.isSelected = false);
         });
 
         if (activePage) {
