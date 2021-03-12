@@ -19,7 +19,7 @@ export class TableComponent extends DocumentBaseComponent {
     return this._widgetOptions;
   }
 
-  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<any>) {
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IWidgetTableConfig>) {
     super();
 
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
