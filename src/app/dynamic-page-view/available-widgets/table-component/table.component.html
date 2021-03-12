@@ -7,7 +7,7 @@
   </tr>
   </thead>
   <tbody class="ant-table-tbody">
-  <tr *ngFor="let row of data|async" class="ant-table-row">
+  <tr *ngFor="let row of _widgetData|async" class="ant-table-row">
     <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
       {{row[column.fieldName] | format: column.mask}}
     </td>

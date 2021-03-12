@@ -12,11 +12,15 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent extends DocumentBaseComponent {
-  private _widgetOptions: IWidgetTableConfig;
-  public data: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  private _widgetOptions: BehaviorSubject<IWidgetTableConfig> = new BehaviorSubject<IWidgetTableConfig>(null);
+  public _widgetData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  get widgetOptions() {
-    return this._widgetOptions;
+  public get widgetOptions(): IWidgetTableConfig {
+    return this._widgetOptions.getValue();
+  }
+
+  public get widgetData(): any {
+    return this._widgetData.getValue();
   }
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IWidgetTableConfig>) {
@@ -25,8 +29,8 @@ export class TableComponent extends DocumentBaseComponent {
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IWidgetTableConfig, any]) => {
-        this._widgetOptions = data[0];
-        this.data.next(data[1]);
+        this._widgetOptions.next(data[0]);
+        this._widgetData.next(data[1]);
       });
   }
 }

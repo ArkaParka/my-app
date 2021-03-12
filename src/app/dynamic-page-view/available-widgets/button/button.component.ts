@@ -36,8 +36,7 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<any>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService,
-              private sanitizer: DomSanitizer,
-  ) {
+              private sanitizer: DomSanitizer) {
     super();
 
     this.widgetOptionsGetter.getOptions().pipe(takeUntil(this.destroy$)).subscribe(widgetOptions => {
