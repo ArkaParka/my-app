@@ -2,14 +2,8 @@ import {ChangeDetectionStrategy, Component, HostBinding, Inject, Input, OnInit, 
 import {IButtonWidgetOptions} from '../../interfaces/IButtonWidgetOptions';
 import {DomSanitizer} from '@angular/platform-browser';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
-import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
+import {takeUntil} from 'rxjs/operators';
 import {EActionTypes} from '../../interfaces/EActionTypes';
-import {ITypePageViewConfig} from '../../interfaces/ITypePageViewConfig';
-import {log} from 'ng-zorro-antd';
-import {IDynamicPageStore} from '../../interfaces/IDynamicPageStore';
-import {IActiveWidgetAction} from '../../interfaces/IActiveWidgetAction';
-import {IWidgetData} from '../../interfaces/IWidgetData';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 

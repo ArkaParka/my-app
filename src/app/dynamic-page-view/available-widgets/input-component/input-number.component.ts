@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnInit, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, Optional} from "@angular/core";
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
 import {FormControl} from "@angular/forms";
 import {BehaviorSubject, combineLatest} from "rxjs";
-import {IInputCheckboxWidgetOptions} from "../../interfaces/IInputCheckboxWidgetOptions";
 import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
