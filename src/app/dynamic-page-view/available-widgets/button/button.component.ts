@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, HostBinding, Inject, Input, OnInit, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, Inject, OnInit, Optional} from '@angular/core';
 import {IButtonWidgetOptions} from '../../interfaces/IButtonWidgetOptions';
 import {DomSanitizer} from '@angular/platform-browser';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
@@ -15,15 +15,7 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent extends DocumentBaseComponent implements OnInit {
-  private _widgetOptions: IButtonWidgetOptions;
-
-  public get widgetOptions(): IButtonWidgetOptions {
-    return this._widgetOptions;
-  }
-
-  public set widgetOptions(value: IButtonWidgetOptions) {
-    this._widgetOptions = value;
-  }
+  public widgetOptions: IButtonWidgetOptions;
 
   @HostBinding('style.width') private width;
   @HostBinding('style.height') private height;
@@ -43,7 +35,7 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
     this.height = this.sanitizer.bypassSecurityTrustStyle(this.widgetOptions?.height?.value);
   }
 
-  private addEventListener() {
+  public addEventListener() {
     const actions = this.widgetOptions.events.value
       .filter(event => event.eventType === EActionTypes.ON_CLICK)
       .map(event => event.actions[0]);

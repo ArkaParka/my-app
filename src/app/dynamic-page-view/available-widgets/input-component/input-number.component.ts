@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, Optional} from "@angular/core";
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
 import {FormControl} from "@angular/forms";
-import {BehaviorSubject, combineLatest} from "rxjs";
+import {combineLatest} from "rxjs";
 import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
@@ -20,16 +20,8 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
 export class InputNumberComponent extends DocumentBaseComponent implements OnInit {
 
   public formControl: FormControl;
-  private _widgetData: BehaviorSubject<number> = new BehaviorSubject<number>(NaN);
-  private _widgetOptions: BehaviorSubject<IInputNumberWidgetOptions> = new BehaviorSubject<IInputNumberWidgetOptions>(null);
-
-  public get widgetOptions(): IInputNumberWidgetOptions {
-    return this._widgetOptions.getValue();
-  }
-
-  public get widgetData(): number {
-    return this._widgetData.getValue();
-  }
+  public widgetData: Number = NaN;
+  public widgetOptions: IInputNumberWidgetOptions = null;
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputNumberWidgetOptions>,
               private cd: ChangeDetectorRef) {
@@ -38,15 +30,15 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IInputNumberWidgetOptions, number]) => {
-        this._widgetOptions.next(data[0]);
+        this.widgetOptions = data[0];
         if (data[1])
-          this._widgetData.next(data[1]);
+          this.widgetData = data[1];
       });
   }
 
   ngOnInit(): void {
     this.formControl = new FormControl();
-    this.formControl.setValue(this._widgetData, {emitEvent: false});
+    this.formControl.setValue(this.widgetData, {emitEvent: false});
     this.formControl.valueChanges.subscribe(value => {
       if (value < this.widgetOptions.minValue.value)
         this.formControl.setValue(this.widgetOptions.minValue.value, {emitEvent: false});

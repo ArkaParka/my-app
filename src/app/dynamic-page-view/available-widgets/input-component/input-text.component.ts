@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
 import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {BehaviorSubject, combineLatest} from "rxjs";
+import {combineLatest} from "rxjs";
 import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
 
@@ -17,21 +17,10 @@ import {takeUntil} from "rxjs/operators";
 })
 export class InputTextComponent extends DocumentBaseComponent {
 
-  private _widgetData: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  private _widgetOptions: BehaviorSubject<IInputTextWidgetOptions> = new BehaviorSubject<any>(null);
+  public widgetData: string = "";
+  public widgetOptions: IInputTextWidgetOptions = null;
   public pattern;
 
-  public get widgetOptions(): IInputTextWidgetOptions {
-    return this._widgetOptions.getValue();
-  }
-
-  public get widgetData(): string {
-    return this._widgetData.getValue();
-  }
-
-  public set widgetData(value: string) {
-    this._widgetData.next(value);
-  }
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputTextWidgetOptions>) {
     super();
@@ -39,9 +28,9 @@ export class InputTextComponent extends DocumentBaseComponent {
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IInputTextWidgetOptions, string]) => {
-        this._widgetOptions.next(data[0]);
+        this.widgetOptions = data[0];
         if (data[1])
-          this._widgetData.next(data[1]);
+          this.widgetData = data[1];
       });
   }
 
