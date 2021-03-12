@@ -1,11 +1,8 @@
 import {NgModule} from "@angular/core";
 import {DynamicPageMockComponent} from "./dynamic-page-mock/dynamic-page-mock.component";
-import {GridContainerComponent} from "./grid-container/grid-container.component";
-import {GridItemComponent} from "./grid-item/grid-item.component";
 import {CommonModule} from "@angular/common";
 import {DynamicPageComponent} from "./dynamic-page/dynamic-page.component";
 import {BlankComponent} from "./available-widgets/blank-component/blank-component";
-import {DynamicWidgetDirective} from "./available-widgets/dynamic-widget.directive";
 import {TabTreeComponent} from "./available-widgets/tabs-component/tabs.component";
 import {TabsModule} from "ngx-bootstrap/tabs";
 import {NzIconModule, NzTreeModule} from "ng-zorro-antd";
@@ -20,7 +17,7 @@ import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 import {TableComponent} from './available-widgets/table-component/table.component';
 import {ButtonComponent} from './available-widgets/button/button.component';
-import { ButtonsModule } from 'ngx-bootstrap/buttons'; // <<
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import {MaskPipe} from './available-widgets/table-component/MaskPipe';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
@@ -29,7 +26,6 @@ const AvailableWidgets = [
   BlankComponent,
   TabTreeComponent,
   TreeListComponent,
-  GridContainerComponent,
   LabelComponent,
   InputTextComponent,
   InputNumberComponent,
@@ -54,9 +50,7 @@ const AvailableWidgets = [
   ],
   declarations: [
     DynamicPageMockComponent,
-    GridItemComponent,
     DynamicPageComponent,
-    DynamicWidgetDirective,
     ...AvailableWidgets,
     MaskPipe
   ],
