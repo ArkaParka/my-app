@@ -13,8 +13,8 @@ export interface IInputTextWidgetOptions {
   };
   length: {
     value: number;
-  }
+  };
   mask: {
     value: string;
-  }
+  };
 }

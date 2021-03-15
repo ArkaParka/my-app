@@ -128,7 +128,7 @@ export class SkeletonComponent extends DocumentBaseComponent {
   navigationLoaded($event: NzTreeNode[]) {
     this.breadcrumbsPages = [];
     $event.forEach(node => {
-      this.breadcrumbsPages.push({title: node.title, key: node.key})
+      this.breadcrumbsPages.push({title: node.title, key: node.key});
     });
     this.cd.detectChanges();
   }

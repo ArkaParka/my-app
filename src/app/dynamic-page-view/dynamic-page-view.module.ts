@@ -17,8 +17,9 @@ import {NgxMaskModule} from "ngx-mask";
 import {InputCheckboxComponent} from "./available-widgets/input-component/input-checkbox.component";
 import {TableComponent} from './available-widgets/table-component/table.component';
 import {ButtonComponent} from './available-widgets/button/button.component';
-import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import {MaskPipe} from './available-widgets/table-component/MaskPipe';
+import {LinkComponent} from './available-widgets/link/link.component';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 
@@ -34,6 +35,7 @@ const AvailableWidgets = [
   PageViewComponent,
   TableComponent,
   ButtonComponent,
+  LinkComponent,
   WidgetListComponent,
   WidgetWrapperComponent,
 ];
@@ -52,7 +54,7 @@ const AvailableWidgets = [
     DynamicPageMockComponent,
     DynamicPageComponent,
     ...AvailableWidgets,
-    MaskPipe
+    MaskPipe,
   ],
   exports: [
     DynamicPageMockComponent,
