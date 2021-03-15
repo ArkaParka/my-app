@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Inject, Optional, QueryList, ViewChildren} from "@angular/core";
 import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {filter, switchMap} from "rxjs/operators";

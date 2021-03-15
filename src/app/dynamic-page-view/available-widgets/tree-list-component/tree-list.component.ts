@@ -13,7 +13,7 @@ import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {ITreeListDataResponse} from '../../interfaces/ITreeListDataResponse';
 import {ITreeListDataValue} from '../../interfaces/ITreeListDataValue';
-import {filter, switchMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
 import {EActionTypes} from '../../interfaces/EActionTypes';
 import {of} from 'rxjs';
 
@@ -34,9 +34,7 @@ export class TreeListComponent  {
   change(index: number) {
     this.onChanged.emit(index);
   }
-
   @ViewChild('tree') nzTree: NzTreeComponent;
-
 
   @Input('treeListConfig') set treeListConfiguration(value: { widgetConfig: IWidgetConfig, widgetData: ITreeListDataResponse }) {
     this._treeListConfig = value.widgetConfig;
@@ -76,7 +74,7 @@ export class TreeListComponent  {
         let activePage: NzTreeNode = null;
         this.nzTree.getTreeNodes().forEach(rootNode => {
           activePage = this.getNodeWithChildren(rootNode).find(node => node.key === key);
-          if (activePage !== null || activePage !== undefined)
+          if (activePage)
             this.getNodeWithChildren(rootNode).forEach(node => node.isSelected = false);
         });
 
