@@ -60,11 +60,14 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     for (const pageConf of typePageViewConfigs) {
       pageConf.viewConfig.areasConfig.forEach(areaConf => {
         if ((areaConf.widgetConfig.type).toUpperCase() === 'BUTTON') {
-          areaConf.widgetConfig.options.events.value.forEach(val => {
+          areaConf.widgetConfig.options?.events?.value.forEach(val => {
             val.actions.forEach(action => {
               action.options.pageUID = pageConf.pageUID;
             });
           });
+        }
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'SIMPLE_LINK') {
+          areaConf.widgetConfig.options.pageUID = {value: pageConf.pageUID};
         }
       });
     }
