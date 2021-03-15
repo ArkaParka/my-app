@@ -62,7 +62,7 @@ const widgetList: IDynamicWidget[] = [
     component: ButtonComponent
   },
   {
-    widgetName: 'SIMPLELINK',
+    widgetName: 'SIMPLE_LINK',
     component: LinkComponent
   }
 ];

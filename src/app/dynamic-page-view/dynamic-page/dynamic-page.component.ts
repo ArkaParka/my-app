@@ -59,7 +59,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
             });
           });
         }
-        if ((areaConf.widgetConfig.type).toUpperCase() === 'SIMPLELINK') {
+        if ((areaConf.widgetConfig.type).toUpperCase() === 'SIMPLE_LINK') {
           areaConf.widgetConfig.options.pageUID = {value: pageConf.pageUID};
         }
       });
