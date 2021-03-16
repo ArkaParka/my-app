@@ -1,16 +1,16 @@
-import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
-import {IModulePageConfiguration} from "../../models/IModulePageConfiguration";
-import {DynamicPageStoreService} from "../dynamic-page-services/dynamic-page-store.service";
-import {EActionConfigType} from "../../models/IActions";
-import {DynamicMenuService} from "../../services/dynamic-menu.service";
-import {combineLatest, zip} from "rxjs";
-import {IPageActionResponse} from "../interfaces/IPageActionResponse";
-import {filter, switchMap, takeUntil} from "rxjs/operators";
-import {ITypePageViewConfig} from "../interfaces/ITypePageViewConfig";
-import {IWidgetDataRequest} from "../interfaces/IWidgetDataRequest";
-import {IAreasConfig} from "../interfaces/IAreasConfig";
-import {IWidgetData} from "../interfaces/IWidgetData";
-import {DocumentBaseComponent} from "../../containers/document-base.component";
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {IModulePageConfiguration} from '../../models/IModulePageConfiguration';
+import {DynamicPageStoreService} from '../dynamic-page-services/dynamic-page-store.service';
+import {EActionConfigType} from '../../models/IActions';
+import {DynamicMenuService} from '../../services/dynamic-menu.service';
+import {combineLatest, zip} from 'rxjs';
+import {IPageActionResponse} from '../interfaces/IPageActionResponse';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {ITypePageViewConfig} from '../interfaces/ITypePageViewConfig';
+import {IWidgetDataRequest} from '../interfaces/IWidgetDataRequest';
+import {IAreasConfig} from '../interfaces/IAreasConfig';
+import {IWidgetData} from '../interfaces/IWidgetData';
+import {DocumentBaseComponent} from '../../containers/document-base.component';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -76,6 +76,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   private executeInitialDataActions(): void {
     const initialDataActions = this.pageConfig.actions.filter(action => action.configType === EActionConfigType.GET_DATA_REQUEST);
     if (initialDataActions && initialDataActions.length) {
+      this.dpStore.setState({isInitialDataLoaded: false});
       const requests = [];
       initialDataActions.forEach(action => requests.push(this.dynamicMenuService.executePageAction(this.moduleKey, action.actionName, action.execConfig.pageUID)));
       zip(...requests).subscribe((result: IPageActionResponse[]) => {
