@@ -40,7 +40,7 @@ export class TreeListComponent  {
     this._treeListConfig = value.widgetConfig;
     this.events = this.treeListConfig.options.events.value;
 
-    value.widgetData.data.forEach(treeNode => {
+    value?.widgetData?.data.forEach(treeNode => {
       this._treeListData.push({
         title: treeNode.title,
         key: String(treeNode?.id?.id) + '/' + treeNode?.id?.type,
@@ -74,8 +74,7 @@ export class TreeListComponent  {
         let activePage: NzTreeNode = null;
         this.nzTree.getTreeNodes().forEach(rootNode => {
           activePage = this.getNodeWithChildren(rootNode).find(node => node.key === key);
-          if (activePage)
-            this.getNodeWithChildren(rootNode).forEach(node => node.isSelected = false);
+          this.getNodeWithChildren(rootNode).forEach(node => node.isSelected = false);
         });
 
         if (activePage) {

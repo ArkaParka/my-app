@@ -1,7 +1,7 @@
 import {Injectable, InjectionToken} from "@angular/core";
 import {Type} from "@angular/core";
 import {Observable, of} from "rxjs";
-import {BlankComponent} from "../available-widgets/blank-component/blank-component";
+import {BlankComponent} from '../available-widgets/blank-component/blank-component';
 import {TabTreeComponent} from "../available-widgets/tabs-component/tabs.component";
 import {IAreasConfig} from "../interfaces/IAreasConfig";
 import {TextareaComponent} from "../available-widgets/textarea-component/textarea.component";
@@ -13,6 +13,7 @@ import {InputCheckboxComponent} from "../available-widgets/input-component/input
 import {TableComponent} from "../available-widgets/table-component/table.component";
 import {ButtonComponent} from "../available-widgets/button/button.component";
 import {DynamicPageStoreService} from "./dynamic-page-store.service";
+import {LinkComponent} from '../available-widgets/link/link.component';
 
 
 export const WIDGET_OPTIONS: InjectionToken<WidgetOptions<any>> = new InjectionToken("WIDGET_OPTIONS");
@@ -166,6 +167,15 @@ export class WidgetsFactoryService {
           }
         }
       },
+      {
+        alias: 'SIMPLE_LINK',
+        widgetComponentType: LinkComponent,
+        widgetData: {
+          getOptions(): Observable<any> {
+            return of(null);
+          }
+        }
+      }
     ];
   }
 }

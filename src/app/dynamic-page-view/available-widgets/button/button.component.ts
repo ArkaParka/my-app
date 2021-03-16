@@ -27,7 +27,7 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
 
     this.widgetOptionsGetter.getOptions().pipe(takeUntil(this.destroy$)).subscribe(widgetOptions => {
       this.widgetOptions = widgetOptions;
-    })
+    });
   }
 
   ngOnInit(): void {
