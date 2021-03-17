@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
 import {IInputCheckboxWidgetOptions} from "../../interfaces/IInputCheckboxWidgetOptions";
 import {combineLatest} from "rxjs";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `<input type="checkbox"><label>{{widgetOptions?.description?.value}}</label>`,

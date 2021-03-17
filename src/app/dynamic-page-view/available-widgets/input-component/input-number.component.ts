@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, O
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
 import {FormControl} from "@angular/forms";
 import {combineLatest} from "rxjs";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `<input type="number"

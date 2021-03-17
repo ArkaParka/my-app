@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `

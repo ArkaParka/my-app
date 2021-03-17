@@ -3,9 +3,9 @@ import {IWidgetConfig} from "../../interfaces/IWidgetConfig";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {filter, switchMap} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
 import {TabDirective} from 'ngx-bootstrap/tabs';
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   templateUrl: './tabs.component.html',

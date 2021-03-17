@@ -1,11 +1,12 @@
 import {Component, ChangeDetectionStrategy, Input, HostBinding} from "@angular/core";
-import {WidgetListItem, WidgetsFactoryService} from "../../dynamic-page-services/widgets-factory.service";
+import {WidgetsFactoryService} from "../../dynamic-page-services/widgets-factory.service";
 import {IDynamicPageViewConfig} from "../../../models/IDynamicPageViewConfig";
 import {IModulePageConfiguration} from "../../../models/IModulePageConfiguration";
 import {IAreasConfig} from "../../interfaces/IAreasConfig";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {takeUntil} from "rxjs/operators";
 import {DomSanitizer} from "@angular/platform-browser";
+import {WidgetListItem} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   selector: "app-widget-list",

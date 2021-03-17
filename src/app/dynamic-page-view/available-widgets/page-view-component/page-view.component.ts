@@ -4,11 +4,11 @@ import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-
 import {ITypePageViewConfig} from "../../interfaces/ITypePageViewConfig";
 import {switchMap, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {combineLatest} from "rxjs";
 import {IWidgetEventAction} from "../../interfaces/IWidgetEventAction";
 import {EActionTypes} from "../../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual';
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `

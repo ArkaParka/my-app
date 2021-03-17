@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/cor
 import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {combineLatest} from "rxjs";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `<input [(ngModel)]="widgetData"

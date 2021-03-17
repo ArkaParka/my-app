@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component, Inject, Optional} from '@angular/cor
 import {takeUntil} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest} from 'rxjs';
 import {IWidgetTableConfig} from '../../interfaces/IWidgetTableConfig';
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   selector: 'app-table-component',

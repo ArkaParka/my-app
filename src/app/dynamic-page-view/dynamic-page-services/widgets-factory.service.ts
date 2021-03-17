@@ -1,5 +1,4 @@
-import {Injectable, InjectionToken} from "@angular/core";
-import {Type} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
 import {BlankComponent} from '../available-widgets/blank-component/blank-component';
 import {TabTreeComponent} from "../available-widgets/tabs-component/tabs.component";
@@ -14,25 +13,8 @@ import {TableComponent} from "../available-widgets/table-component/table.compone
 import {ButtonComponent} from "../available-widgets/button/button.component";
 import {DynamicPageStoreService} from "./dynamic-page-store.service";
 import {LinkComponent} from '../available-widgets/link/link.component';
+import {WidgetListItem} from "./IWIdgetFacrotyInterfaces";
 
-
-export const WIDGET_OPTIONS: InjectionToken<WidgetOptions<any>> = new InjectionToken("WIDGET_OPTIONS");
-export const DP_STORE: InjectionToken<WidgetOptions<any>> = new InjectionToken("DP_STORE");
-
-export interface WidgetOptions<T> {
-  getOptions(): Observable<T>;
-
-  getAreaName?(): Observable<string>;
-
-  getWidgetData?(): Observable<any>;
-}
-
-
-export interface WidgetListItem {
-  alias: string;
-  widgetComponentType: Type<any>;
-  widgetData: WidgetOptions<any>;
-}
 
 @Injectable({
   providedIn: "root"

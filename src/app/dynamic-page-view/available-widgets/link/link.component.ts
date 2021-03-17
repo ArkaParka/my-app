@@ -1,13 +1,13 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnInit, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Optional} from '@angular/core';
 import {ILinkWidgetOptions} from '../../interfaces/ILinkWidgetOptions';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
 import {EActionTypes} from '../../interfaces/EActionTypes';
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/widgets-factory.service';
 import {takeUntil} from 'rxjs/operators';
 import {DocumentBaseComponent} from '../../../containers/document-base.component';
 import {BehaviorSubject, combineLatest} from 'rxjs';
 import {ILinkWidgetData} from '../../interfaces/ILinkWidgetData';
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   selector: 'app-link',
@@ -27,7 +27,7 @@ export class LinkComponent extends DocumentBaseComponent {
 
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
-      .subscribe(( [widgetOptions, data]) => {
+      .subscribe(([widgetOptions, data]) => {
         this.widgetOptions = widgetOptions;
         this.widgetData.next(data);
       });
@@ -56,7 +56,13 @@ export class LinkComponent extends DocumentBaseComponent {
     _widgetEventActions.options.targetArea = this.widgetOptions.targetArea.value;
     _widgetEventActions.options.widgetConfig.options.page_key.value = this.widgetOptions.page_key.value;
     _widgetEventActions.options.widgetConfig.options.page_id.value = id;
-    this.dpStore.setState({widgetDataRequest: {id: id, type: this.widgetOptions.page_key.value, key: this.widgetOptions.pageUID.value}, widgetAction: [_widgetEventActions]});
+    this.dpStore.setState({
+      widgetDataRequest: {
+        id: id,
+        type: this.widgetOptions.page_key.value,
+        key: this.widgetOptions.pageUID.value
+      }, widgetAction: [_widgetEventActions]
+    });
   }
 
 

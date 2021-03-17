@@ -2,8 +2,8 @@ import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/cor
 import {ILabelWidgetOptions} from "../../interfaces/ILabelWidgetOptions";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {BehaviorSubject, combineLatest} from "rxjs";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {takeUntil} from "rxjs/operators";
+import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   template: `

@@ -5,10 +5,10 @@ import {
 } from "@angular/core";
 import {combineLatest, Observable, ReplaySubject} from "rxjs";
 import {map} from "rxjs/operators";
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IAreasConfig} from "../../interfaces/IAreasConfig";
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   selector: "app-widget-wrapper",

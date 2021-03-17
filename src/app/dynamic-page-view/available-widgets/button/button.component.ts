@@ -4,8 +4,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {takeUntil} from 'rxjs/operators';
 import {EActionTypes} from '../../interfaces/EActionTypes';
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/widgets-factory.service";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 
 @Component({
   selector: 'app-button',
