@@ -1,7 +1,8 @@
 import {IActiveWidgetAction} from './IActiveWidgetAction';
+import {EEventTypes} from './EEventTypes';
 
 export interface IActiveWidgetEvent {
-  eventType: string;
+  eventType: EEventTypes;
   dataType: string;
   actions: IActiveWidgetAction[];
 }

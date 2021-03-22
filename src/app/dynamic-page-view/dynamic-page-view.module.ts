@@ -22,6 +22,7 @@ import {MaskPipe} from './available-widgets/table-component/MaskPipe';
 import {LinkComponent} from './available-widgets/link/link.component';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
+import { ModalComponent } from './available-widgets/modal/modal.component';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -38,6 +39,7 @@ const AvailableWidgets = [
   LinkComponent,
   WidgetListComponent,
   WidgetWrapperComponent,
+  ModalComponent,
 ];
 
 @NgModule({

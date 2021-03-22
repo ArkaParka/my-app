@@ -1,4 +1,4 @@
 export interface IForms {
-    formKey: string,
-    schema: object[]
+    formKey: string;
+    schema: object[];
 }

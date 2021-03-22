@@ -4,6 +4,7 @@ import {IInitWidgetData} from "./IInitWidgetData";
 import {IWidgetData} from "./IWidgetData";
 import {IWidgetDataRequest} from "./IWidgetDataRequest";
 import {IActiveWidgetAction} from './IActiveWidgetAction';
+import {IFormWidget} from './IFormWidget';
 
 export interface IDynamicPageStore {
   widgetAction: IWidgetEventAction[];
@@ -14,4 +15,5 @@ export interface IDynamicPageStore {
   widgetData: IWidgetData[];
   widgetDataRequest: IWidgetDataRequest;
   needsDetectChanges: boolean;
+  forms: IFormWidget[];
 }

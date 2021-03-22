@@ -7,14 +7,14 @@ import {
   ViewChild
 } from '@angular/core';
 import {IWidgetConfig} from '../../interfaces/IWidgetConfig';
-import {EEventTypes, IWidgetEvent} from '../../interfaces/IWidgetEvent';
+import { IWidgetEvent} from '../../interfaces/IWidgetEvent';
 import {NzFormatEmitEvent, NzTreeComponent, NzTreeNode, NzTreeNodeOptions} from 'ng-zorro-antd';
 import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {ITreeListDataResponse} from '../../interfaces/ITreeListDataResponse';
 import {ITreeListDataValue} from '../../interfaces/ITreeListDataValue';
 import {switchMap} from 'rxjs/operators';
-import {EActionTypes} from '../../interfaces/EActionTypes';
+import {EEventTypes} from '../../interfaces/EEventTypes';
 import {of} from 'rxjs';
 
 @Component({
@@ -62,7 +62,7 @@ export class TreeListComponent  {
     this.dpStore.select('widgetAction').pipe(
       switchMap((events: IWidgetEventAction[]) => {
         const displayEvent: IWidgetEventAction = events
-          .find(event => event.actionType === EActionTypes.DISPLAY_WIDGET);
+          .find(event => event.actionType === EEventTypes.DISPLAY_WIDGET);
         return of(displayEvent?.options?.widgetConfig?.options?.page_id?.value ? displayEvent : null);
       }),
     ).subscribe((displayEvent: IWidgetEventAction) => {

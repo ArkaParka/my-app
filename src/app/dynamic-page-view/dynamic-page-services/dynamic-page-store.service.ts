@@ -16,6 +16,7 @@ export class DynamicPageStoreService {
     isInitialDataLoaded: false,
     widgetDataRequest: null,
     widgetData: [],
+    forms: [],
     needsDetectChanges: false
   });
 
@@ -46,6 +47,6 @@ export class DynamicPageStoreService {
       map((state: IDynamicPageStore) => state[key]),
       map((data: any) => getDeepValue(data, filter)),
       distinctUntilChanged()
-    )
+    );
   }
 }
