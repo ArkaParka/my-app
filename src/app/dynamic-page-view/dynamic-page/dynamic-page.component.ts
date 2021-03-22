@@ -152,6 +152,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       takeUntil(this.destroy$)
     ).subscribe(actions => {
       console.log('NOT DISPLAY_FORM actions', actions);
+      this.dpStore.setState({activeWidgetAction: []});
     });
 
     combineLatest(this.dpStore.select('activeWidgetAction'), this.dpStore.select('forms')).pipe(
@@ -165,7 +166,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         return combineLatest(of(action), this.modalRef.content.onSubmit);
       }),
       filter(([action, onSubmit]) => {
-        //todo: clear events
+        this.dpStore.setState({activeWidgetAction: []});
         return !!onSubmit;
       }),
       switchMap(([action, onSubmit]) => {
