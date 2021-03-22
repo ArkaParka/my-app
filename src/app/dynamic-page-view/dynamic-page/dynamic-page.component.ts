@@ -12,10 +12,10 @@ import {IAreasConfig} from '../interfaces/IAreasConfig';
 import {IWidgetData} from '../interfaces/IWidgetData';
 import {DocumentBaseComponent} from '../../containers/document-base.component';
 import {log} from 'ng-zorro-antd';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ModalComponent} from '../available-widgets/modal/modal.component';
 import {IFormWidget} from '../interfaces/IFormWidget';
 import {EActionTypes} from '../interfaces/EEventTypes';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -33,7 +33,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   private configPath: string = null;
   private _pageConfig: any = null;
 
-  modalRef: BsModalRef;
+  private dialogRef: MatDialogRef<any>;
 
   public get pageConfig() {
     return this._pageConfig;
@@ -45,7 +45,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
   constructor(public dpStore: DynamicPageStoreService,
               private dynamicMenuService: DynamicMenuService,
-              private bsModal: BsModalService) {
+              public dialog: MatDialog) {
     super();
     this.addEventListener();
   }
@@ -161,9 +161,9 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       switchMap(([actions, data]) => {
         const key = actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
         const formData = data.find(obj => obj.key === key);
-        this.openModal(formData);
+        this.openDialog(formData);
         const action = actions.find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
-        return combineLatest(of(action), this.modalRef.content.onSubmit);
+        return combineLatest(of(action), this.dialogRef.afterClosed());
       }),
       filter(([action, onSubmit]) => {
         this.dpStore.setState({activeWidgetAction: []});
@@ -179,13 +179,10 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     ).subscribe();
   }
 
-  public onSubmit(data: any) {
-    console.log('onSubmit', data);
-  }
-
-
-  public openModal(data: IFormWidget) {
-    const initialState = {data: data};
-    this.modalRef = this.bsModal.show(ModalComponent, {initialState});
+  openDialog(data: IFormWidget): void {
+    this.dialogRef = this.dialog.open(ModalComponent, {
+      width: "50%",
+      data: data
+    });
   }
 }

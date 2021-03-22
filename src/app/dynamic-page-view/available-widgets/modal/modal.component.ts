@@ -1,37 +1,29 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {BsModalRef} from 'ngx-bootstrap/modal';
-import {initialState} from 'ngx-bootstrap/timepicker/reducer/timepicker.reducer';
 import {IFormWidget} from '../../interfaces/IFormWidget';
+import {Component, Inject, EventEmitter, Output} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent {
 
-  constructor(public bsModalRef: BsModalRef) {
-  }
-
-  data: IFormWidget;
-
-  ngOnInit(): void {
+  constructor(public dialogRef: MatDialogRef<ModalComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: IFormWidget) {
   }
 
   get updateData() {
     return this.data;
   }
 
-  @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
-
   public submit() {
     console.log('modal data', this.updateData);
-    this.onSubmit.emit(this.updateData);
-    this.bsModalRef.hide();
+    this.dialogRef.close(this.updateData);
   }
 
   public hideModal(): void {
-    this.onSubmit.emit(null);
-    this.bsModalRef.hide();
+    this.dialogRef.close(null);
   }
 }

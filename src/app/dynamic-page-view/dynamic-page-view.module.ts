@@ -23,6 +23,8 @@ import {LinkComponent} from './available-widgets/link/link.component';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 import { ModalComponent } from './available-widgets/modal/modal.component';
+import { InputDateComponent } from './available-widgets/input-date/input-date.component';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -40,6 +42,7 @@ const AvailableWidgets = [
   WidgetListComponent,
   WidgetWrapperComponent,
   ModalComponent,
+  InputDateComponent,
 ];
 
 @NgModule({
@@ -50,7 +53,8 @@ const AvailableWidgets = [
     NzIconModule,
     SharedModule,
     NgxMaskModule.forRoot(),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    MatDialogModule
   ],
   declarations: [
     DynamicPageMockComponent,
