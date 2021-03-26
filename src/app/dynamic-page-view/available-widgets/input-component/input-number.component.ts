@@ -9,7 +9,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 
 @Component({
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{labelText}}</label>
+    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <input type="number" name="{{widgetOptions.fieldName.value}}"
                     [max]="widgetOptions?.maxValue?.value"
                     [min]="widgetOptions?.minValue?.value"
@@ -30,7 +30,6 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
   public formControl: FormControl;
   public widgetData: Number = NaN;
   public widgetOptions: IInputNumberWidgetOptions = null;
-  public labelText: string;
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputNumberWidgetOptions>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService,
@@ -45,8 +44,6 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
           this.widgetData = data[1];
       });
 
-    this.labelText = this.widgetOptions.fieldName.value
-      .split('').map(letter => (letter.toUpperCase() === letter) ? ' ' + letter.toLowerCase() : letter).join('');
     this.checkWidgetDataTrigger();
   }
 

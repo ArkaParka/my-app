@@ -8,7 +8,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 
 @Component({
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{labelText}}</label>
+    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <input name="{{widgetOptions.fieldName.value}}"
            [(ngModel)]="widgetData"
            [mask]="widgetOptions?.mask?.value"
@@ -29,8 +29,6 @@ export class InputTextComponent extends DocumentBaseComponent {
   public widgetData: string = "";
   public widgetOptions: IInputTextWidgetOptions = null;
   public pattern;
-  public labelText: string;
-
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputTextWidgetOptions>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
@@ -44,8 +42,6 @@ export class InputTextComponent extends DocumentBaseComponent {
           this.widgetData = data[1];
       });
 
-    this.labelText = this.widgetOptions.fieldName.value
-      .split('').map(letter => (letter.toUpperCase() === letter) ? ' ' + letter.toLowerCase() : letter).join('');
     this.checkWidgetDataTrigger();
   }
 

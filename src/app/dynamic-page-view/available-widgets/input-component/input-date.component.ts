@@ -11,7 +11,7 @@ import {trigger} from '@angular/animations';
 @Component({
   selector: 'app-input-date',
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{labelText}}</label>
+    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <nz-date-picker name="{{widgetOptions.fieldName.value}}" [(ngModel)]="date" nzFormat="dd.MM.yyyy"></nz-date-picker>`,
   styles: [`
     label {
@@ -27,7 +27,6 @@ import {trigger} from '@angular/animations';
 export class InputDateComponent extends DocumentBaseComponent implements OnInit {
   date: any;
   public widgetOptions: IInputNumberWidgetOptions = null;
-  public labelText: string;
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputNumberWidgetOptions>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
@@ -38,8 +37,6 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
         this.widgetOptions = data[0];
       });
 
-    this.labelText = this.widgetOptions.fieldName.value
-      .split('').map(letter => (letter.toUpperCase() === letter) ? ' ' + letter.toLowerCase() : letter).join('');
     this.checkWidgetDataTrigger();
   }
 
