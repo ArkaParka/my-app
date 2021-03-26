@@ -23,14 +23,16 @@ import {LinkComponent} from './available-widgets/link/link.component';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 import { ModalComponent } from './available-widgets/modal/modal.component';
-import { InputDateComponent } from './available-widgets/input-date/input-date.component';
+import { InputDateComponent } from './available-widgets/input-component/input-date.component';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {StatusLabelComponent} from './available-widgets/label/status-label.component';
 
 const AvailableWidgets = [
   BlankComponent,
   TabTreeComponent,
   TreeListComponent,
   LabelComponent,
+  StatusLabelComponent,
   InputTextComponent,
   InputNumberComponent,
   InputCheckboxComponent,

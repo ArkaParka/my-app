@@ -141,7 +141,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       filter(data => !!data),
       filter(data => !!!data.find(action => {
         console.log(action);
-        return action.actionType === 'DISPLAY_FORM';
+        return action.actionType === EActionTypes.DISPLAY_FORM;
       })),
       switchMap(data => {
         const actionRequest = data
@@ -153,7 +153,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     ).subscribe(actions => {
       console.log('NOT DISPLAY_FORM actions', actions);
       this.dpStore.setState({activeWidgetAction: []});
-    });
+    }); // нужен ли ключ при удалении формы
 
     combineLatest(this.dpStore.select('activeWidgetAction'), this.dpStore.select('forms')).pipe(
       filter(data => !!data),

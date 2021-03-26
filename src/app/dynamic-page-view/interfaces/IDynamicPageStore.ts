@@ -16,4 +16,6 @@ export interface IDynamicPageStore {
   widgetDataRequest: IWidgetDataRequest;
   needsDetectChanges: boolean;
   forms: IFormWidget[];
+  getWidgetDataTrigger: boolean;
+  widgetsData: any[];
 }

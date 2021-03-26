@@ -2,19 +2,27 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, O
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
 import {FormControl} from "@angular/forms";
 import {combineLatest} from "rxjs";
-import {takeUntil} from "rxjs/operators";
+import {filter, takeUntil} from 'rxjs/operators';
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
+import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 
 @Component({
-  template: `<input type="number"
+  template: `
+    <label for="{{widgetOptions.fieldName.value}}">{{labelText}}</label>
+    <input type="number" name="{{widgetOptions.fieldName.value}}"
                     [max]="widgetOptions?.maxValue?.value"
                     [min]="widgetOptions?.minValue?.value"
                     [formControl]="formControl">`,
-  styles: [`input {
-    width: 100%;
-    height: 100%
-  }`],
+  styles: [`
+    label {
+      float: left;
+      width: 130px;
+    }
+    input {
+      display: block;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputNumberComponent extends DocumentBaseComponent implements OnInit {
@@ -22,8 +30,10 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
   public formControl: FormControl;
   public widgetData: Number = NaN;
   public widgetOptions: IInputNumberWidgetOptions = null;
+  public labelText: string;
 
   constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputNumberWidgetOptions>,
+              @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService,
               private cd: ChangeDetectorRef) {
     super();
 
@@ -34,6 +44,19 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
         if (data[1])
           this.widgetData = data[1];
       });
+
+    this.labelText = this.widgetOptions.fieldName.value
+      .split('').map(letter => (letter.toUpperCase() === letter) ? ' ' + letter.toLowerCase() : letter).join('');
+    this.checkWidgetDataTrigger();
+  }
+
+  public checkWidgetDataTrigger() {
+    this.dpStore.select('getWidgetDataTrigger').pipe(
+      filter(trigger => !!trigger)
+    ).subscribe(trigger => {
+      const fieldName = this.widgetOptions.fieldName.value;
+      this.dpStore.pushData({key: fieldName, value: this.widgetData});
+    });
   }
 
   ngOnInit(): void {

@@ -17,14 +17,24 @@ export class DynamicPageStoreService {
     widgetDataRequest: null,
     widgetData: [],
     forms: [],
-    needsDetectChanges: false
+    needsDetectChanges: false,
+    getWidgetDataTrigger: false,
+    widgetsData: []
   });
 
   constructor() {
     this.select('needsDetectChanges').subscribe(ndc => {
-      if (ndc)
+      if (ndc) {
         this.setState({needsDetectChanges: false});
+      }
     });
+  }
+
+  public pushData( data: { key: string, value: any }) {
+    const newData = this.getStateSnapshot().widgetsData;
+    newData.push(data);
+    console.log('data', newData);
+    this.setState({widgetsData: newData});
   }
 
 
@@ -33,7 +43,7 @@ export class DynamicPageStoreService {
   public getStateSnapshot = (): IDynamicPageStore => this.stateSubject.getValue();
 
   public setState = (partialState: Partial<IDynamicPageStore>): void =>
-    this.stateSubject.next(Object.assign({}, this.getStateSnapshot(), partialState));
+    this.stateSubject.next(Object.assign({}, this.getStateSnapshot(), partialState))
 
   public select<K extends keyof IDynamicPageStore>(key: K): Observable<IDynamicPageStore[K]> {
     return this.stateSubject.pipe(

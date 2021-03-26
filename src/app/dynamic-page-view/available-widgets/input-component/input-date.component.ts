@@ -1,18 +1,18 @@
-import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
-import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions";
-import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {combineLatest} from "rxjs";
-import {filter, takeUntil} from 'rxjs/operators';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
+import {IInputNumberWidgetOptions} from '../../interfaces/IInputNumberWidgetOptions';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
+import {DocumentBaseComponent} from '../../../containers/document-base.component';
+import {filter, takeUntil} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
+import {trigger} from '@angular/animations';
 
 @Component({
+  selector: 'app-input-date',
   template: `
     <label for="{{widgetOptions.fieldName.value}}">{{labelText}}</label>
-    <input name="{{widgetOptions.fieldName.value}}"
-           [(ngModel)]="widgetData"
-           [mask]="widgetOptions?.mask?.value"
-           [maxLength]="widgetOptions?.length?.value">`,
+    <nz-date-picker name="{{widgetOptions.fieldName.value}}" [(ngModel)]="date" nzFormat="dd.MM.yyyy"></nz-date-picker>`,
   styles: [`
     label {
       float: left;
@@ -22,26 +22,20 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
       display: block;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InputTextComponent extends DocumentBaseComponent {
 
-  public widgetData: string = "";
-  public widgetOptions: IInputTextWidgetOptions = null;
-  public pattern;
+export class InputDateComponent extends DocumentBaseComponent implements OnInit {
+  date: any;
+  public widgetOptions: IInputNumberWidgetOptions = null;
   public labelText: string;
 
-
-  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputTextWidgetOptions>,
+  constructor(@Optional() @Inject(WIDGET_OPTIONS) readonly widgetOptionsGetter: WidgetOptions<IInputNumberWidgetOptions>,
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService) {
     super();
-
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: [IInputTextWidgetOptions, string]) => {
+      .subscribe((data: [IInputNumberWidgetOptions, number]) => {
         this.widgetOptions = data[0];
-        if (data[1])
-          this.widgetData = data[1];
       });
 
     this.labelText = this.widgetOptions.fieldName.value
@@ -49,12 +43,15 @@ export class InputTextComponent extends DocumentBaseComponent {
     this.checkWidgetDataTrigger();
   }
 
+  ngOnInit(): void {
+  }
+
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
       filter(trigger => !!trigger)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
-      this.dpStore.pushData({key: fieldName, value: this.widgetData});
+      this.dpStore.pushData({key: fieldName, value: this.date});
     });
   }
 

@@ -14,7 +14,8 @@ import {ButtonComponent} from "../available-widgets/button/button.component";
 import {DynamicPageStoreService} from "./dynamic-page-store.service";
 import {LinkComponent} from '../available-widgets/link/link.component';
 import {WidgetListItem} from "./IWIdgetFacrotyInterfaces";
-import {InputDateComponent} from '../available-widgets/input-date/input-date.component';
+import {InputDateComponent} from '../available-widgets/input-component/input-date.component';
+import {StatusLabelComponent} from '../available-widgets/label/status-label.component';
 
 
 @Injectable({
