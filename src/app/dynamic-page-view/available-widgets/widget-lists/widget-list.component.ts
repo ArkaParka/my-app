@@ -59,7 +59,6 @@ export class WidgetListComponent extends DocumentBaseComponent {
       array[i] = `\"${gtpl}\"`;
     });
 
-    console.log('this.viewConfig.gridTemplate', this.viewConfig.gridTemplate.join(' '));
     this.gridTemplateAreas = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.gridTemplate.join(' ')}`);
     this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.columnSize}`);
     this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.rowSize}`);

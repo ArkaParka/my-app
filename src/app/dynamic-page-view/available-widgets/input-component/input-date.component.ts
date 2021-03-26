@@ -6,7 +6,6 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 import {DocumentBaseComponent} from '../../../containers/document-base.component';
 import {filter, takeUntil} from 'rxjs/operators';
 import {combineLatest} from 'rxjs';
-import {trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-input-date',

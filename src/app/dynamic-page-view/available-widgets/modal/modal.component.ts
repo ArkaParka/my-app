@@ -16,7 +16,6 @@ export class ModalComponent {
   constructor(public dialogRef: MatDialogRef<ModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IFormWidget,
               private dpStore: DynamicPageStoreService) {
-    console.log('modal data', data);
   }
 
   get updateData() {
@@ -34,7 +33,6 @@ export class ModalComponent {
     ).subscribe(data => {
       const newWidgetsData = {};
       data.forEach(widgetData => newWidgetsData[widgetData.key] = widgetData.value);
-      console.log('newWidgetsData', newWidgetsData);
       this.dpStore.setState({getWidgetDataTrigger: false, widgetsData: []});
     });
 
