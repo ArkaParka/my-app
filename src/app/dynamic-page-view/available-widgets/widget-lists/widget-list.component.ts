@@ -7,6 +7,7 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
 import {takeUntil} from "rxjs/operators";
 import {DomSanitizer} from "@angular/platform-browser";
 import {WidgetListItem} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: "app-widget-list",
@@ -24,8 +25,8 @@ export class WidgetListComponent extends DocumentBaseComponent {
   @Input()
   public set pageConfig(options: IModulePageConfiguration | IDynamicPageViewConfig) {
     if ((options as IModulePageConfiguration).viewConfig)
-      this.viewConfig = (options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig;
-    else this.viewConfig = options as IDynamicPageViewConfig;
+      this.viewConfig = cloneDeep((options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig);
+    else this.viewConfig = cloneDeep(options as IDynamicPageViewConfig);
 
     this.widgetAreas = this.viewConfig.areasConfig;
 
@@ -58,6 +59,7 @@ export class WidgetListComponent extends DocumentBaseComponent {
       array[i] = `\"${gtpl}\"`;
     });
 
+    console.log('this.viewConfig.gridTemplate', this.viewConfig.gridTemplate.join(' '));
     this.gridTemplateAreas = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.gridTemplate.join(' ')}`);
     this.gridTemplateColumns = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.columnSize}`);
     this.gridTemplateRows = this.sanitizer.bypassSecurityTrustStyle(`${this.viewConfig.rowSize}`);

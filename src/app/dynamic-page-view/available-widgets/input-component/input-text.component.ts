@@ -8,9 +8,9 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 
 @Component({
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
-    <input name="{{widgetOptions.fieldName.value}}"
-           [(ngModel)]="widgetData"
+    <label for="{{widgetOptions?.fieldName?.value}}">{{widgetOptions?.label?.value}}</label>
+    <input name="{{widgetOptions?.fieldName?.value}}"
+           [(ngModel)]="widgetData.value"
            [mask]="widgetOptions?.mask?.value"
            [maxLength]="widgetOptions?.length?.value">`,
   styles: [`
@@ -26,7 +26,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 })
 export class InputTextComponent extends DocumentBaseComponent {
 
-  public widgetData: string = "";
+  public widgetData: { value: string } = {value: ''};
   public widgetOptions: IInputTextWidgetOptions = null;
   public pattern;
 
@@ -36,7 +36,7 @@ export class InputTextComponent extends DocumentBaseComponent {
 
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: [IInputTextWidgetOptions, string]) => {
+      .subscribe((data: [IInputTextWidgetOptions, { value: '' }]) => {
         this.widgetOptions = data[0];
         if (data[1])
           this.widgetData = data[1];
