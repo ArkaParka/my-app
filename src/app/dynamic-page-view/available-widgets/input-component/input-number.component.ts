@@ -9,7 +9,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 
 @Component({
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
+    <label *ngIf="widgetOptions?.label?.value" for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <input type="number" name="{{widgetOptions.fieldName.value}}"
                     [max]="widgetOptions?.maxValue?.value"
                     [min]="widgetOptions?.minValue?.value"

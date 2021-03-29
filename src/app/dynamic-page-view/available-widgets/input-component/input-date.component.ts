@@ -10,7 +10,7 @@ import {combineLatest} from 'rxjs';
 @Component({
   selector: 'app-input-date',
   template: `
-    <label for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
+    <label *ngIf="widgetOptions?.label?.value" for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <nz-date-picker name="{{widgetOptions.fieldName.value}}" [(ngModel)]="date" nzFormat="dd.MM.yyyy"></nz-date-picker>`,
   styles: [`
     label {
