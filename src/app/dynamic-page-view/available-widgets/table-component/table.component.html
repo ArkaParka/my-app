@@ -4,12 +4,18 @@
     <th class="ant-table-cell" *ngFor="let column of widgetOptions.columns.value" width="{{column.width}}">
       {{column.title}}
     </th>
+    <th data-checkbox="true" class="ant-table-cell">
+      <input type="checkbox" [(ngModel)]="isChecked" (change)="checkboxChecked(widgetData.getValue(), $event)">
+    </th>
   </tr>
   </thead>
   <tbody class="ant-table-tbody">
   <tr *ngFor="let row of widgetData|async" class="ant-table-row">
     <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
       {{row[column.fieldName] | format: column.mask}}
+    </td>
+    <td class="ant-table-cell" data-checkbox="true">
+      <input type="checkbox" [checked]="isChecked" (change)="checkboxChecked(row, $event)">
     </td>
   </tr>
   </tbody>

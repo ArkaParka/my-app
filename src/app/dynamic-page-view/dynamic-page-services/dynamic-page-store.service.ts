@@ -3,6 +3,9 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {IDynamicPageStore} from "../interfaces/IDynamicPageStore";
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {getDeepValue} from "../helpers/getDeepValueHelper";
+import {EActionUseWhenType} from '../interfaces/EEventTypes';
+import {isArray} from 'ngx-bootstrap/chronos';
+import {IButtonSubjectStore} from '../interfaces/IButtonSubjectStore';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +25,31 @@ export class DynamicPageStoreService {
     widgetsData: []
   });
 
+  private buttonSubject$: BehaviorSubject<IButtonSubjectStore> = new BehaviorSubject<IButtonSubjectStore>({
+    widgetData: [],
+    fieldName: ''
+  });
+
+  public setButtonData = (newData: IButtonSubjectStore): void => {
+    return this.buttonSubject$.next(newData);
+  }
+
+  public selectButtonData(fieldName: string, condition: string): Observable<boolean> {
+    return this.buttonSubject$.pipe(
+      map((button: IButtonSubjectStore) => (button.fieldName === fieldName) ? button : null),
+      map((button: IButtonSubjectStore) => {
+        switch (condition) {
+          case EActionUseWhenType.SELECTED_ONE: return (isArray(button?.widgetData) && (button?.widgetData.length === 1));
+          case EActionUseWhenType.SELECTED_MANY: return (isArray(button?.widgetData) && (button?.widgetData.length >= 1));
+          case EActionUseWhenType.ALWAYS: return true;
+          case EActionUseWhenType.FILLED: return !!button?.widgetData;
+          default: return true;
+        }
+      }),
+      distinctUntilChanged()
+    );
+  }
+
   constructor() {
     this.select('needsDetectChanges').subscribe(ndc => {
       if (ndc) {
@@ -33,7 +61,6 @@ export class DynamicPageStoreService {
   public pushData( data: { key: string, value: any }) {
     const newData = this.getStateSnapshot().widgetsData;
     newData.push(data);
-    console.log('data', newData);
     this.setState({widgetsData: newData});
   }
 

@@ -9,3 +9,10 @@ export enum EActionTypes {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE'
 }
+
+export enum EActionUseWhenType {
+  ALWAYS = 'ALWAYS',
+  SELECTED_ONE = 'SELECTED_ONE',
+  SELECTED_MANY = 'SELECTED_MANY',
+  FILLED = 'FILLED'
+}

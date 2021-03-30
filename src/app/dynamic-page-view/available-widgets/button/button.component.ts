@@ -9,7 +9,7 @@ import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-servic
 
 @Component({
   selector: 'app-button',
-  template: '<button type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
+  template: '<button [disabled]="!(dpStore.selectButtonData(widgetOptions?.relatedDataWidget?.value?.fieldName, widgetOptions?.relatedDataWidget?.value?.useWhen)|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
   styles: [`button {
   }`],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,10 +36,9 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
   }
 
   public addEventListener() {
+    console.log('widgetOptions', this.widgetOptions);
     const actions = this.widgetOptions.events.value
       .find(event => event.eventType === EEventTypes.ON_CLICK)?.actions;
-
-    console.log(actions);
 
     this.dpStore.setState({activeWidgetAction: actions});
   }
