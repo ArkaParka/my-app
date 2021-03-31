@@ -25,6 +25,7 @@ import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wr
 import { ModalComponent } from './available-widgets/modal/modal.component';
 import { InputDateComponent } from './available-widgets/input-component/input-date.component';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
 import {StatusLabelComponent} from './available-widgets/label/status-label.component';
 
 const AvailableWidgets = [
@@ -56,7 +57,8 @@ const AvailableWidgets = [
     SharedModule,
     NgxMaskModule.forRoot(),
     ButtonsModule.forRoot(),
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ],
   declarations: [
     DynamicPageMockComponent,

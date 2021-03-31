@@ -3,7 +3,7 @@
   <app-widget-list [pageConfig]="data.pageViewConfig"></app-widget-list>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="hideModal()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial (click)="submit()">Ok</button>
+  <button mat-raised-button (click)="hideModal()">No Thanks</button>
+  <button mat-raised-button [mat-dialog-close]="data" (click)="submit()">Ok</button>
 </div>
 

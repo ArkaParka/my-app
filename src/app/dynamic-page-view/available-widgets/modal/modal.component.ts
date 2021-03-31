@@ -1,7 +1,6 @@
 import {IFormWidget} from '../../interfaces/IFormWidget';
 import {Component, Inject, EventEmitter, Output, Optional} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DP_STORE} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {filter, map, switchMap} from 'rxjs/operators';
 

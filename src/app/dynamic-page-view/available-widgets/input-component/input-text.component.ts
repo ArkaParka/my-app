@@ -10,7 +10,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
   template: `
     <label *ngIf="widgetOptions?.label?.value" for="{{widgetOptions?.fieldName?.value}}">{{widgetOptions?.label?.value}}</label>
     <input name="{{widgetOptions?.fieldName?.value}}"
-           [(ngModel)]="widgetData.value"
+           [(ngModel)]="widgetData"
            [mask]="widgetOptions?.mask?.value"
            [maxLength]="widgetOptions?.length?.value">`,
   styles: [`
@@ -26,7 +26,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 })
 export class InputTextComponent extends DocumentBaseComponent {
 
-  public widgetData: { value: string } = {value: ''};
+  public widgetData: string = '';
   public widgetOptions: IInputTextWidgetOptions = null;
   public pattern;
 
@@ -39,7 +39,7 @@ export class InputTextComponent extends DocumentBaseComponent {
       .subscribe((data: [IInputTextWidgetOptions, { value: '' }]) => {
         this.widgetOptions = data[0];
         if (data[1])
-          this.widgetData = data[1];
+          this.widgetData = data[1].value;
       });
 
     this.checkWidgetDataTrigger();
