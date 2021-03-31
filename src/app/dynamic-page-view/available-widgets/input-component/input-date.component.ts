@@ -17,6 +17,7 @@ import {combineLatest} from 'rxjs';
       float: left;
       width: 130px;
     }
+
     input {
       display: block;
     }
@@ -44,11 +45,11 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
 
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
-      filter(trigger => !!trigger)
+      filter(trigger => !!trigger),
+      takeUntil(this.destroy$)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
       this.dpStore.pushData({key: fieldName, value: this.date});
     });
   }
-
 }

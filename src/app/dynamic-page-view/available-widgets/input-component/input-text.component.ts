@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
-import {IInputTextWidgetOptions} from "../../interfaces/IInputTextWidgetOptions";
-import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {combineLatest} from "rxjs";
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, Optional} from '@angular/core';
+import {IInputTextWidgetOptions} from '../../interfaces/IInputTextWidgetOptions';
+import {DocumentBaseComponent} from '../../../containers/document-base.component';
+import {combineLatest} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
@@ -18,6 +18,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
       float: left;
       width: 130px;
     }
+
     input {
       display: block;
     }
@@ -38,8 +39,9 @@ export class InputTextComponent extends DocumentBaseComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IInputTextWidgetOptions, { value: '' }]) => {
         this.widgetOptions = data[0];
-        if (data[1])
+        if (data[1]) {
           this.widgetData = data[1].value;
+        }
       });
 
     this.checkWidgetDataTrigger();
@@ -47,7 +49,8 @@ export class InputTextComponent extends DocumentBaseComponent {
 
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
-      filter(trigger => !!trigger)
+      filter(trigger => !!trigger),
+      takeUntil(this.destroy$)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
       this.dpStore.pushData({key: fieldName, value: this.widgetData});

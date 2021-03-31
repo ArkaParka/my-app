@@ -36,7 +36,6 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
   }
 
   public addEventListener() {
-    console.log('widgetOptions', this.widgetOptions);
     const actions = this.widgetOptions.events.value
       .find(event => event.eventType === EEventTypes.ON_CLICK)?.actions;
 

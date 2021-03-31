@@ -161,7 +161,8 @@ export class DynamicPageComponent extends DocumentBaseComponent {
       switchMap(([actions, data]) => {
         const key = actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
         const formData = data.find(obj => obj.key === key);
-        this.openDialog(formData);
+        // TODO: передавать конфиг и объект для редактирования
+        this.openDialog(formData, null);
         const action = actions.find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
         return combineLatest(of(action), this.dialogRef.afterClosed());
       }),
@@ -170,19 +171,25 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         return !!onSubmit;
       }),
       switchMap(([action, onSubmit]) => {
-        // skipUntil(of(onSubmit));
-        console.log('after submit', action);
-        console.log('after submit 2', onSubmit);
+        switch (action.actionType) {
+          case EActionTypes.CREATE: console.log(action.actionType, ' obj ', onSubmit); break;
+          case EActionTypes.UPDATE: console.log(action.actionType, ' obj ', onSubmit); break;
+          case EActionTypes.DELETE: console.log(action.actionType, ' obj ', onSubmit); break;
+          default: break;
+        }
         return [action, onSubmit];
       }),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  openDialog(data: IFormWidget): void {
+  openDialog(config: IFormWidget, widgetData: any): void {
     this.dialogRef = this.dialog.open(ModalComponent, {
       width: "50%",
-      data: data
+      data: {
+        config: config,
+        widgetData: widgetData
+      }
     });
   }
 }

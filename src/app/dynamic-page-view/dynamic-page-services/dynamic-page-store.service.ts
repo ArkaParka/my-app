@@ -6,6 +6,7 @@ import {getDeepValue} from "../helpers/getDeepValueHelper";
 import {EActionUseWhenType} from '../interfaces/EEventTypes';
 import {isArray} from 'ngx-bootstrap/chronos';
 import {IButtonSubjectStore} from '../interfaces/IButtonSubjectStore';
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class DynamicPageStoreService {
     forms: [],
     needsDetectChanges: false,
     getWidgetDataTrigger: false,
-    widgetsData: []
+    modalWidgetsData: []
   });
 
   private buttonSubject$: BehaviorSubject<IButtonSubjectStore> = new BehaviorSubject<IButtonSubjectStore>({
@@ -59,9 +60,9 @@ export class DynamicPageStoreService {
   }
 
   public pushData( data: { key: string, value: any }) {
-    const newData = this.getStateSnapshot().widgetsData;
+    const newData = this.getStateSnapshot().modalWidgetsData;
     newData.push(data);
-    this.setState({widgetsData: newData});
+    this.setState({modalWidgetsData: newData});
   }
 
 

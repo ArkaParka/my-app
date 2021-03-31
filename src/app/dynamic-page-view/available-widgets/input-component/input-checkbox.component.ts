@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, Optional} from '@angular/core';
 import {IInputCheckboxWidgetOptions} from "../../interfaces/IInputCheckboxWidgetOptions";
 import {combineLatest} from "rxjs";
 import {filter, takeUntil} from 'rxjs/operators';
@@ -32,7 +32,8 @@ export class InputCheckboxComponent extends DocumentBaseComponent {
 
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
-      filter(trigger => !!trigger)
+      filter(trigger => !!trigger),
+      takeUntil(this.destroy$)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
       this.dpStore.pushData({key: fieldName, value: this.widgetData});
