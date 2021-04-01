@@ -31,13 +31,13 @@ export class WidgetsFactoryService {
         || allWidgets.find(widget => widget.alias === 'BLANK');
 
       widget.widgetData.getOptions = () => {
-        return of(area.widgetConfig.options)
+        return of(area.widgetConfig.options);
       };
       widget.widgetData.getAreaName = () => {
-        return of(area.areaName)
+        return of(area.areaName);
       };
       widget.widgetData.getWidgetData = () => {
-        return this.dpStore.selectDeepByFilter('widgetData', area.widgetConfig?.options?.fieldName?.value)
+        return this.dpStore.selectDeepByFilter('widgetData', area.widgetConfig?.options?.fieldName?.value);
       };
 
       acc.push(widget);

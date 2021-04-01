@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject, Optional} from '@angular/core';
-import {takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {BehaviorSubject, combineLatest} from 'rxjs';
 import {IWidgetTableConfig} from '../../interfaces/IWidgetTableConfig';
-import {DocumentBaseComponent} from "../../../containers/document-base.component";
+import {DocumentBaseComponent} from '../../../containers/document-base.component';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
 import {isArray} from 'ngx-bootstrap/chronos';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
@@ -24,8 +24,9 @@ export class TableComponent extends DocumentBaseComponent {
     super();
 
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
-      .pipe(takeUntil(this.destroy$))
+      .pipe(filter(([options, data]) => !!options && !!data), takeUntil(this.destroy$))
       .subscribe((data: [IWidgetTableConfig, any]) => {
+        console.log('table', data);
         this.widgetOptions = data[0];
         this.widgetData.next(data[1]);
       });
@@ -35,10 +36,11 @@ export class TableComponent extends DocumentBaseComponent {
   public isChecked: boolean = false;
 
   public checkboxChecked(obj: any, event: any) {
-    if (event.target.checked)
+    if (event.target.checked) {
       (isArray(obj)) ? this.selectedRows = obj : this.selectedRows.push(obj);
-    else
+    } else {
       (isArray(obj)) ? this.selectedRows = [] : this.selectedRows.splice(this.selectedRows.indexOf(obj), 1);
+    }
     this.dpStore.setButtonData({widgetData: this.selectedRows, fieldName: this.widgetOptions.fieldName.value});
   }
 }

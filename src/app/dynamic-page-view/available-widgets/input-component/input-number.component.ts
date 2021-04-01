@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, Optional} from "@angular/core";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, Optional} from '@angular/core';
 import {IInputNumberWidgetOptions} from "../../interfaces/IInputNumberWidgetOptions";
 import {FormControl} from "@angular/forms";
 import {combineLatest} from "rxjs";

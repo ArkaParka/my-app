@@ -7,12 +7,13 @@ import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {headerMock} from "../../headerMock";
+import {mock} from '../../../dynamic-page-mock';
 import {
   get_product_data_mock,
   get_requirement_data_mock,
   get_task_data_mock
-} from "../dynamic-page-view/dynamic-page-mock/tab-tree-data-mock";
-import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
+} from '../dynamic-page-view/dynamic-page-mock/tab-tree-data-mock';
+import {delay} from 'rxjs/operators';
 
 
 @Injectable({
@@ -65,10 +66,11 @@ export class DynamicMenuService {
     return this.http.delete(`/pbs/modules/${moduleKey}/base/v1/data/${formKey}/${type}/${id}`);
   }
 
-  public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
-    if (action === 'get_product_data') return of(get_product_data_mock);
-    if (action === 'get_task_data') return of(get_task_data_mock);
-    if (action === 'get_requirement_data') return of(get_requirement_data_mock);
-    return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
+  public executePageAction(moduleKey: string, action: string, pageUID: string, body: any = null): Observable<IPageActionResponse> {
+    // if (action === 'get_product_data') return of(get_product_data_mock).pipe(delay(1000));
+    // if (action === 'get_task_data') return of(get_task_data_mock);
+    // if (action === 'get_requirement_data') return of(get_requirement_data_mock);
+    // if (action === 'get_dictionary_data') return of(get_requirement_data_mock);
+    return this.http.post<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`, body);
   }
 }

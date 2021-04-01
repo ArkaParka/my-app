@@ -5,7 +5,7 @@ import {EActionConfigType} from '../../models/IActions';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {combineLatest, of, zip} from 'rxjs';
 import {IPageActionResponse} from '../interfaces/IPageActionResponse';
-import {filter, map, skipUntil, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, mergeMap, skipUntil, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ITypePageViewConfig} from '../interfaces/ITypePageViewConfig';
 import {IWidgetDataRequest} from '../interfaces/IWidgetDataRequest';
 import {IAreasConfig} from '../interfaces/IAreasConfig';
@@ -19,8 +19,19 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dynamic-page-view',
+  // TODO: создать для лоадера класс, сделать его красивым, чтоб перекрывал фон
+  // *ngIf="!(dpStore.select('isInitialDataLoaded')|async)"
+  // *ngIf="dpStore.select('isInitialDataLoaded')|async"
+  // <div *ngIf="true" class="spinner-grow" role="status"></div>
   template: `
-    <div *ngIf="!(dpStore.select('isInitialDataLoaded')|async)" class="spinner-border" role="status"></div>
+    <div *ngIf="!(dpStore.select('isInitialDataLoaded')|async)" class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
     <app-widget-list *ngIf="dpStore.select('isInitialDataLoaded')|async" [pageConfig]="pageConfig"></app-widget-list>`,
   styles: [`:host {
     display: block;
@@ -139,9 +150,9 @@ export class DynamicPageComponent extends DocumentBaseComponent {
 
   private addEventListener() {
     this.dpStore.select('activeWidgetAction').pipe(
+      // map(data => data.actions),
       filter(data => !!data),
       filter(data => !!!data.find(action => {
-        console.log(action);
         return action.actionType === EActionTypes.DISPLAY_FORM;
       })),
       switchMap(data => {
@@ -157,33 +168,51 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     }); // нужен ли ключ при удалении формы
 
     combineLatest(this.dpStore.select('activeWidgetAction'), this.dpStore.select('forms')).pipe(
+      tap(data => console.log('data', data)),
       filter(data => !!data),
-      filter(([actions, data]) => !!actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM)),
+      filter(([actions, data]) => !!actions?.find(action => action.actionType === EActionTypes.DISPLAY_FORM)),
       switchMap(([actions, data]) => {
-        const key = actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
+        const key = actions?.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
         const formData = data.find(obj => obj.key === key);
-        this.openDialog(formData);
-        const action = actions.find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
-        return combineLatest(of(action), this.dialogRef.afterClosed());
+        // TODO: передавать конфиг и объект для редактирования
+        // this.openDialog(formData, action.modalData);
+        const action = actions
+          .find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
+        console.log(key);
+        this.openDialog(formData, action.modalData);
+        return combineLatest(of(action), this.dialogRef.afterClosed(), of(key));
       }),
-      filter(([action, onSubmit]) => {
+      filter(([action, onSubmit, formKey]) => {
         this.dpStore.setState({activeWidgetAction: []});
         return !!onSubmit;
       }),
-      switchMap(([action, onSubmit]) => {
-        // skipUntil(of(onSubmit));
-        console.log('after submit', action);
-        console.log('after submit 2', onSubmit);
-        return [action, onSubmit];
+      switchMap(([action, onSubmit, formKey]) => {
+        // switch (action.actionType) {
+        //   case EActionTypes.CREATE: console.log(action.actionType, ' obj ', onSubmit); break;
+        //   case EActionTypes.UPDATE: console.log(action.actionType, ' obj ', onSubmit); break;
+        //   case EActionTypes.DELETE: console.log(action.actionType, ' obj ', onSubmit); break;
+        //   default: break;
+        // }
+        console.log('result obj', action);
+        const obj = {
+          'data': onSubmit,
+          'type': formKey
+        };
+        return this.dynamicMenuService.executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID, obj);
       }),
       takeUntil(this.destroy$)
-    ).subscribe();
+    ).subscribe(result => {
+      console.log(result);
+    });
   }
 
-  openDialog(data: IFormWidget): void {
+  openDialog(config: IFormWidget, widgetData: any): void {
     this.dialogRef = this.dialog.open(ModalComponent, {
-      width: "50%",
-      data: data
+      width: '50%',
+      data: {
+        config: config,
+        widgetData: widgetData
+      }
     });
   }
 }

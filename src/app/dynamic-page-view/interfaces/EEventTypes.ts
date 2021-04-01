@@ -7,7 +7,8 @@ export enum EEventTypes {
 export enum EActionTypes {
   DISPLAY_FORM = 'DISPLAY_FORM',
   CREATE = 'CREATE',
-  UPDATE = 'UPDATE'
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE'
 }
 
 export enum EActionUseWhenType {
