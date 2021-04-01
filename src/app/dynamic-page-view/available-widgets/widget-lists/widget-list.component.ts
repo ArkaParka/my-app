@@ -7,6 +7,7 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
 import {takeUntil} from "rxjs/operators";
 import {DomSanitizer} from "@angular/platform-browser";
 import {WidgetListItem} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {DynamicPageBuilder} from "../../dynamic-page-services/dynamic-page-builder";
 
 @Component({
   selector: "app-widget-list",
@@ -26,6 +27,7 @@ export class WidgetListComponent extends DocumentBaseComponent {
     if ((options as IModulePageConfiguration).viewConfig)
       this.viewConfig = (options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig;
     else this.viewConfig = options as IDynamicPageViewConfig;
+    this.viewConfig = DynamicPageBuilder.generateFlatPageConfig(this.viewConfig);
 
     this.widgetAreas = this.viewConfig.areasConfig;
 
@@ -38,8 +40,6 @@ export class WidgetListComponent extends DocumentBaseComponent {
     this.setGridTemplate();
   };
 
-  @HostBinding('style.grid-auto-rows') gridAutoRows;
-  @HostBinding('style.grid-auto-columns') gridAutoColumns;
   @HostBinding('style.grid-template-areas') gridTemplateAreas;
   @HostBinding('style.grid-template-columns') gridTemplateColumns;
   @HostBinding('style.grid-template-rows') gridTemplateRows;

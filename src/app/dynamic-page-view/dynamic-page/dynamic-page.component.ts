@@ -46,6 +46,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
     this.pageConfig = data.pageConfiguration;
+    // this.pageConfig = configMock;
     this.getPageUID(this.pageConfig.typePageViewConfigs);
     this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
 
@@ -139,8 +140,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
           .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID);
         actionRequests.push(actionRequest);
       });
-      combineLatest(actionRequests).subscribe(request => {
-      });
+      combineLatest(actionRequests).subscribe();
     });
   }
 }

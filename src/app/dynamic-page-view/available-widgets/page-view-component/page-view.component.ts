@@ -9,6 +9,7 @@ import {IWidgetEventAction} from "../../interfaces/IWidgetEventAction";
 import {EActionTypes} from "../../interfaces/EActionTypes";
 import isEqual from 'lodash/isEqual';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {DynamicPageBuilder} from "../../dynamic-page-services/dynamic-page-builder";
 
 @Component({
   template: `
@@ -35,6 +36,8 @@ export class PageViewComponent extends DocumentBaseComponent {
           this.innerPageViewConfig = typePageViewConfigs
             .find(config => config.key === widgetOptions?.page_key?.value)?.viewConfig;
         } else this.innerPageViewConfig = widgetOptions?.innerGridConfig?.value;
+
+        this.innerPageViewConfig = DynamicPageBuilder.generateFlatPageConfig(this.innerPageViewConfig);
       });
 
     this.dpStore.select("widgetAction").pipe(

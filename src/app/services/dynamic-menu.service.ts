@@ -1,16 +1,18 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import {Observable, throwError, of} from 'rxjs';
-import {SettingsService} from "./settings.service";
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
 import {ModuleInfo} from "../models/ModuleInfo";
 import {ModuleActionsResponse} from "../models/ModuleActionsResponse";
 import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
-import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
-import {widgetDataMock} from "../../../widgetDataMock";
 import {headerMock} from "../../headerMock";
-import {mock} from '../../../dynamic-page-mock';
+import {
+  get_product_data_mock,
+  get_requirement_data_mock,
+  get_task_data_mock
+} from "../dynamic-page-view/dynamic-page-mock/tab-tree-data-mock";
+import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 
 
 @Injectable({
@@ -18,7 +20,7 @@ import {mock} from '../../../dynamic-page-mock';
 })
 export class DynamicMenuService {
 
-  constructor(public http: HttpClient, private settingsService: SettingsService) {
+  constructor(public http: HttpClient) {
   }
 
   public test(): Observable<any> {
@@ -64,6 +66,9 @@ export class DynamicMenuService {
   }
 
   public executePageAction(moduleKey: string, action: string, pageUID: string): Observable<IPageActionResponse> {
+    if (action === 'get_product_data') return of(get_product_data_mock);
+    if (action === 'get_task_data') return of(get_task_data_mock);
+    if (action === 'get_requirement_data') return of(get_requirement_data_mock);
     return this.http.get<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`);
   }
 }

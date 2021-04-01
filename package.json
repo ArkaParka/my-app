@@ -60,6 +60,7 @@
     "font-awesome": "^4.7.0",
     "jexl": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
+    "mathjs": "^9.3.0",
     "moment": "^2.24.0",
     "mutationobserver-shim": "^0.3.3",
     "ng-zorro-antd": "^9.2.0",
