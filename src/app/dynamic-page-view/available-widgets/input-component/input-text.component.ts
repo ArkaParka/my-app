@@ -37,14 +37,15 @@ export class InputTextComponent extends DocumentBaseComponent {
 
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: [IInputTextWidgetOptions, { value: '' }]) => {
+      .subscribe((data: [IInputTextWidgetOptions, '']) => {
         this.widgetOptions = data[0];
         if (data[1]) {
-          this.widgetData = data[1].value;
+          this.widgetData = data[1];
         }
       });
 
     this.checkWidgetDataTrigger();
+    console.log('input text', this.widgetData);
   }
 
   public checkWidgetDataTrigger() {
