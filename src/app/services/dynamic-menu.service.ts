@@ -7,13 +7,7 @@ import {IModulePageConfiguration} from '../models/IModulePageConfiguration';
 import {ModuleData} from '../models/ModuleData.interface';
 import {ISelectableParent} from "../models/ISelectableParent";
 import {headerMock} from "../../headerMock";
-import {mock} from '../../../dynamic-page-mock';
-import {
-  get_product_data_mock,
-  get_requirement_data_mock,
-  get_task_data_mock
-} from '../dynamic-page-view/dynamic-page-mock/tab-tree-data-mock';
-import {delay} from 'rxjs/operators';
+import {IPageActionResponse} from "../dynamic-page-view/interfaces/IPageActionResponse";
 
 
 @Injectable({

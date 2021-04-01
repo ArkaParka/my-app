@@ -46,7 +46,9 @@ export class DynamicPageStoreService {
         switch (condition) {
           case EActionUseWhenType.SELECTED_ONE: {
             result.checked = (isArray(button?.widgetData) && (button?.widgetData.length === 1));
-            result.data = button?.widgetData;
+            //TODO: выбор одного элемента в случае редактирования раньше отправлял массив и неправильно собирал объект для запроса на бэк
+            //TODO: сделать по-нормальному
+            result.data = button?.widgetData[0];
             return of(result);
           }
           case EActionUseWhenType.SELECTED_MANY: {

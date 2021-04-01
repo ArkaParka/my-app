@@ -5,13 +5,12 @@ import {EActionConfigType} from '../../models/IActions';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {combineLatest, of, zip} from 'rxjs';
 import {IPageActionResponse} from '../interfaces/IPageActionResponse';
-import {filter, map, mergeMap, skipUntil, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ITypePageViewConfig} from '../interfaces/ITypePageViewConfig';
 import {IWidgetDataRequest} from '../interfaces/IWidgetDataRequest';
 import {IAreasConfig} from '../interfaces/IAreasConfig';
 import {IWidgetData} from '../interfaces/IWidgetData';
 import {DocumentBaseComponent} from '../../containers/document-base.component';
-import {log} from 'ng-zorro-antd';
 import {ModalComponent} from '../available-widgets/modal/modal.component';
 import {IFormWidget} from '../interfaces/IFormWidget';
 import {EActionTypes} from '../interfaces/EEventTypes';
@@ -193,7 +192,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         //   case EActionTypes.DELETE: console.log(action.actionType, ' obj ', onSubmit); break;
         //   default: break;
         // }
-        console.log('result obj', action);
+        console.log('result obj', onSubmit);
         const obj = {
           'data': onSubmit,
           'type': formKey

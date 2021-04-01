@@ -1,8 +1,8 @@
 import {IFormWidget} from '../../interfaces/IFormWidget';
-import {Component, Inject, EventEmitter, Output, Optional} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {filter, map, switchMap, tap} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
 
 
 @Component({
@@ -19,10 +19,8 @@ export class ModalComponent {
     this.dpStore.setState({widgetData: data.widgetData});
   }
 
-  private newWidgetsData = {};
-
   get updateData() {
-    return this.newWidgetsData;
+    return this.data.widgetData;
   }
 
   public submit() {
@@ -33,7 +31,7 @@ export class ModalComponent {
       filter(data => !!data),
       filter(data => data.length === length)
     ).subscribe(data => {
-      data.forEach(widgetData => this.newWidgetsData[widgetData.key] = widgetData.value);
+      data.forEach(widgetData => this.data.widgetData[widgetData.key] = widgetData.value);
       this.dpStore.setState({getWidgetDataTrigger: false, modalWidgetsData: []});
     });
 
