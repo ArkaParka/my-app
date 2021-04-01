@@ -1,12 +1,12 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {IDynamicPageStore} from "../interfaces/IDynamicPageStore";
-import {distinctUntilChanged, map} from 'rxjs/operators';
-import {getDeepValue} from "../helpers/getDeepValueHelper";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {IDynamicPageStore} from '../interfaces/IDynamicPageStore';
+import {distinctUntilChanged, map, mergeMap, switchMap} from 'rxjs/operators';
+import {getDeepValue} from '../helpers/getDeepValueHelper';
 import {EActionUseWhenType} from '../interfaces/EEventTypes';
 import {isArray} from 'ngx-bootstrap/chronos';
 import {IButtonSubjectStore} from '../interfaces/IButtonSubjectStore';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -35,16 +35,36 @@ export class DynamicPageStoreService {
     return this.buttonSubject$.next(newData);
   }
 
-  public selectButtonData(fieldName: string, condition: string): Observable<boolean> {
+  public selectButtonData(fieldName: string, condition: string): Observable<any> {
+    const result = {
+      checked: true,
+      data: null,
+    };
     return this.buttonSubject$.pipe(
       map((button: IButtonSubjectStore) => (button.fieldName === fieldName) ? button : null),
       map((button: IButtonSubjectStore) => {
         switch (condition) {
-          case EActionUseWhenType.SELECTED_ONE: return (isArray(button?.widgetData) && (button?.widgetData.length === 1));
-          case EActionUseWhenType.SELECTED_MANY: return (isArray(button?.widgetData) && (button?.widgetData.length >= 1));
-          case EActionUseWhenType.ALWAYS: return true;
-          case EActionUseWhenType.FILLED: return !!button?.widgetData;
-          default: return true;
+          case EActionUseWhenType.SELECTED_ONE: {
+            result.checked = (isArray(button?.widgetData) && (button?.widgetData.length === 1));
+            result.data = button?.widgetData;
+            return of(result);
+          }
+          case EActionUseWhenType.SELECTED_MANY: {
+            result.checked = (isArray(button?.widgetData) && (button?.widgetData.length >= 1));
+            result.data = button?.widgetData;
+            return of(result);
+          }
+          case EActionUseWhenType.ALWAYS: {
+            // result.checked = true;
+            return of(result);
+          }
+          case EActionUseWhenType.FILLED: {
+            result.checked = !!button?.widgetData;
+            result.data = button?.widgetData;
+            return of(result);
+          }
+          default:
+            return of(result);
         }
       }),
       distinctUntilChanged()
@@ -59,7 +79,7 @@ export class DynamicPageStoreService {
     });
   }
 
-  public pushData( data: { key: string, value: any }) {
+  public pushData(data: { key: string, value: any }) {
     const newData = this.getStateSnapshot().modalWidgetsData;
     newData.push(data);
     this.setState({modalWidgetsData: newData});
@@ -71,7 +91,7 @@ export class DynamicPageStoreService {
   public getStateSnapshot = (): IDynamicPageStore => this.stateSubject.getValue();
 
   public setState = (partialState: Partial<IDynamicPageStore>): void =>
-    this.stateSubject.next(Object.assign({}, this.getStateSnapshot(), partialState))
+    this.stateSubject.next(Object.assign({}, this.getStateSnapshot(), partialState));
 
   public select<K extends keyof IDynamicPageStore>(key: K): Observable<IDynamicPageStore[K]> {
     return this.stateSubject.pipe(

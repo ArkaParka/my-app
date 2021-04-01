@@ -15,8 +15,8 @@ export class ModalComponent {
   constructor(public dialogRef: MatDialogRef<ModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: { config: IFormWidget, widgetData: any },
               private dpStore: DynamicPageStoreService) {
-    console.log(data);
-    // this.dpStore.setState({widgetData: data.widgetData});
+    console.log('modal data', data);
+    this.dpStore.setState({widgetData: data.widgetData});
   }
 
   private newWidgetsData = {};

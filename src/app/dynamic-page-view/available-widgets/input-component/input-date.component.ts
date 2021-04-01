@@ -33,8 +33,9 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
     super();
     combineLatest(this.widgetOptionsGetter.getOptions(), this.widgetOptionsGetter.getWidgetData())
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data: [IInputNumberWidgetOptions, number]) => {
+      .subscribe((data: [IInputNumberWidgetOptions, Date]) => {
         this.widgetOptions = data[0];
+        this.date = data[1];
       });
 
     this.checkWidgetDataTrigger();

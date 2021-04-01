@@ -2,20 +2,25 @@ import {ChangeDetectionStrategy, Component, HostBinding, Inject, OnInit, Optiona
 import {IButtonWidgetOptions} from '../../interfaces/IButtonWidgetOptions';
 import {DomSanitizer} from '@angular/platform-browser';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {takeUntil} from 'rxjs/operators';
+import {mergeMap, takeUntil} from 'rxjs/operators';
 import {EEventTypes} from '../../interfaces/EEventTypes';
-import {DocumentBaseComponent} from "../../../containers/document-base.component";
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {DocumentBaseComponent} from '../../../containers/document-base.component';
+import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
+import {BehaviorSubject, combineLatest} from 'rxjs';
+import {IActiveWidgetAction} from '../../interfaces/IActiveWidgetAction';
 
 @Component({
   selector: 'app-button',
-  template: '<button [disabled]="!(dpStore.selectButtonData(widgetOptions?.relatedDataWidget?.value?.fieldName, widgetOptions?.relatedDataWidget?.value?.useWhen)|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
+  // template: '<button [disabled]="!(dpStore.selectButtonData(this.widgetOptions?.relatedDataWidget?.value?.fieldName, this.widgetOptions?.relatedDataWidget?.value?.useWhen)|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
+  template: '<button [disabled]="!(isChecked|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
   styles: [`button {
   }`],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent extends DocumentBaseComponent implements OnInit {
   public widgetOptions: IButtonWidgetOptions;
+  public isChecked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public buttonData: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   @HostBinding('style.width') private width;
   @HostBinding('style.height') private height;
@@ -25,8 +30,20 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
               private sanitizer: DomSanitizer) {
     super();
 
+    // combineLatest(this.widgetOptionsGetter.getOptions(), this.dpStore.selectButtonData2(this.widgetOptions?.relatedDataWidget?.value?.fieldName, this.widgetOptions?.relatedDataWidget?.value?.useWhen))
+    //   .pipe(mergeMap(([widgetOptions, buttonData]) => buttonData), takeUntil(this.destroy$)).subscribe(([widgetOptions, buttonData]) => {
+    //   this.widgetOptions = widgetOptions;
+    //   this.isChecked.next(buttonData?.checked);
+    //   this.buttonData.next(buttonData?.data);
+    // });
+
     this.widgetOptionsGetter.getOptions().pipe(takeUntil(this.destroy$)).subscribe(widgetOptions => {
       this.widgetOptions = widgetOptions;
+    });
+    this.dpStore.selectButtonData(this.widgetOptions?.relatedDataWidget?.value?.fieldName, this.widgetOptions?.relatedDataWidget?.value?.useWhen)
+      .pipe(mergeMap(data => data), takeUntil(this.destroy$)).subscribe((buttonData: any) => {
+      this.isChecked.next(buttonData?.checked);
+      this.buttonData.next(buttonData?.data);
     });
   }
 
@@ -39,6 +56,8 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
     const actions = this.widgetOptions.events.value
       .find(event => event.eventType === EEventTypes.ON_CLICK)?.actions;
 
+    actions.forEach(action => action.modalData = this.buttonData.getValue());
+    console.log('addEventListener', actions);
     this.dpStore.setState({activeWidgetAction: actions});
   }
 
