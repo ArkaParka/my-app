@@ -5,6 +5,9 @@ export interface IInputTextWidgetOptions {
   fieldName: {
     value: string;
   };
+  label?: {
+    value: string;
+  };
   height: {
     value: string;
   };

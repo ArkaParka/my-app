@@ -7,6 +7,7 @@ import {DocumentBaseComponent} from "../../../containers/document-base.component
 import {takeUntil} from "rxjs/operators";
 import {DomSanitizer} from "@angular/platform-browser";
 import {WidgetListItem} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import cloneDeep from 'lodash/cloneDeep';
 import {DynamicPageBuilder} from "../../dynamic-page-services/dynamic-page-builder";
 
 @Component({
@@ -25,8 +26,8 @@ export class WidgetListComponent extends DocumentBaseComponent {
   @Input()
   public set pageConfig(options: IModulePageConfiguration | IDynamicPageViewConfig) {
     if ((options as IModulePageConfiguration).viewConfig)
-      this.viewConfig = (options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig;
-    else this.viewConfig = options as IDynamicPageViewConfig;
+      this.viewConfig = cloneDeep((options as IModulePageConfiguration).viewConfig.config as IDynamicPageViewConfig);
+    else this.viewConfig = cloneDeep(options as IDynamicPageViewConfig);
     this.viewConfig = DynamicPageBuilder.generateFlatPageConfig(this.viewConfig);
 
     this.widgetAreas = this.viewConfig.areasConfig;

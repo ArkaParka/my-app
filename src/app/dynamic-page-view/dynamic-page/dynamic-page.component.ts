@@ -3,14 +3,19 @@ import {IModulePageConfiguration} from '../../models/IModulePageConfiguration';
 import {DynamicPageStoreService} from '../dynamic-page-services/dynamic-page-store.service';
 import {EActionConfigType} from '../../models/IActions';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
-import {combineLatest, zip} from 'rxjs';
+import {combineLatest, of, zip} from 'rxjs';
 import {IPageActionResponse} from '../interfaces/IPageActionResponse';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, skipUntil, switchMap, takeUntil} from 'rxjs/operators';
 import {ITypePageViewConfig} from '../interfaces/ITypePageViewConfig';
 import {IWidgetDataRequest} from '../interfaces/IWidgetDataRequest';
 import {IAreasConfig} from '../interfaces/IAreasConfig';
 import {IWidgetData} from '../interfaces/IWidgetData';
 import {DocumentBaseComponent} from '../../containers/document-base.component';
+import {log} from 'ng-zorro-antd';
+import {ModalComponent} from '../available-widgets/modal/modal.component';
+import {IFormWidget} from '../interfaces/IFormWidget';
+import {EActionTypes} from '../interfaces/EEventTypes';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dynamic-page-view',
@@ -28,6 +33,8 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   private configPath: string = null;
   private _pageConfig: any = null;
 
+  private dialogRef: MatDialogRef<any>;
+
   public get pageConfig() {
     return this._pageConfig;
   }
@@ -37,7 +44,8 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   }
 
   constructor(public dpStore: DynamicPageStoreService,
-              private dynamicMenuService: DynamicMenuService) {
+              private dynamicMenuService: DynamicMenuService,
+              public dialog: MatDialog) {
     super();
     this.addEventListener();
   }
@@ -48,9 +56,9 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.pageConfig = data.pageConfiguration;
     // this.pageConfig = configMock;
     this.getPageUID(this.pageConfig.typePageViewConfigs);
-    this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs});
+    this.dpStore.setState({typePageViewConfigs: this.pageConfig.typePageViewConfigs, forms: data.pageConfiguration.forms});
 
-    console.log(data);
+    console.log('data', data);
 
     this.executeInitialDataActions();
     this.getInitialWidgetsData();
@@ -132,15 +140,50 @@ export class DynamicPageComponent extends DocumentBaseComponent {
   private addEventListener() {
     this.dpStore.select('activeWidgetAction').pipe(
       filter(data => !!data),
+      filter(data => !!!data.find(action => {
+        console.log(action);
+        return action.actionType === EActionTypes.DISPLAY_FORM;
+      })),
+      switchMap(data => {
+        const actionRequest = data
+          .map(action => this.dynamicMenuService
+            .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID));
+        return combineLatest(actionRequest);
+      }),
       takeUntil(this.destroy$)
-    ).subscribe((actions) => {
-      const actionRequests = [];
-      actions.forEach(action => {
-        const actionRequest = this.dynamicMenuService
-          .executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID);
-        actionRequests.push(actionRequest);
-      });
-      combineLatest(actionRequests).subscribe();
+    ).subscribe(actions => {
+      console.log('NOT DISPLAY_FORM actions', actions);
+      this.dpStore.setState({activeWidgetAction: []});
+    }); // нужен ли ключ при удалении формы
+
+    combineLatest(this.dpStore.select('activeWidgetAction'), this.dpStore.select('forms')).pipe(
+      filter(data => !!data),
+      filter(([actions, data]) => !!actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM)),
+      switchMap(([actions, data]) => {
+        const key = actions.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
+        const formData = data.find(obj => obj.key === key);
+        this.openDialog(formData);
+        const action = actions.find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
+        return combineLatest(of(action), this.dialogRef.afterClosed());
+      }),
+      filter(([action, onSubmit]) => {
+        this.dpStore.setState({activeWidgetAction: []});
+        return !!onSubmit;
+      }),
+      switchMap(([action, onSubmit]) => {
+        // skipUntil(of(onSubmit));
+        console.log('after submit', action);
+        console.log('after submit 2', onSubmit);
+        return [action, onSubmit];
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
+
+  openDialog(data: IFormWidget): void {
+    this.dialogRef = this.dialog.open(ModalComponent, {
+      width: "50%",
+      data: data
     });
   }
 }

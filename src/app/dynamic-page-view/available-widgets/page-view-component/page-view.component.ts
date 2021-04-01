@@ -6,7 +6,7 @@ import {switchMap, takeUntil} from "rxjs/operators";
 import {DocumentBaseComponent} from "../../../containers/document-base.component";
 import {combineLatest} from "rxjs";
 import {IWidgetEventAction} from "../../interfaces/IWidgetEventAction";
-import {EActionTypes} from "../../interfaces/EActionTypes";
+import {EEventTypes} from "../../interfaces/EEventTypes";
 import isEqual from 'lodash/isEqual';
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
 import {DynamicPageBuilder} from "../../dynamic-page-services/dynamic-page-builder";
@@ -44,7 +44,7 @@ export class PageViewComponent extends DocumentBaseComponent {
       switchMap((events: IWidgetEventAction[]) => {
         let displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.widgetListAreaName)
-          .find(event => event.actionType === EActionTypes.DISPLAY_WIDGET);
+          .find(event => event.actionType === EEventTypes.DISPLAY_WIDGET);
 
         this.currentDisplayEvent = isEqual(this.currentDisplayEvent, displayEvent) ? undefined : displayEvent;
         return this.dpStore.select("typePageViewConfigs");

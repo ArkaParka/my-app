@@ -1,0 +1,9 @@
+<h5 class="modal-title">Modal title</h5>
+<div mat-dialog-content>
+  <app-widget-list [pageConfig]="data.pageViewConfig"></app-widget-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="hideModal()">No Thanks</button>
+  <button mat-raised-button [mat-dialog-close]="data" (click)="submit()">Ok</button>
+</div>
+

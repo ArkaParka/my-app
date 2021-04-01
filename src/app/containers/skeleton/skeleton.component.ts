@@ -40,7 +40,7 @@ export class SkeletonComponent extends DocumentBaseComponent {
         this.setupActiveModules(moduleResponse);
         return this.setupRouterParams(routerParams);
       }),
-      tap(moduleActionsResponse=> {
+      tap(moduleActionsResponse => {
         if (moduleActionsResponse)
           this.getModuleAction(moduleActionsResponse, this.activeModule.key);
       }),

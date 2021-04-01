@@ -22,12 +22,18 @@ import {MaskPipe} from './available-widgets/table-component/MaskPipe';
 import {LinkComponent} from './available-widgets/link/link.component';
 import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.component";
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
+import { ModalComponent } from './available-widgets/modal/modal.component';
+import { InputDateComponent } from './available-widgets/input-component/input-date.component';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {StatusLabelComponent} from './available-widgets/label/status-label.component';
 
 const AvailableWidgets = [
   BlankComponent,
   TabTreeComponent,
   TreeListComponent,
   LabelComponent,
+  StatusLabelComponent,
   InputTextComponent,
   InputNumberComponent,
   InputCheckboxComponent,
@@ -38,6 +44,8 @@ const AvailableWidgets = [
   LinkComponent,
   WidgetListComponent,
   WidgetWrapperComponent,
+  ModalComponent,
+  InputDateComponent,
 ];
 
 @NgModule({
@@ -48,7 +56,9 @@ const AvailableWidgets = [
     NzIconModule,
     SharedModule,
     NgxMaskModule.forRoot(),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    MatDialogModule,
+    MatButtonModule
   ],
   declarations: [
     DynamicPageMockComponent,

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Optional}
 import {ILinkWidgetOptions} from '../../interfaces/ILinkWidgetOptions';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
 import {IWidgetEventAction} from '../../interfaces/IWidgetEventAction';
-import {EActionTypes} from '../../interfaces/EActionTypes';
+import {EEventTypes} from '../../interfaces/EEventTypes';
 import {takeUntil} from 'rxjs/operators';
 import {DocumentBaseComponent} from '../../../containers/document-base.component';
 import {BehaviorSubject, combineLatest} from 'rxjs';
@@ -36,7 +36,7 @@ export class LinkComponent extends DocumentBaseComponent {
   public addEventListener() {
     const id = this.widgetData.getValue().id.value;
     const _widgetEventActions: IWidgetEventAction = {
-      actionType: EActionTypes.DISPLAY_WIDGET,
+      actionType: EEventTypes.DISPLAY_WIDGET,
       options: {
         targetArea: '',
         widgetConfig: {
