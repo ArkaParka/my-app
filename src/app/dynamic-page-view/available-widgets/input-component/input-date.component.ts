@@ -6,6 +6,7 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 import {DocumentBaseComponent} from '../../../containers/document-base.component';
 import {filter, takeUntil} from 'rxjs/operators';
 import {combineLatest} from 'rxjs';
+import {log} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-input-date',
@@ -35,7 +36,7 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IInputNumberWidgetOptions, Date]) => {
         this.widgetOptions = data[0];
-        this.date = data[1];
+        this.date = new Date(data[1]);
       });
 
     this.checkWidgetDataTrigger();
