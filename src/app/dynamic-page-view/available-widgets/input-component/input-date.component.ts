@@ -39,7 +39,7 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
       .subscribe((data: [IInputNumberWidgetOptions, Date]) => {
         this.widgetOptions = data[0];
         console.log('data1', data[1]);
-        this.date = data[1]? new Date(data[1]):null;
+        this.date = data[1] ? new Date(data[1]) : null;
       });
 
     this.checkWidgetDataTrigger();
