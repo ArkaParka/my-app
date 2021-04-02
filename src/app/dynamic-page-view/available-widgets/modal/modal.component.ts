@@ -31,6 +31,9 @@ export class ModalComponent {
       filter(data => !!data),
       filter(data => data.length === length)
     ).subscribe(data => {
+      if (!this.data.widgetData) {
+        this.data.widgetData = {};
+      }
       data.forEach(widgetData => this.data.widgetData[widgetData.key] = widgetData.value);
       this.dpStore.setState({getWidgetDataTrigger: false, modalWidgetsData: []});
     });
