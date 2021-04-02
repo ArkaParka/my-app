@@ -20,6 +20,8 @@ import {log} from 'ng-zorro-antd';
     }
 
     input {
+      width: 100%;
+      height: 100%;
       display: block;
     }
   `],

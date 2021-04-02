@@ -20,6 +20,8 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
       width: 130px;
     }
     input {
+      width: 100%;
+      height: 100%;
       display: block;
     }
   `],
