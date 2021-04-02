@@ -1,7 +1,7 @@
 <table class="ant-table ant-table-bordered ant-table-small">
   <thead class="ant-table-thead">
   <tr class="ant-table-row">
-    <th class="ant-table-cell" *ngFor="let column of widgetOptions.columns.value" width="{{column.width}}">
+    <th class="ant-table-cell" *ngFor="let column of widgetOptions?.columns?.value" width="{{column.width}}">
       {{column.title}}
     </th>
     <th data-checkbox="true" class="ant-table-cell">
