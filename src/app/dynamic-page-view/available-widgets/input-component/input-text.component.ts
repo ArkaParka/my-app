@@ -21,7 +21,6 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
 
     input {
       width: 100%;
-      /*height: 100%;*/
       display: block;
     }
   `],
@@ -47,7 +46,6 @@ export class InputTextComponent extends DocumentBaseComponent {
       });
 
     this.checkWidgetDataTrigger();
-    console.log('input text', this.widgetData);
   }
 
   public checkWidgetDataTrigger() {

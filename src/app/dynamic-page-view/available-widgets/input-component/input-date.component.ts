@@ -21,7 +21,6 @@ import {log} from 'ng-zorro-antd';
 
     input {
       width: 100%;
-      /*height: 100%;*/
       display: block;
     }
   `],
@@ -38,7 +37,6 @@ export class InputDateComponent extends DocumentBaseComponent implements OnInit 
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: [IInputNumberWidgetOptions, Date]) => {
         this.widgetOptions = data[0];
-        console.log('data1', data[1]);
         this.date = data[1] ? new Date(data[1]) : null;
       });
 

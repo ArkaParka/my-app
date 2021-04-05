@@ -1,21 +1,21 @@
 <table class="ant-table ant-table-bordered ant-table-small">
   <thead class="ant-table-thead">
   <tr class="ant-table-row">
+    <th *ngIf="widgetOptions?.columns?.value" data-checkbox="true" class="ant-table-cell">
+      <input type="checkbox" [(ngModel)]="isChecked" (change)="checkboxChecked(widgetData.getValue(), $event)">
+    </th>
     <th class="ant-table-cell" *ngFor="let column of widgetOptions?.columns?.value" width="{{column.width}}">
       {{column.title}}
-    </th>
-    <th data-checkbox="true" class="ant-table-cell">
-      <input type="checkbox" [(ngModel)]="isChecked" (change)="checkboxChecked(widgetData.getValue(), $event)">
     </th>
   </tr>
   </thead>
   <tbody class="ant-table-tbody">
   <tr *ngFor="let row of widgetData|async" class="ant-table-row">
-    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
-      {{column.mask? (row[column.fieldName] | format: column.mask) : row[column.fieldName]}}
-    </td>
     <td class="ant-table-cell" data-checkbox="true">
       <input type="checkbox" [checked]="isChecked" (change)="checkboxChecked(row, $event)">
+    </td>
+    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
+      {{column.mask? (row[column.fieldName] | format: column.mask) : row[column.fieldName]}}
     </td>
   </tr>
   </tbody>

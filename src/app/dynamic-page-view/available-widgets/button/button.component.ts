@@ -11,7 +11,6 @@ import {IActiveWidgetAction} from '../../interfaces/IActiveWidgetAction';
 
 @Component({
   selector: 'app-button',
-  // template: '<button [disabled]="!(dpStore.selectButtonData(this.widgetOptions?.relatedDataWidget?.value?.fieldName, this.widgetOptions?.relatedDataWidget?.value?.useWhen)|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
   template: '<button [disabled]="!(isChecked|async)" type="button" class="btn btn-primary" (click)="addEventListener()">{{widgetOptions?.label?.value}}</button>',
   styles: [`button {
   }`],
@@ -29,13 +28,6 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
               @Optional() @Inject(DP_STORE) readonly dpStore: DynamicPageStoreService,
               private sanitizer: DomSanitizer) {
     super();
-
-    // combineLatest(this.widgetOptionsGetter.getOptions(), this.dpStore.selectButtonData2(this.widgetOptions?.relatedDataWidget?.value?.fieldName, this.widgetOptions?.relatedDataWidget?.value?.useWhen))
-    //   .pipe(mergeMap(([widgetOptions, buttonData]) => buttonData), takeUntil(this.destroy$)).subscribe(([widgetOptions, buttonData]) => {
-    //   this.widgetOptions = widgetOptions;
-    //   this.isChecked.next(buttonData?.checked);
-    //   this.buttonData.next(buttonData?.data);
-    // });
 
     this.widgetOptionsGetter.getOptions().pipe(takeUntil(this.destroy$)).subscribe(widgetOptions => {
       this.widgetOptions = widgetOptions;

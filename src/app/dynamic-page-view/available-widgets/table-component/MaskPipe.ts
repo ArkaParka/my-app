@@ -8,7 +8,7 @@ import * as moment from 'moment';
 export class MaskPipe implements PipeTransform {
   transform(value: any, ...args): any {
     if (moment(value, moment.ISO_8601, true).isValid()) {
-      return moment(value).format(args[0]); // ('L');
+      return moment(value).format(args[0]); // ('L'); //args[0]
     }
     return value;
   }

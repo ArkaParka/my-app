@@ -46,9 +46,7 @@ export class PageViewComponent extends DocumentBaseComponent {
           .filter(event => event.options.targetArea === this.widgetListAreaName)
           .find(event => event.actionType === EEventTypes.DISPLAY_WIDGET);
 
-        console.log(this.widgetListAreaName, events)
         this.currentDisplayEvent = isEqual(this.currentDisplayEvent, displayEvent) ? undefined : displayEvent;
-        console.log("dislay event", this.currentDisplayEvent)
         return this.dpStore.select("typePageViewConfigs");
       }),
       takeUntil(this.destroy$))
