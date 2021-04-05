@@ -42,7 +42,7 @@ export class PageViewComponent extends DocumentBaseComponent {
 
     this.dpStore.select("widgetAction").pipe(
       switchMap((events: IWidgetEventAction[]) => {
-        let displayEvent: IWidgetEventAction = events
+        const displayEvent: IWidgetEventAction = events
           .filter(event => event.options.targetArea === this.widgetListAreaName)
           .find(event => event.actionType === EEventTypes.DISPLAY_WIDGET);
 

@@ -26,6 +26,8 @@ import { ModalComponent } from './available-widgets/modal/modal.component';
 import { InputDateComponent } from './available-widgets/input-component/input-date.component';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {StatusLabelComponent} from './available-widgets/label/status-label.component';
 
 const AvailableWidgets = [
@@ -58,7 +60,9 @@ const AvailableWidgets = [
     NgxMaskModule.forRoot(),
     ButtonsModule.forRoot(),
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule
   ],
   declarations: [
     DynamicPageMockComponent,

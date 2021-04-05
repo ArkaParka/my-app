@@ -20,8 +20,8 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
     }
 
     input {
-      width: 100%;
-      display: block;
+      width: 50%;
+      display: inline-block;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

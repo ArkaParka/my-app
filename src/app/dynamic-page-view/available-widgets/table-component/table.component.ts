@@ -12,7 +12,7 @@ import {log} from 'ng-zorro-antd';
 @Component({
   selector: 'app-table-component',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
+  styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent extends DocumentBaseComponent {
