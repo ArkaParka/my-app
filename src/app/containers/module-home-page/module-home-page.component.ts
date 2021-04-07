@@ -14,9 +14,9 @@ export class ModuleHomePageComponent {
     this.route.params.pipe(
       tap(params => {
         this.currentModule = params['moduleKey'];
-        this.rs.emit(params)
+        this.rs.emit(params);
       }),
-    ).subscribe()
+    ).subscribe();
 
   }
 }

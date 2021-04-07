@@ -6,6 +6,7 @@ import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {RoutingService} from '../../services/routing.service';
 import {DocumentBaseComponent} from "../document-base.component";
 import {Observable} from "rxjs";
+import {BreadcrumbsStoreService} from '../../services/breadcrumbs-store.service';
 
 @Component({
   selector: 'app-form-loader',
@@ -26,7 +27,8 @@ export class FormLoaderComponent extends DocumentBaseComponent {
 
   constructor(private dynamicMenuService: DynamicMenuService,
               private rs: RoutingService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private bcStore: BreadcrumbsStoreService) {
     super();
 
     this.route.params.pipe(
@@ -39,8 +41,9 @@ export class FormLoaderComponent extends DocumentBaseComponent {
     this.moduleKey = params['moduleKey'];
     this.configPath = params['configPath'];
     this.rs.emit(params);
+    this.bcStore.setState({tab: {title: '', key: ''}, tree_lists: []});
     this.isFormLoading = true;
-    return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath)
+    return this.dynamicMenuService.getModulePageConfiguration(this.moduleKey, this.configPath);
   }
 
   loadForm(resp) {

@@ -16,6 +16,8 @@ import {ITreeListDataValue} from '../../interfaces/ITreeListDataValue';
 import {switchMap} from 'rxjs/operators';
 import {EEventTypes} from '../../interfaces/EEventTypes';
 import {of} from 'rxjs';
+import {BreadcrumbsStoreService} from '../../../services/breadcrumbs-store.service';
+import {IBreadCrumbsItem} from '../../../models/IBreadCrumbsItem';
 
 @Component({
   selector: 'app-dynamic-tree-list',
@@ -54,7 +56,8 @@ export class TreeListComponent  {
     return this._treeListConfig;
   }
 
-  constructor(private dpStore: DynamicPageStoreService) {
+  constructor(private dpStore: DynamicPageStoreService,
+              private bcStore: BreadcrumbsStoreService) {
     this.changeNode();
   }
 
@@ -83,6 +86,11 @@ export class TreeListComponent  {
           activePage.isSelected = true;
 
           [...this.getNodeParents(activePage)].forEach((node: NzTreeNode) => node.isExpanded = true);
+
+          const tree_lists: IBreadCrumbsItem[] = [];
+          this.getNodeParents(activePage).concat(activePage).map(node => node.title)
+            .forEach(nodeTitle => tree_lists.push({title: nodeTitle, key: ''}));
+          this.bcStore.setState({tree_lists: tree_lists});
         }
       }
     });
@@ -114,6 +122,11 @@ export class TreeListComponent  {
   }
 
   treeNodeClicked($event: NzFormatEmitEvent) {
+    const tree_lists: IBreadCrumbsItem[] = [];
+    this.getNodeParents($event.node).concat($event.nodes).map(node => node.title)
+      .forEach(nodeTitle => tree_lists.push({title: nodeTitle, key: ''}));
+    this.bcStore.setState({tree_lists: tree_lists});
+
     const dataType = this.treeDataTypes.find(dataType => $event.node.key === dataType.id + '/' + dataType.dataType);
     this.events.filter(event => event.eventType === EEventTypes.ON_SELECT)
       .filter(event => event.dataType === dataType.dataType)

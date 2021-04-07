@@ -1,5 +1,5 @@
 <tabset>
-  <tab *ngFor="let tab of tabs; let i = index" [heading]="tab.title">
+  <tab (selectTab)="onTabChange($event)" *ngFor="let tab of tabs; let i = index" [heading]="tab.title">
     <ng-container [ngSwitch]="tab.config.widgetConfig.type">
       <app-dynamic-tree-list
         [index]="i"

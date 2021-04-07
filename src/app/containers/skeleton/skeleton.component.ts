@@ -1,16 +1,16 @@
 import {ChangeDetectorRef, Component} from "@angular/core";
 import {DynamicMenuService} from "../../services/dynamic-menu.service";
-import {ActivatedRoute, Params, Router, UrlSegment} from "@angular/router";
-import {IBreadCrumbsItem} from "../../models/IBreadCrumbsItem";
+import {ActivatedRoute, Router} from "@angular/router";
 import {IModuleInfo} from "../../models/IModuleInfo";
 import {RoutingService} from "../../services/routing.service";
-import {delay, mergeMap, switchMap, takeUntil, takeWhile, tap} from "rxjs/operators";
+import {delay, mergeMap, takeUntil, tap} from "rxjs/operators";
 import {ModuleActionsResponse, ModuleActionType} from "../../models/ModuleActionsResponse";
 import {NzNotificationService, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
 import last from 'lodash/last';
-import isEmpty from 'lodash/isempty'
-import {combineLatest, from, Observable, of, zip} from "rxjs";
+import isEmpty from 'lodash/isempty';
+import {combineLatest, from, Observable, of} from "rxjs";
 import {DocumentBaseComponent} from "../document-base.component";
+import {BreadcrumbsStoreService} from '../../services/breadcrumbs-store.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,15 +24,13 @@ export class SkeletonComponent extends DocumentBaseComponent {
   private activeModule: IModuleInfo = null;
   private activePage: string = null;
 
-  private breadcrumbsModule: IBreadCrumbsItem = null;
-  private breadcrumbsPages: IBreadCrumbsItem[] = [];
-
   constructor(private dynamicMenuService: DynamicMenuService,
               private route: ActivatedRoute,
               private router: Router,
               private cd: ChangeDetectorRef,
               private rs: RoutingService,
-              private notificator: NzNotificationService) {
+              private notificator: NzNotificationService,
+              private bcStore: BreadcrumbsStoreService) {
     super();
 
     combineLatest(this.dynamicMenuService.getModules(), this.rs.routeChanged$).pipe(
@@ -67,24 +65,22 @@ export class SkeletonComponent extends DocumentBaseComponent {
 
           this.notificator.error(`Произошла ошибка при загрузке модуля!`, `Переход на главную страницу...`);
           from([null]).pipe(delay(1500)).subscribe(() => {
-            this.router.navigate(['home'], {relativeTo: this.route})
+            this.router.navigate(['home'], {relativeTo: this.route});
           });
 
           return of(null);
         }
-        this.breadcrumbsModule = {title: this.activeModule.title, key: this.activeModule.key};
-        this.breadcrumbsPages = [];
+        this.bcStore.setState({module: {title: this.activeModule.title, key: this.activeModule.key}, pages: [], tab: {title: '', key: ''}, tree_lists: []});
         this.activePage = null;
 
         if (routerParams['configPath']) {
-          this.activePage = routerParams['configPath']
+          this.activePage = routerParams['configPath'];
         }
 
         return this.dynamicMenuService.getModuleActions(routerParams['moduleKey']);
       }
     } else {
-      this.breadcrumbsModule = {title: 'Home', key: '/home'};
-      this.breadcrumbsPages = [];
+      this.bcStore.setState({module: {title: 'Home', key: '/home'}, pages: [], tab: {title: '', key: ''}, tree_lists: []});
       this.availableModulePages = [];
     }
     return of(null);
@@ -99,37 +95,38 @@ export class SkeletonComponent extends DocumentBaseComponent {
         key: mar.type === ModuleActionType.ROOT ? null : `${moduleKey}/${mar.actionName}`,
         children: mar.type === ModuleActionType.ROOT ? this.getModuleActionChildren(mar, moduleKey, mar.actionName) : null
       });
-    })
+    });
   }
 
-  private getModuleActionChildren(moduleAction: ModuleActionsResponse, moduleKey: string, parentKey: string,): NzTreeNodeOptions[] {
-    let children: NzTreeNodeOptions[] = [];
+  private getModuleActionChildren(moduleAction: ModuleActionsResponse, moduleKey: string, parentKey: string): NzTreeNodeOptions[] {
+    const children: NzTreeNodeOptions[] = [];
     moduleAction.childActions.forEach(childAction => {
       children.push({
         title: childAction.displayName,
         expanded: false,
         key: childAction.type === ModuleActionType.ROOT ? null : `${moduleKey}/${parentKey}.${childAction.actionName}`,
         children: childAction.type === ModuleActionType.ROOT ? this.getModuleActionChildren(childAction, moduleKey, childAction.actionName) : null
-      })
+      });
     });
     return children.length ? children : null;
   }
 
   moduleClicked($event: IModuleInfo) {
-    let route = $event.key.split('/').filter(r => r !== '');
+    const route = $event.key.split('/').filter(r => r !== '');
     this.router.navigate(route, {relativeTo: this.route});
   }
 
   navItemClicked($event: NzTreeNode[]) {
-    let route = last($event).key.split("/").filter(r => r !== "");
+    const route = last($event).key.split("/").filter(r => r !== "");
     this.router.navigate(route, {relativeTo: this.route});
   }
 
   navigationLoaded($event: NzTreeNode[]) {
-    this.breadcrumbsPages = [];
+    const breadcrumbsPages = [];
     $event.forEach(node => {
-      this.breadcrumbsPages.push({title: node.title, key: node.key});
+      breadcrumbsPages.push({title: node.title, key: node.key});
     });
+    this.bcStore.setState({pages: breadcrumbsPages});
     this.cd.detectChanges();
   }
 }

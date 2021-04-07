@@ -8,7 +8,8 @@ import {map} from "rxjs/operators";
 import {DynamicPageStoreService} from "../../dynamic-page-services/dynamic-page-store.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {IAreasConfig} from "../../interfaces/IAreasConfig";
-import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {BC_STORE, DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-services/IWIdgetFacrotyInterfaces";
+import {BreadcrumbsStoreService} from '../../../services/breadcrumbs-store.service';
 
 @Component({
   selector: "app-widget-wrapper",
@@ -64,6 +65,10 @@ export class WidgetWrapperComponent implements OnInit, AfterViewInit {
                 {
                   provide: DP_STORE,
                   useExisting: DynamicPageStoreService
+                },
+                {
+                  provide: BC_STORE,
+                  useExisting: BreadcrumbsStoreService
                 }
               ]
             })
@@ -75,7 +80,7 @@ export class WidgetWrapperComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.areaConfig$.subscribe(config => {
       this.gridArea = this.sanitizer.bypassSecurityTrustStyle(config.areaName);
-      let columnFlow = config.widgetFlow === 'left' ? 'start' : config.widgetFlow === 'right' ? 'end' : config.widgetFlow === 'auto' ? 'center' : null;
+      const columnFlow = config.widgetFlow === 'left' ? 'start' : config.widgetFlow === 'right' ? 'end' : config.widgetFlow === 'auto' ? 'center' : null;
       this.justifyItems = this.sanitizer.bypassSecurityTrustStyle(columnFlow);
 
       this.widgetWidth = config.widgetConfig?.options?.width?.value || "100%";

@@ -1,5 +1,8 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, OnInit} from '@angular/core';
 import {IBreadCrumbsItem} from "../../../models/IBreadCrumbsItem";
+import {BreadcrumbsStoreService} from '../../../services/breadcrumbs-store.service';
+import {BehaviorSubject, combineLatest} from 'rxjs';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -7,6 +10,15 @@ import {IBreadCrumbsItem} from "../../../models/IBreadCrumbsItem";
   styleUrls: ['./breadcrumbs.component.scss']
 })
 export class BreadcrumbsComponent {
-  @Input('currentModule') module: IBreadCrumbsItem;
-  @Input('modulePages') pages: IBreadCrumbsItem[] = [];
+
+  private pages: BehaviorSubject<IBreadCrumbsItem[]> = new BehaviorSubject<IBreadCrumbsItem[]>([]);
+
+  constructor(private bcStore: BreadcrumbsStoreService) {
+    combineLatest(this.bcStore.select('module'), this.bcStore.select('pages'),
+      this.bcStore.select('tab'), this.bcStore.select('tree_lists')).pipe(
+      filter(data => !!data)
+    ).subscribe(data => {
+      this.pages.next(data.flat(Infinity));
+    });
+  }
 }

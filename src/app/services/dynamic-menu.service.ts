@@ -41,7 +41,7 @@ export class DynamicMenuService {
 
   public findSelectableData(nodeName: string, endpoint: string, filter: string, parents: ISelectableParent[]): Observable<any> {
     return this.http.post(`/pbs/modules/${nodeName}/base/v1/selectable/${endpoint}/${filter}`, parents);
-  };
+  }
 
   public putFormDataInstance(nodeName: string, body: object): Observable<any> {
     const headers = {"Content-type": "application/json; charset=UTF-8"};
