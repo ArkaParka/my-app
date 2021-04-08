@@ -19,7 +19,7 @@ import {IActiveWidgetAction} from '../../interfaces/IActiveWidgetAction';
 export class ButtonComponent extends DocumentBaseComponent implements OnInit {
   public widgetOptions: IButtonWidgetOptions;
   public isChecked: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public buttonData: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public buttonData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   @HostBinding('style.width') private width;
   @HostBinding('style.height') private height;
@@ -48,7 +48,7 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
     const actions = this.widgetOptions.events.value
       .find(event => event.eventType === EEventTypes.ON_CLICK)?.actions;
 
-    actions.forEach(action => action.modalData = this.buttonData.getValue());
+    actions.forEach(action => action.modalData = [this.buttonData.getValue()]);
     console.log('addEventListener', actions);
     this.dpStore.setState({activeWidgetAction: actions});
   }

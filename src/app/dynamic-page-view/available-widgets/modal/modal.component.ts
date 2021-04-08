@@ -2,7 +2,8 @@ import {IFormWidget} from '../../interfaces/IFormWidget';
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {filter} from 'rxjs/operators';
+import {filter, tap} from 'rxjs/operators';
+import {EActionTypes} from '../../interfaces/EEventTypes';
 
 
 @Component({
@@ -13,13 +14,19 @@ import {filter} from 'rxjs/operators';
 export class ModalComponent {
 
   constructor(public dialogRef: MatDialogRef<ModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { config: IFormWidget, widgetData: any },
+              @Inject(MAT_DIALOG_DATA) public data: { config: IFormWidget, widgetData: any[], action: string },
               private dpStore: DynamicPageStoreService) {
     this.dpStore.setState({widgetData: data.widgetData});
   }
 
   get updateData() {
-    return this.data.widgetData;
+    const resIdArr = [];
+    if (this.data.action === EActionTypes.DELETE) {
+      this.data.widgetData.forEach((item, index) => resIdArr[index] = {id: item.id});
+      console.log('resArr', resIdArr);
+      return resIdArr;
+    }
+    return this.data.widgetData[0];
   }
 
   public submit() {
@@ -30,11 +37,11 @@ export class ModalComponent {
       filter(data => !!data),
       filter(data => data.length === length)
     ).subscribe(data => {
+      console.log('data', this.data.widgetData);
       if (!this.data.widgetData) {
-        this.data.widgetData = {};
+        this.data.widgetData[0] = {};
       }
-      data.forEach(widgetData => this.data.widgetData[widgetData.key] = widgetData.value);
-      console.log('modal data', data);
+      data.forEach(widgetData => this.data.widgetData[0][widgetData.key] = widgetData.value);
       this.dpStore.setState({getWidgetDataTrigger: false, modalWidgetsData: []});
     });
 

@@ -1,6 +1,6 @@
 export interface IActiveWidgetAction {
   actionType: string;
-  modalData?: any;
+  modalData?: any[];
   options: {
     formKey: string;
     pageUID: string;

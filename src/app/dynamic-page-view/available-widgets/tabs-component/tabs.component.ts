@@ -22,7 +22,7 @@ export class TabTreeComponent extends DocumentBaseComponent {
   @ViewChildren(TabDirective) tabArray: QueryList<TabDirective>;
 
   public onTabChange($event) {
-    this.bcStore.setState({tab: {title: $event.heading, key: ''}});
+    this.bcStore.setState({tab: {title: $event.heading, key: ''}, tree_lists: []});
   }
 
   public onChanged(index: number) {

@@ -14,7 +14,7 @@
     <td class="ant-table-cell" data-checkbox="true">
       <input type="checkbox" [checked]="isChecked" (change)="checkboxChecked(row, $event)">
     </td>
-    <td *ngFor="let column of widgetOptions.columns.value" class="ant-table-cell">
+    <td *ngFor="let column of widgetOptions?.columns?.value" class="ant-table-cell">
       {{column.mask? (row[column.fieldName] | format: column.mask) : row[column.fieldName]}}
     </td>
   </tr>

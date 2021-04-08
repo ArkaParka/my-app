@@ -172,8 +172,8 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         const key = actions?.find(action => action.actionType === EActionTypes.DISPLAY_FORM).options.formKey;
         const formData = data.find(obj => obj.key === key);
         const action = actions
-          .find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE);
-        this.openDialog(formData, action.modalData);
+          .find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE || action.actionType === EActionTypes.DELETE);
+        this.openDialog(formData, action.modalData, action.actionType);
         return combineLatest(of(action), this.dialogRef.afterClosed(), of(key));
       }),
       filter(([action, onSubmit, formKey]) => {
@@ -181,7 +181,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         return !!onSubmit;
       }),
       switchMap(([action, onSubmit, formKey]) => {
-        console.log('result obj', onSubmit);
+        console.log('onSubmit obj', onSubmit);
         const obj = {
           'data': onSubmit,
           'type': formKey
@@ -195,12 +195,13 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     });
   }
 
-  openDialog(config: IFormWidget, widgetData: any): void {
+  openDialog(config: IFormWidget, widgetData: any[], action: string): void {
     this.dialogRef = this.dialog.open(ModalComponent, {
       width: '50%',
       data: {
         config: config,
-        widgetData: widgetData
+        widgetData: widgetData,
+        action: action
       }
     });
   }
