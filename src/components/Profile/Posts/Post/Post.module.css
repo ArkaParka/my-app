@@ -1,0 +1,23 @@
+.newPost {
+    height: 5em;
+    margin: 1em 0 1em 0;
+
+    display: grid;
+    grid-template-areas:
+    "post-ava post-content";
+    grid-template-columns: .7fr 11.3fr;
+}
+
+.newPostAva {
+    grid-area: post-ava;
+    overflow: hidden;
+}
+
+.newPostAva img {
+    width: 100%;
+}
+
+.newPostContent {
+    grid-area: post-content;
+    padding: .6em 0 0 1em;
+}

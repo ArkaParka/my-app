@@ -1,0 +1,24 @@
+.description {
+    margin: 1em 0 1em 0;
+    height: 9em;
+
+    display: grid;
+    grid-template-areas:
+    "ava info";
+    grid-template-columns: 8em 1fr;
+}
+
+.descriptionAva {
+    grid-area: ava;
+    height: 6.5em;
+    overflow: hidden;
+}
+
+.descriptionAva img {
+    height: 100%;
+}
+
+.descriptionInfo {
+    grid-area: info;
+}
+

@@ -1,0 +1,26 @@
+.nav {
+    width: 11em;
+    grid-area: nav;
+    background-color:#4CAF50;
+    margin: 1em 0 1em 0;
+    color: white;
+}
+
+.nav ul {
+    padding: 0;
+}
+
+.nav li {
+    font-size: 20px;
+    line-height: 2em;
+    cursor: pointer;
+    padding: 0 0 0 1em;
+}
+
+.nav li:last-child {
+    margin-top: 1.3em;
+}
+
+.nav li:hover {
+    background-color: #3b863d;
+}

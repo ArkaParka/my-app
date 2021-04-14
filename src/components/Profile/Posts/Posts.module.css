@@ -1,0 +1,50 @@
+.myPosts {
+    height: 10em;
+
+    display: grid;
+    grid-template-areas:
+    "title"
+    "input"
+    "button";
+    grid-template-rows: 3em 5em 2em;
+}
+
+.myPostsTitle {
+    grid-area: title;
+}
+
+.myPostsInput {
+    grid-area: input;
+}
+
+.myPostsInput textarea {
+    background-color: rgba(95, 160, 138, 0.418);
+    height: 5em;
+    width: 100%;
+    border: none;
+}
+
+.myPostsBtn {
+    grid-area: button;
+    float: right;
+}
+
+.myPostsBtn button {
+    float: right;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.myPostsBtn button:hover {
+    background-color: #3e8e41;
+}
+
+
+

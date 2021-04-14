@@ -1,0 +1,18 @@
+.profile {
+    grid-area: content;
+
+    padding: 1em 0 1em 1em;
+}
+
+.profile .image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.profile .image img {
+    width: 100%;
+}
+
+.title {
+    font-size: 1.5em;
+}
