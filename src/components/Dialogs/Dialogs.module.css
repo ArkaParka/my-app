@@ -1,0 +1,39 @@
+.dialogContainer {
+    width: 100%;
+    display: grid;
+    grid-template-areas:
+    "title title"
+    "dialogs messages";
+    grid-template-columns: 35% 65%;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5em;
+    grid-area: title;
+    font-weight: 400;
+    color: #575757;
+}
+
+.dialogsList {
+    grid-area: dialogs;
+    border-right: 1px solid #9264ed;
+}
+
+.dialogsList li {
+    margin-left: 2em;
+    font-weight: 400;
+    color: grey;
+    list-style: disc;
+    padding-bottom: 2em;
+}
+
+.dialogsList li .active {
+    font-size: 20px;
+    color: #555555;
+}
+
+.messages {
+    grid-area: messages;
+}
+

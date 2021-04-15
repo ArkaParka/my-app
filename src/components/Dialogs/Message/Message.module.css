@@ -1,0 +1,33 @@
+.message {
+    height: 5em;
+    margin: 1em 0em 3em 3em;
+    display: grid;
+    grid-template-areas:
+    "message-ava message-content";
+    grid-template-columns: 1.5fr 11.3fr;
+}
+
+.messageAva {
+    grid-area: message-ava;
+    overflow: hidden;
+}
+
+.messageAva img {
+    width: 100%;
+}
+
+.messageSender {
+    text-align: center;
+    color: gray;
+}
+
+.messageContent {
+    grid-area: message-content;
+    padding: .6em 0 0 1em;
+    width: 15em;
+    border: 1px solid #80808094;
+    margin-left: 1em;
+    padding: 1em;
+    border-radius: 1em;
+    color: gray;
+}

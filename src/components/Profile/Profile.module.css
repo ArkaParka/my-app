@@ -1,15 +1,9 @@
-.profile {
-    grid-area: content;
-
-    padding: 1em 0 1em 1em;
-}
-
-.profile .image {
+.image {
     height: 200px;
     overflow: hidden;
 }
 
-.profile .image img {
+.image img {
     width: 100%;
 }
 
