@@ -386,7 +386,7 @@ export class TableViewComponent extends DocumentBaseComponent implements OnInit 
   }
 
   private deleteFormDataInstance(typeForm: string): void {
-    let deleteRequest = [];
+    const deleteRequest = [];
     this.multy_id.forEach(elem => deleteRequest.push(this.dynamicMenuService.deleteFormDataInstance(this.moduleKey, (this.putFormData as any).formKey, typeForm, elem)));
 
     zip(...deleteRequest).pipe(

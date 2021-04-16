@@ -173,6 +173,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         const formData = data.find(obj => obj.key === key);
         const action = actions
           .find(action => action.actionType === EActionTypes.CREATE || action.actionType === EActionTypes.UPDATE || action.actionType === EActionTypes.DELETE);
+        console.log('action', action);
         this.openDialog(formData, action.modalData, action.actionType);
         return combineLatest(of(action), this.dialogRef.afterClosed(), of(key));
       }),
@@ -184,8 +185,28 @@ export class DynamicPageComponent extends DocumentBaseComponent {
         console.log('onSubmit obj', onSubmit);
         const obj = {
           'data': onSubmit,
-          'type': formKey
+          'type': formKey,
+          'hash': 'string'
         };
+        // const obj = {
+        //   data:
+        //     {
+        //       agenda: "aaa",
+        //       communicationType: 1,
+        //       continuous: 4,
+        //       createDate: "2015-11-21T12:48:00.973",
+        //       dateTimeStart: "2015-11-21T12:48:00.973",
+        //       description: "описание",
+        //       executionDate: "2015-11-21T12:48:00.973",
+        //       hourValue: 7,
+        //       projectIteration: 1,
+        //       responsible: 1,
+        //       status: 1,
+        //       taskType: 1
+        //     },
+        //   hash: "string",
+        //   type: "task_communication_form"
+        // };
         console.log('result obj', obj);
         return this.dynamicMenuService.executePageAction(this.moduleKey, action.options.actionKey, action.options.pageUID, obj);
       }),

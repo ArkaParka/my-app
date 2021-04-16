@@ -44,7 +44,7 @@ export class WidgetsFactoryService {
       return acc;
     }, []);
 
-    return of(arr)
+    return of(arr);
   }
 
   constructor(private dpStore: DynamicPageStoreService) {
@@ -57,7 +57,7 @@ export class WidgetsFactoryService {
         widgetComponentType: PageViewComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -66,7 +66,7 @@ export class WidgetsFactoryService {
         widgetComponentType: PageViewComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -93,7 +93,7 @@ export class WidgetsFactoryService {
         widgetComponentType: LabelComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -102,7 +102,7 @@ export class WidgetsFactoryService {
         widgetComponentType: InputTextComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -111,7 +111,7 @@ export class WidgetsFactoryService {
         widgetComponentType: InputNumberComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -120,7 +120,7 @@ export class WidgetsFactoryService {
         widgetComponentType: InputCheckboxComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -129,7 +129,7 @@ export class WidgetsFactoryService {
         widgetComponentType: TextareaComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -138,7 +138,7 @@ export class WidgetsFactoryService {
         widgetComponentType: TableComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -147,7 +147,7 @@ export class WidgetsFactoryService {
         widgetComponentType: ButtonComponent,
         widgetData: {
           getOptions(): Observable<any> {
-            return of(null)
+            return of(null);
           }
         }
       },
@@ -159,10 +159,18 @@ export class WidgetsFactoryService {
             return of(null);
           }
         }
-      }
-      ,
+      },
       {
         alias: 'INPUT_DATE',
+        widgetComponentType: InputDateComponent,
+        widgetData: {
+          getOptions(): Observable<any> {
+            return of(null);
+          }
+        }
+      },
+      {
+        alias: 'INPUT_DATE_TIME',
         widgetComponentType: InputDateComponent,
         widgetData: {
           getOptions(): Observable<any> {

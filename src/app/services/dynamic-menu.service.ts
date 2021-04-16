@@ -65,6 +65,7 @@ export class DynamicMenuService {
     // if (action === 'get_task_data') return of(get_task_data_mock);
     // if (action === 'get_requirement_data') return of(get_requirement_data_mock);
     // if (action === 'get_dictionary_data') return of(get_requirement_data_mock);
+    console.log(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`, body);
     return this.http.post<IPageActionResponse>(`/pbs/modules/${moduleKey}/base/v1/page/${pageUID}/${action}`, body);
   }
 }

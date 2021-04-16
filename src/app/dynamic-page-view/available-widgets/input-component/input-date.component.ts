@@ -12,7 +12,7 @@ import {log} from 'ng-zorro-antd';
   selector: 'app-input-date',
   template: `
     <label *ngIf="widgetOptions?.label?.value" for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
-    <nz-date-picker name="{{widgetOptions.fieldName.value}}" [(ngModel)]="date" nzFormat="dd.MM.yyyy"></nz-date-picker>`,
+    <nz-date-picker name="{{widgetOptions.fieldName.value}}" [(ngModel)]="date"></nz-date-picker>`,
   styles: [`
     label {
       float: left;

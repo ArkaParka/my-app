@@ -29,6 +29,8 @@ export class TableComponent extends DocumentBaseComponent {
       .subscribe((data: [IWidgetTableConfig, any]) => {
         this.widgetOptions = data[0];
         this.widgetData.next(data[1]);
+        console.log('this.widgetData', this.widgetData.getValue());
+        console.log('this.widgetOptions', this.widgetOptions);
         this.widgetData.getValue().sort((a, b) => a.id - b.id);
       });
   }

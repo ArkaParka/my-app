@@ -34,7 +34,8 @@ export class TextareaComponent extends DocumentBaseComponent {
 
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
-      filter(trigger => !!trigger)
+      filter(trigger => !!trigger),
+      takeUntil(this.destroy$)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
       this.dpStore.pushData({key: fieldName, value: this.widgetData});

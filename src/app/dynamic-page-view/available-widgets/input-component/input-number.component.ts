@@ -11,16 +11,17 @@ import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-
   template: `
     <label *ngIf="widgetOptions?.label?.value" for="{{widgetOptions.fieldName.value}}">{{widgetOptions?.label?.value}}</label>
     <input type="number" name="{{widgetOptions.fieldName.value}}"
-                    [max]="widgetOptions?.maxValue?.value"
-                    [min]="widgetOptions?.minValue?.value"
-                    [formControl]="formControl">`,
+           [(ngModel)]="widgetData"
+           [max]="widgetOptions?.maxValue?.value"
+           [min]="widgetOptions?.minValue?.value"
+           [formControl]="formControl">`,
   styles: [`
     label {
       float: left;
       width: 130px;
     }
     input {
-      width: 100%;
+      width: 50%;
       display: block;
     }
   `],
@@ -50,7 +51,8 @@ export class InputNumberComponent extends DocumentBaseComponent implements OnIni
 
   public checkWidgetDataTrigger() {
     this.dpStore.select('getWidgetDataTrigger').pipe(
-      filter(trigger => !!trigger)
+      filter(trigger => !!trigger),
+      takeUntil(this.destroy$)
     ).subscribe(trigger => {
       const fieldName = this.widgetOptions.fieldName.value;
       this.dpStore.pushData({key: fieldName, value: this.widgetData});

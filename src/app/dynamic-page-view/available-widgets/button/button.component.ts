@@ -48,7 +48,7 @@ export class ButtonComponent extends DocumentBaseComponent implements OnInit {
     const actions = this.widgetOptions.events.value
       .find(event => event.eventType === EEventTypes.ON_CLICK)?.actions;
 
-    actions.forEach(action => action.modalData = [this.buttonData.getValue()]);
+    actions.forEach(action => action.modalData = this.buttonData.getValue());
     console.log('addEventListener', actions);
     this.dpStore.setState({activeWidgetAction: actions});
   }
