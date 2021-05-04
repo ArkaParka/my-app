@@ -5,7 +5,7 @@ import {EActionConfigType} from '../../models/IActions';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {combineLatest, of, zip} from 'rxjs';
 import {IPageActionResponse} from '../interfaces/IPageActionResponse';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {ITypePageViewConfig} from '../interfaces/ITypePageViewConfig';
 import {IWidgetDataRequest} from '../interfaces/IWidgetDataRequest';
 import {IAreasConfig} from '../interfaces/IAreasConfig';
@@ -41,6 +41,7 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 export class DynamicPageComponent extends DocumentBaseComponent {
   private moduleKey: string = null;
   private configPath: string = null;
+  private id: string = null;
   private _pageConfig: any = null;
 
   private dialogRef: MatDialogRef<any>;
@@ -60,9 +61,10 @@ export class DynamicPageComponent extends DocumentBaseComponent {
     this.addEventListener();
   }
 
-  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, pageConfiguration: IModulePageConfiguration }) {
+  @Input('dataForComponent') set dataForComponent(data: { moduleKey: string, configPath: string, id: string, pageConfiguration: IModulePageConfiguration }) {
     this.moduleKey = data.moduleKey;
     this.configPath = data.configPath;
+    this.id = data.id;
     this.pageConfig = data.pageConfiguration;
     // this.pageConfig = configMock;
     this.getPageUID(this.pageConfig.typePageViewConfigs);
@@ -117,7 +119,7 @@ export class DynamicPageComponent extends DocumentBaseComponent {
           .filter((area: IAreasConfig) => area.widgetConfig?.options?.needsDataPreload)
           .forEach((area: IAreasConfig) => {
             const typePageViewConfig: ITypePageViewConfig = typePageViewConfigs.find(config => config.key === area.widgetConfig.options.page_key.value);
-            initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, null));
+            initialWidgetDataRequests.push(this.dynamicMenuService.getFormDataInstance(this.moduleKey, typePageViewConfig.pageUID, typePageViewConfig.key, this.id));
           });
         return combineLatest(initialWidgetDataRequests);
       }),

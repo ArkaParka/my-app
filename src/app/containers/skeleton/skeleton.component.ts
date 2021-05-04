@@ -1,15 +1,15 @@
-import {ChangeDetectorRef, Component} from "@angular/core";
-import {DynamicMenuService} from "../../services/dynamic-menu.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {IModuleInfo} from "../../models/IModuleInfo";
-import {RoutingService} from "../../services/routing.service";
-import {delay, mergeMap, takeUntil, tap} from "rxjs/operators";
-import {ModuleActionsResponse, ModuleActionType} from "../../models/ModuleActionsResponse";
-import {NzNotificationService, NzTreeNode, NzTreeNodeOptions} from "ng-zorro-antd";
+import {ChangeDetectorRef, Component} from '@angular/core';
+import {DynamicMenuService} from '../../services/dynamic-menu.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IModuleInfo} from '../../models/IModuleInfo';
+import {RoutingService} from '../../services/routing.service';
+import {delay, mergeMap, takeUntil, tap} from 'rxjs/operators';
+import {ModuleActionsResponse, ModuleActionType} from '../../models/ModuleActionsResponse';
+import {NzNotificationService, NzTreeNode, NzTreeNodeOptions} from 'ng-zorro-antd';
 import last from 'lodash/last';
 import isEmpty from 'lodash/isempty';
-import {combineLatest, from, Observable, of} from "rxjs";
-import {DocumentBaseComponent} from "../document-base.component";
+import {combineLatest, from, Observable, of} from 'rxjs';
+import {DocumentBaseComponent} from '../document-base.component';
 import {BreadcrumbsStoreService} from '../../services/breadcrumbs-store.service';
 
 @Component({
@@ -39,8 +39,9 @@ export class SkeletonComponent extends DocumentBaseComponent {
         return this.setupRouterParams(routerParams);
       }),
       tap(moduleActionsResponse => {
-        if (moduleActionsResponse)
+        if (moduleActionsResponse) {
           this.getModuleAction(moduleActionsResponse, this.activeModule.key);
+        }
       }),
       takeUntil(this.destroy$),
     ).subscribe();
@@ -70,10 +71,17 @@ export class SkeletonComponent extends DocumentBaseComponent {
 
           return of(null);
         }
-        this.bcStore.setState({module: {title: this.activeModule.title, key: this.activeModule.key}, pages: [], tab: {title: '', key: ''}, tree_lists: []});
+        this.bcStore.setState({
+          module: {title: this.activeModule.title, key: this.activeModule.key},
+          pages: [],
+          tab: {title: '', key: ''},
+          tree_lists: []
+        });
         this.activePage = null;
 
-        if (routerParams['configPath']) {
+        if (routerParams['configPath'] && routerParams['id']) {
+          this.activePage = routerParams['configPath'] + '/' + routerParams['id'];
+        } else if (routerParams['configPath']) {
           this.activePage = routerParams['configPath'];
         }
 
@@ -89,11 +97,12 @@ export class SkeletonComponent extends DocumentBaseComponent {
   private getModuleAction(moduleActionsResponse: ModuleActionsResponse[], moduleKey: string) {
     this.availableModulePages = [];
     moduleActionsResponse.forEach(mar => {
+      const id = mar.id ? mar.id : ``;
       this.availableModulePages.push({
         title: mar.displayName,
         expanded: false,
-        key: mar.type === ModuleActionType.ROOT ? null : `${moduleKey}/${mar.actionName}`,
-        children: mar.type === ModuleActionType.ROOT ? this.getModuleActionChildren(mar, moduleKey, mar.actionName) : null
+        key: mar.type === ModuleActionType.ROOT ? null : `${moduleKey}/${mar.actionName}/${id}`,
+        children: mar.childActions?.length ? this.getModuleActionChildren(mar, moduleKey, mar.actionName) : null
       });
     });
   }
@@ -101,11 +110,12 @@ export class SkeletonComponent extends DocumentBaseComponent {
   private getModuleActionChildren(moduleAction: ModuleActionsResponse, moduleKey: string, parentKey: string): NzTreeNodeOptions[] {
     const children: NzTreeNodeOptions[] = [];
     moduleAction.childActions.forEach(childAction => {
+      const id = childAction.id ? childAction.id : ``;
       children.push({
         title: childAction.displayName,
         expanded: false,
-        key: childAction.type === ModuleActionType.ROOT ? null : `${moduleKey}/${parentKey}.${childAction.actionName}`,
-        children: childAction.type === ModuleActionType.ROOT ? this.getModuleActionChildren(childAction, moduleKey, childAction.actionName) : null
+        key: childAction.type === ModuleActionType.ROOT ? null : `${moduleKey}/${parentKey}.${childAction.actionName}/${id}`,
+        children: childAction?.childActions?.length ? this.getModuleActionChildren(childAction, moduleKey, childAction.actionName) : null
       });
     });
     return children.length ? children : null;
@@ -113,11 +123,12 @@ export class SkeletonComponent extends DocumentBaseComponent {
 
   moduleClicked($event: IModuleInfo) {
     const route = $event.key.split('/').filter(r => r !== '');
+    console.log('moduleClicked', route);
     this.router.navigate(route, {relativeTo: this.route});
   }
 
   navItemClicked($event: NzTreeNode[]) {
-    const route = last($event).key.split("/").filter(r => r !== "");
+    const route = last($event).key.split('/').filter(r => r !== '');
     this.router.navigate(route, {relativeTo: this.route});
   }
 

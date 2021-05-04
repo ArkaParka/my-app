@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {IModulePageConfiguration} from '../../models/IModulePageConfiguration';
-import {mergeMap, takeUntil, tap} from 'rxjs/operators';
+import {mergeMap, tap} from 'rxjs/operators';
 import {DynamicMenuService} from '../../services/dynamic-menu.service';
 import {RoutingService} from '../../services/routing.service';
 import {DocumentBaseComponent} from "../document-base.component";
@@ -17,10 +17,12 @@ export class FormLoaderComponent extends DocumentBaseComponent {
 
   private moduleKey: string;
   private configPath: string;
+  private id: string;
   public viewType;
   public dataForComponent: {
     moduleKey: string,
     configPath: string,
+    id: string,
     pageConfiguration: IModulePageConfiguration
   };
   public isFormLoading: boolean = true;
@@ -40,6 +42,7 @@ export class FormLoaderComponent extends DocumentBaseComponent {
   setupRouteParams(params: Params): Observable<any> {
     this.moduleKey = params['moduleKey'];
     this.configPath = params['configPath'];
+    this.id = params['id'];
     this.rs.emit(params);
     this.bcStore.setState({tab: {title: '', key: ''}, tree_lists: []});
     this.isFormLoading = true;
@@ -50,6 +53,7 @@ export class FormLoaderComponent extends DocumentBaseComponent {
     this.dataForComponent = {
       moduleKey: this.moduleKey,
       configPath: this.configPath,
+      id: this.id,
       pageConfiguration: resp
     };
     this.viewType = resp.viewConfig.type;

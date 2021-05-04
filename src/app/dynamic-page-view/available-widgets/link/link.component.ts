@@ -11,7 +11,7 @@ import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from "../../dynamic-page-servic
 
 @Component({
   selector: 'app-link',
-  template: '<a (click)="addEventListener()">{{(this.widgetData | async)?.title?.value}}</a>',
+  template: '<a (click)="addEventListener()">{{(this.widgetData | async)?.title?.value || "ПРОСТАЯ ССЫЛКА"}} </a>',
   styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

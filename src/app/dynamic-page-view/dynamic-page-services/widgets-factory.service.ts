@@ -15,7 +15,7 @@ import {DynamicPageStoreService} from "./dynamic-page-store.service";
 import {LinkComponent} from '../available-widgets/link/link.component';
 import {WidgetListItem} from "./IWIdgetFacrotyInterfaces";
 import {InputDateComponent} from '../available-widgets/input-component/input-date.component';
-import {StatusLabelComponent} from '../available-widgets/label/status-label.component';
+import {NavigationLinkComponent} from '../available-widgets/link/navigation-link.component';
 
 
 @Injectable({
@@ -24,10 +24,10 @@ import {StatusLabelComponent} from '../available-widgets/label/status-label.comp
 export class WidgetsFactoryService {
 
   public widgetList(areas: IAreasConfig[]): Observable<WidgetListItem[]> {
-    let arr: WidgetListItem[] = areas.reduce((acc: any, area) => {
-      let allWidgets = this.initFullWidgetList();
+    const arr: WidgetListItem[] = areas.reduce((acc: any, area) => {
+      const allWidgets = this.initFullWidgetList();
 
-      let widget = allWidgets.find(widget => widget.alias === area.widgetConfig.type)
+      const widget = allWidgets.find(widget => widget.alias === area.widgetConfig.type)
         || allWidgets.find(widget => widget.alias === 'BLANK');
 
       widget.widgetData.getOptions = () => {
@@ -172,6 +172,15 @@ export class WidgetsFactoryService {
       {
         alias: 'INPUT_DATE_TIME',
         widgetComponentType: InputDateComponent,
+        widgetData: {
+          getOptions(): Observable<any> {
+            return of(null);
+          }
+        }
+      },
+      {
+        alias: 'NAVIGATION_LINK',
+        widgetComponentType: NavigationLinkComponent,
         widgetData: {
           getOptions(): Observable<any> {
             return of(null);

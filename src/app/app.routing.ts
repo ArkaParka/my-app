@@ -66,6 +66,10 @@ export const routes: Routes = [
         path: ':module/:moduleKey/:configPath',
         component: FormLoaderComponent
       },
+      {
+        path: ':module/:moduleKey/:configPath/:id',
+        component: FormLoaderComponent
+      },
     ]
   },
   {path: '**', component: P404Component}

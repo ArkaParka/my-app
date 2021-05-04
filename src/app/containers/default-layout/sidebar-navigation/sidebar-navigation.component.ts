@@ -46,7 +46,7 @@ export class SidebarNavigationComponent implements AfterContentChecked {
       this.nzTree.getTreeNodes().forEach(rootNode => {
         if (!activePage) { activePage = this.getNodeWithChildren(rootNode)
           .filter(node => node.key)
-          .find(node => node.key.includes(this.activePage));
+          .find(node => node.key.endsWith(this.activePage));
         }
       });
 
@@ -64,7 +64,7 @@ export class SidebarNavigationComponent implements AfterContentChecked {
   nzNavItemClicked(e): void {
     if (e.node.children && e.node.children.length) {
       e.node.isExpanded = !e.node.isExpanded;
-    } else {
+    } if (e.node.key) {
       this.nzTree.getTreeNodes().forEach(node => this.switchOffCheckedNodes(node));
       const nodeWithParents = [...this.getNodeParents(e.node), e.node];
 

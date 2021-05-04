@@ -6,7 +6,6 @@ import {DocumentBaseComponent} from '../../../containers/document-base.component
 import {DP_STORE, WIDGET_OPTIONS, WidgetOptions} from '../../dynamic-page-services/IWIdgetFacrotyInterfaces';
 import {isArray} from 'ngx-bootstrap/chronos';
 import {DynamicPageStoreService} from '../../dynamic-page-services/dynamic-page-store.service';
-import {log} from 'ng-zorro-antd';
 
 
 @Component({
@@ -31,7 +30,7 @@ export class TableComponent extends DocumentBaseComponent {
         this.widgetData.next(data[1]);
         console.log('this.widgetData', this.widgetData.getValue());
         console.log('this.widgetOptions', this.widgetOptions);
-        this.widgetData.getValue().sort((a, b) => a.id - b.id);
+        // this.widgetData.getValue().sort((a, b) => a.id - b.id);
       });
   }
 

@@ -24,11 +24,13 @@ import {WidgetListComponent} from "./available-widgets/widget-lists/widget-list.
 import {WidgetWrapperComponent} from "./available-widgets/widget-lists/widget-wrapper.component";
 import { ModalComponent } from './available-widgets/modal/modal.component';
 import { InputDateComponent } from './available-widgets/input-component/input-date.component';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {StatusLabelComponent} from './available-widgets/label/status-label.component';
+import {NavigationLinkComponent} from './available-widgets/link/navigation-link.component';
+import {RouterModule} from '@angular/router';
 
 const AvailableWidgets = [
   BlankComponent,
@@ -44,6 +46,7 @@ const AvailableWidgets = [
   TableComponent,
   ButtonComponent,
   LinkComponent,
+  NavigationLinkComponent,
   WidgetListComponent,
   WidgetWrapperComponent,
   ModalComponent,
@@ -51,19 +54,20 @@ const AvailableWidgets = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TabsModule,
-    NzTreeModule,
-    NzIconModule,
-    SharedModule,
-    NgxMaskModule.forRoot(),
-    ButtonsModule.forRoot(),
-    MatDialogModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule
-  ],
+    imports: [
+        CommonModule,
+        TabsModule,
+        NzTreeModule,
+        NzIconModule,
+        SharedModule,
+        NgxMaskModule.forRoot(),
+        ButtonsModule.forRoot(),
+        MatDialogModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        RouterModule
+    ],
   declarations: [
     DynamicPageMockComponent,
     DynamicPageComponent,
